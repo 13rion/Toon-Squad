@@ -1,13 +1,5 @@
 /**
- * CS 141: Introduction to Programming and Problem Solving
- * Professor: Edwin Rodr&iacute;guez
- *
- * Programming Assignment #N
- *
- * <description-of-assignment>
- *
- * Team #N / (or name if individual)
- *   <team-member-names-if-team-assignment>
+ * 
  */
 package edu.cpp.cs.cs141.teamproject;
 
@@ -15,14 +7,44 @@ package edu.cpp.cs.cs141.teamproject;
  * @author Toon Squad
  *
  */
-public class Main {
+public class Gun {
+	/**
+	 * This is the ammo for the gun
+	 */
+	private int ammo;
 
 	/**
-	 * @param args
+	 * The constructor that will set ammo amount.
 	 */
-	public static void main(String[] args) {
-		GameEngine ge = new GameEngine();
-		System.out.println(ge.getBoard());
+	public Gun() {
+		ammo = 1;
 	}
 
+	/**
+	 * The method that will return ammo.
+	 * 
+	 * @return ammo
+	 */
+	public int getAmmo() {
+		return ammo;
+
+	}
+
+	/**
+	 * The method that will add ammo.
+	 */
+	public void addAmmo() {
+		if(ammo == 0) {
+			++ammo;
+		}
+	}
+
+	/**
+	 * The method will shoot the players gun
+	 * 
+	 * @return
+	 */
+	public void shoot() {
+		--ammo;
+	}
 }
