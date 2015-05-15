@@ -38,10 +38,18 @@ public class GameEngine {
 	
 	public void set() {
 		board.setPlayer(8, 0, player.getPlayer());
+		setEnemies();
+	}
+	
+	public void setEnemies() {
 		int rndmX = R.nextInt(8);
 		int rndmY = R.nextInt(8);
-		for(int i = 0; i < 6; ++i) {
-			board.setEnemies(rndmX, rndmY, enemy.getEnemy());
+		if(board.check(rndmX, rndmY) == true) {
+			for (int i = 0; i < 6; ++i) {
+				board.setEnemies(rndmX, rndmY, enemy.getEnemy());
+			}
+		} else {
+			setEnemies();
 		}
 	}
 
