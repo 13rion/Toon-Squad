@@ -86,7 +86,6 @@ public class Board {
 	public void setPlayer(int i, int k, char x) {
 		// NEED CHECK METHOD IN GAMEENGINE
 		board[i][k] = x;
-		itemSet(x);
 		playerX = i;
 		playerY = k;
 	}
