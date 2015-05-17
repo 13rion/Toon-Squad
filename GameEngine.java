@@ -2,6 +2,7 @@
  * 
  */
 package edu.cpp.cs.cs141.teamproject;
+
 import java.util.Random;
 
 /**
@@ -14,42 +15,36 @@ public class GameEngine {
 	 * 
 	 */
 	private Player player;
-	/**
-	 * 
-	 */
-	private Enemy enemy;
+	
+	private UI ui;
 	/**
 	 * 
 	 */
 	private Board board;
-	
+
 	Random R;
+	private Enemy[] arr;
 
 	/**
 	 * This constructor will instantiate Player, Enemy, and Board, as well as
 	 */
 	public GameEngine() {
+		ui = new UI();
 		board = new Board();
 		player = new Player();
-		enemy = new Enemy();
 		R = new Random();
+		arr = new Enemy[6];
 		set();
+
 	}
-	
+
 	public void set() {
 		board.setPlayer(8, 0, player.getPlayer());
-		setEnemies();
-	}
-	
-	public void setEnemies() {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if(board.check(rndmX, rndmY) == true) {
-			for (int i = 0; i < 6; ++i) {
-				board.setEnemies(rndmX, rndmY, enemy.getEnemy());
-			}
-		} else {
-			setEnemies();
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = new Enemy();
+			int rndmX = R.nextInt(8);
+			int rndmY = R.nextInt(8);
+			board.setEnemies(rndmX, rndmY, arr[i].getEnemy());
 		}
 	}
 
@@ -59,19 +54,35 @@ public class GameEngine {
 	public void save() {
 
 	}
+	
+	public void move(int i) {
+		switch(i) {
+		case 1:
+			board.playerUp();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		default:
+			break;
+		}
+	}
 
 	/**
 	 * This method will let the user move left
 	 */
 	public void left() {
-
+		
 	}
 
 	/**
 	 * This method will let the user move right
 	 */
 	public void right() {
-
+		
 	}
 
 	/**
@@ -104,7 +115,7 @@ public class GameEngine {
 		return false;
 
 	}
-	
+
 	public String getBoard() {
 		return board.toString();
 	}
