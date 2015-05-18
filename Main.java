@@ -21,8 +21,8 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		GameEngine ge = new GameEngine();
-		System.out.println(ge.getBoard());
+		UI ui = new UI();
+		//System.out.println(ge.getBoard());
 	}
 
 }
