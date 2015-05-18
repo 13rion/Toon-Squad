@@ -32,7 +32,6 @@ public class GameEngine {
 		R = new Random();
 		arr = new Enemy[6];
 		set();
-
 	}
 
 	public void set() {
@@ -52,20 +51,37 @@ public class GameEngine {
 
 	}
 	
-	public void move(int i) {
+	public boolean move(int i) {
+		boolean x = false;
 		switch(i) {
 		case 1:
-			board.playerUp(player.getPlayer());
+			if (board.moveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
+				board.playerUp(player.getPlayer());
+				x = true;
+			}
 			break;
 		case 2:
+			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
+			board.playerLeft(player.getPlayer());
+			x = true;
+			}
 			break;
 		case 3:
+			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
+			board.playerRight(player.getPlayer());
+			x = true;
+			}
 			break;
 		case 4:
+			if (board.moveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
+			board.playerDown(player.getPlayer());
+			x = true;
+			}
 			break;
 		default:
 			break;
 		}
+		return x;
 	}
 
 	/**
