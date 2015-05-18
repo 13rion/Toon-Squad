@@ -55,7 +55,7 @@ public class GameEngine {
 	public void move(int i) {
 		switch(i) {
 		case 1:
-			board.playerUp();
+			board.playerUp(player.getPlayer());
 			break;
 		case 2:
 			break;
