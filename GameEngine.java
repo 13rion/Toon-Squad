@@ -15,21 +15,18 @@ public class GameEngine {
 	 * 
 	 */
 	private Player player;
-	
-	private UI ui;
 	/**
 	 * 
 	 */
 	private Board board;
 
-	Random R;
+	private Random R;
 	private Enemy[] arr;
 
 	/**
 	 * This constructor will instantiate Player, Enemy, and Board, as well as
 	 */
 	public GameEngine() {
-		ui = new UI();
 		board = new Board();
 		player = new Player();
 		R = new Random();
