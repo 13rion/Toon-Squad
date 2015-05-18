@@ -2,6 +2,7 @@
  * 
  */
 package edu.cpp.cs.cs141.teamproject;
+
 import java.util.Random;
 
 /**
@@ -88,7 +89,7 @@ public class Board {
 		playerX = i;
 		playerY = k;
 	}
-	
+
 	public void setEnemies(int i, int k, char x) {
 		// NEED CHECK METHOD IN GAMEENGINE
 		// board[i][k] = x;
@@ -97,27 +98,27 @@ public class Board {
 
 	public void enemySet(char x) {
 		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);	
+		int rndmY = R.nextInt(8);
 		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
 			board[rndmX][rndmY] = x;
 		} else if (check(rndmX, rndmY) == false) {
 			enemySet(x);
-		} else{
+		} else {
 			enemySet(x);
 		}
 	}
-	
+
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
-		if (i > 5 && k < 3) {
+		if (i > 4 && k < 3) {
 			x = false;
 		}
 		return x;
 	}
-	
+
 	public void itemSet(char x) {
-		int rndmX = R.nextInt(9);
-		int rndmY = R.nextInt(9);
+		int rndmX = R.nextInt(8);
+		int rndmY = R.nextInt(8);
 		if (check(rndmX, rndmY) == true) {
 			board[rndmX][rndmY] = x;
 		} else if (check(rndmX, rndmY) == false) {
@@ -138,19 +139,24 @@ public class Board {
 	}
 
 	public void setCase(int i, int k) {
-		
+
 	}
 
 	/**
 	 * This method will print out the board.
 	 */
 	public String toString() {
+		s = "";
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				s += "[" + board[i][j] + "]";
 			}
 			s = s + "\n";
 		}
+		return s;
+	}
+
+	public String gameBoard() {
 		return s;
 	}
 
@@ -169,11 +175,48 @@ public class Board {
 		return x;
 	}
 
+	public boolean moveCheck(int i, int k) {
+		boolean x = false;
+		switch (board[i][k]) {
+		case ' ':
+			x = true;
+			break;
+		case 'B':
+			x = true;
+			break;
+		case 'R':
+			x = true;
+			break;
+		case 'I':
+			x = true;
+			break;
+		default:
+			break;
+		}
+		return x;
+	}
+
 	public void playerUp(char x) {
 		board[playerX][playerY] = ' ';
-		setPlayer(7, 0, x);
+		playerX -= 1;
+		setPlayer(playerX, playerY, x);
 	}
-	
+
+	public void playerLeft(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX, playerY - 1, x);
+	}
+
+	public void playerRight(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX, playerY + 1, x);
+	}
+
+	public void playerDown(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX + 1, playerY, x);
+	}
+
 	/**
 	 * This method will search for an enemy in the direction the gun of the
 	 * player was fired. This will only function if the player has ammo to
@@ -224,5 +267,13 @@ public class Board {
 	 */
 	public boolean briefcase(char[][] board) {
 		return false;
+	}
+
+	public int getPlayerX() {
+		return playerX;
+	}
+
+	public int getPlayerY() {
+		return playerY;
 	}
 }
