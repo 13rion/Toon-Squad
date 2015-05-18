@@ -13,10 +13,10 @@ public class Board {
 	 * A 2D array that will be the game board.
 	 */
 	private char[][] board;
-	
+
 	private int playerX;
 	private int playerY;
-	
+
 	/**
 	 * The additional bullet power-up
 	 */
@@ -37,9 +37,9 @@ public class Board {
 	 * The rooms where the briefcase will be.
 	 */
 	private char room;
-	
+
 	private String s;
-	
+
 	private Random R;
 
 	/**
@@ -69,11 +69,11 @@ public class Board {
 			}
 		}
 	}
-	
+
 	public void setRooms() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
-				if(i == 1 || i == 4 || i == 7) {
+				if (i == 1 || i == 4 || i == 7) {
 					board[i][1] = room;
 					board[i][4] = room;
 					board[i][7] = room;
@@ -81,62 +81,66 @@ public class Board {
 			}
 		}
 	}
-	
-	public void setPlayer(int i, int k, char x ) {
-		//NEED CHECK METHOD IN GAMEENGINE
+
+	public void setPlayer(int i, int k, char x) {
+		// NEED CHECK METHOD IN GAMEENGINE
 		board[i][k] = x;
 		playerX = i;
 		playerY = k;
 	}
 
-	public void setEnemies(int i, int k, char x ) {
-		//NEED CHECK METHOD IN GAMEENGINE
-		board[i][k] = x;
-		playerX = i;
-		playerY = k;
+	public void setEnemies(int i, int k, char x) {
+		// NEED CHECK METHOD IN GAMEENGINE
+		// board[i][k] = x;
+		enemySet(x);
 	}
-	
-	public void itemSet() {
+
+	public void enemySet(char x) {
 		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if(check(rndmX, rndmY) == true) {
-			
-		} else if(check(rndmX, rndmY) == false) {
-			itemSet();
+		int rndmY = R.nextInt(8);	
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
+			board[rndmX][rndmY] = x;
+		} else if (check(rndmX, rndmY) == false) {
+			enemySet(x);
+		} else{
+			enemySet(x);
 		}
 	}
 	
+	public boolean enemyCheck(int i, int k) {
+		boolean x = true;
+		if (i > 5 && k < 3) {
+			x = false;
+		}
+		return x;
+	}
+	
+	public void itemSet(char x) {
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
+		if (check(rndmX, rndmY) == true) {
+			board[rndmX][rndmY] = x;
+		} else if (check(rndmX, rndmY) == false) {
+			itemSet(x);
+		}
+	}
+
 	public void setBullet() {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if(check(rndmX, rndmY) == true) {
-			board[rndmX][rndmY] = bullet;
-		} else if(check(rndmX, rndmY) == false) {
-			setBullet();
-		}
+		itemSet(bullet);
 	}
-	public void setInvin() {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if(check(rndmX, rndmY) == true) {
-			board[rndmX][rndmY] = invincibility;
-		} else if(check(rndmX, rndmY) == false) {
-			setInvin();
-		}
-	}
-	public void setRadar() {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if(check(rndmX, rndmY) == true) {
-			board[rndmX][rndmY] = radar;
-		} else if(check(rndmX, rndmY) == false) {
-			setRadar();
-		}
-	}
-	public void setCase(int i, int k) {
 
+	public void setInvin() {
+		itemSet(invincibility);
 	}
-	
+
+	public void setRadar() {
+		itemSet(radar);
+	}
+
+	public void setCase(int i, int k) {
+		
+	}
+
 	/**
 	 * This method will print out the board.
 	 */
@@ -159,12 +163,16 @@ public class Board {
 	 */
 	public boolean check(int i, int k) {
 		boolean x = false;
-		if(board[i][k] == ' ') {
+		if (board[i][k] == ' ') {
 			x = true;
 		}
 		return x;
 	}
 
+	public void playerUp() {
+		playerX--;
+	}
+	
 	/**
 	 * This method will search for an enemy in the direction the gun of the
 	 * player was fired. This will only function if the player has ammo to
