@@ -88,7 +88,7 @@ public class Board {
 		playerX = i;
 		playerY = k;
 	}
-
+	
 	public void setEnemies(int i, int k, char x) {
 		// NEED CHECK METHOD IN GAMEENGINE
 		// board[i][k] = x;
@@ -169,8 +169,9 @@ public class Board {
 		return x;
 	}
 
-	public void playerUp() {
-		playerX--;
+	public void playerUp(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(7, 0, x);
 	}
 	
 	/**
