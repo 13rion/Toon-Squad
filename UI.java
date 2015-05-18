@@ -33,8 +33,10 @@ public class UI {
 	 * This method will start the game
 	 */
 	public void start() {
-		System.out.println("1. Move Up\n 2. Move Left \n 3. Move Right \n 4. Move Down");
+		System.out.println(ge.getBoard());
+		System.out.println("1. Move Up\n2. Move Left \n3. Move Right \n4. Move Down");
 		ge.move(sc.nextInt());
+		start();
 	}
 
 	/*
@@ -50,6 +52,4 @@ public class UI {
 	private void response() {
 
 	}
-	
-
 }
