@@ -1,0 +1,327 @@
+/**
+ * 
+ */
+package edu.cpp.cs.cs141.class_project;
+
+import java.util.Random;
+
+/**
+ * @author Toon Squad
+ *
+ */
+public class Board {
+	/**
+	 * A 2D array that will be the game board.
+	 */
+	private char[][] board;
+
+	private int playerX;
+	private int playerY;
+	
+	private int enemyX;
+	private int enemyY;
+
+	/**
+	 * The additional bullet power-up
+	 */
+	private char bullet;
+	/**
+	 * The invincibility power-up.
+	 */
+	private char invincibility;
+	/**
+	 * The radar power-up
+	 */
+	private char radar;
+	/**
+	 * The briefcase
+	 */
+	private char briefcase;
+	/**
+	 * The rooms where the briefcase will be.
+	 */
+	private char room;
+
+	private String s;
+
+	private Random R;
+
+	/**
+	 * This constructor will set up the game board including the rooms,
+	 * power-ups, and the briefcase.
+	 */
+	public Board() {
+		R = new Random();
+		board = new char[9][9];
+		bullet = 'B';
+		invincibility = 'I';
+		radar = 'R';
+		briefcase = 'C';
+		room = 'X';
+		s = "";
+		setBoard();
+		setRooms();
+		setBullet();
+		setInvin();
+		setRadar();
+	}
+
+	public void setBoard() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				board[i][j] = ' ';
+			}
+		}
+	}
+
+	public char[][] getBoard(){
+		return board;
+	}
+	public void setRooms() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				if (i == 1 || i == 4 || i == 7) {
+					board[i][1] = room;
+					board[i][4] = room;
+					board[i][7] = room;
+				}
+			}
+		}
+	}
+
+	public void setPlayer(int i, int k, char x) {
+		// NEED CHECK METHOD IN GAMEENGINE
+		board[i][k] = x;
+		playerX = i;
+		playerY = k;
+	}
+
+	public void enemySet(char x) {
+		int rndmX = R.nextInt(8);
+		int rndmY = R.nextInt(8);
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
+			board[rndmX][rndmY] = x;
+			enemyX = rndmX;
+			enemyY = rndmY;
+		} else {
+			enemySet(x);
+		}
+	}
+
+//	public void setEnemyX(int x){
+//		enemyX = x;
+//	}
+//	
+//	public void setEnemyY(int x){
+//		enemyY = x;
+//	}
+//	
+	public int getEnemyX(){
+		return enemyX;
+	}
+	
+	public int getEnemyY(){
+		return enemyY;
+	}
+	
+	public boolean enemyCheck(int i, int k) {
+		boolean x = true;
+		if (i > 4 && k < 3) {
+			x = false;
+		}
+		return x;
+	}
+
+	public void itemSet(char x) {
+		int rndmX = R.nextInt(8);
+		int rndmY = R.nextInt(8);
+		if (check(rndmX, rndmY) == true) {
+			board[rndmX][rndmY] = x;
+		} else if (check(rndmX, rndmY) == false) {
+			itemSet(x);
+		}
+	}
+
+	public void setBullet() {
+		itemSet(bullet);
+	}
+
+	public void setInvin() {
+		itemSet(invincibility);
+	}
+
+	public void setRadar() {
+		itemSet(radar);
+	}
+
+	public void setCase(int i, int k) {
+
+	}
+
+	/**
+	 * This method will print out the board.
+	 */
+	public String toString() {
+		s = "";
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				s += "[" + board[i][j] + "]";
+			}
+			s = s + "\n";
+		}
+		return s;
+	}
+
+	public String gameBoard() {
+		return s;
+	}
+
+	/**
+	 * This method will check to see if a player is able to step in the
+	 * direction that they chose.
+	 * 
+	 * @return true if they can step in that direction, return false if they
+	 *         cannot.
+	 */
+	public boolean check(int i, int k) {
+		boolean x = false;
+		if (board[i][k] == ' ') {
+			x = true;
+		}
+		return x;
+	}
+
+	public boolean moveCheckEnemy(int i, int k) {
+		boolean x = false;
+		switch (board[i][k]) {
+		case ' ':
+			x = true;
+			break;
+		default:
+			break;
+		}
+		return x;
+	}
+		
+	public void enemyUp(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X-1][Y] = k;
+	}
+
+	public void enemyLeft(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y-1]= k;
+	}
+
+	public void enemyRight(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y+1]= k;
+	}
+
+	public void enemyDown(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X+1][Y]= k;
+	}
+	
+	public boolean moveCheck(int i, int k) {
+		boolean x = false;
+		switch (board[i][k]) {
+		case ' ':
+			x = true;
+			break;
+		case 'B':
+			x = true;
+			break;
+		case 'R':
+			x = true;
+			break;
+		case 'I':
+			x = true;
+			break;
+		default:
+			break;
+		}
+		return x;
+	}
+
+	public void playerUp(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX-1, playerY, x);
+	}
+
+	public void playerLeft(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX, playerY - 1, x);
+	}
+
+	public void playerRight(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX, playerY + 1, x);
+	}
+
+	public void playerDown(char x) {
+		board[playerX][playerY] = ' ';
+		setPlayer(playerX + 1, playerY, x);
+	}
+
+	/**
+	 * This method will search for an enemy in the direction the gun of the
+	 * player was fired. This will only function if the player has ammo to
+	 * shoot.
+	 * 
+	 * @return true if enemy is in line of sight of bullet, return false if not.
+	 */
+
+	public boolean searchShot() {
+		return false;
+	}
+
+	/**
+	 * This method will check if the player will pick up the bullet power-up in
+	 * the next step
+	 * 
+	 * @return
+	 */
+	public boolean bullet(char[][] board) {
+		return false;
+	}
+
+	/**
+	 * This method will check if the player will pick up the invincibility
+	 * power-up in the next step
+	 * 
+	 * @return
+	 */
+	public boolean invincibility(char[][] board) {
+		return false;
+
+	}
+
+	/**
+	 * This method will check if the player will pick up the radar power-up in
+	 * the next step
+	 * 
+	 * @return
+	 */
+	public boolean radar(char[][] board) {
+		return false;
+	}
+
+	/**
+	 * This method will check if the player will pick up the briefcase in the
+	 * next step
+	 * 
+	 * @return
+	 */
+	public boolean briefcase(char[][] board) {
+		return false;
+	}
+
+	public int getPlayerX() {
+		return playerX;
+	}
+
+	public int getPlayerY() {
+		return playerY;
+	}
+}
