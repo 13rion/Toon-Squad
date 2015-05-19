@@ -36,7 +36,7 @@ public class Board {
 	/**
 	 * The briefcase
 	 */
-	private final char caseChar = 'C';
+	private final char CASECHAR = 'C';
 	
 	private int caseX;
 	private int caseY;
