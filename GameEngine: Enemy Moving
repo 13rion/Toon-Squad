@@ -1,0 +1,195 @@
+/**
+ * 
+ */
+package edu.cpp.cs.cs141.class_project;
+
+import java.util.Random;
+
+/**
+ * @author Toon Squad
+ *
+ */
+public class GameEngine {
+
+	/**
+	 * 
+	 */
+	private Player player;
+	/**
+	 * 
+	 */
+	private Board board;
+
+	private Enemy[] arr;
+
+	private Random R;
+
+	/**
+	 * This constructor will instantiate Player, Enemy, and Board, as well as
+	 */
+	public GameEngine() {
+		board = new Board();
+		player = new Player();
+		arr = new Enemy[6];
+		R = new Random();
+		set();
+	}
+
+	public void set() {
+		board.setPlayer(8, 0, player.getPlayer());
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = new Enemy();
+			board.enemySet(arr[i].getEnemy());
+			arr[i].setEnemyX(board.getEnemyX());
+			arr[i].setEnemyY(board.getEnemyY());
+		}
+	}
+
+	public void enemyMove() {
+		for (int i = 0; i < arr.length; i++) {
+			int rndm = R.nextInt(3);
+			randomEnemy(arr[i],rndm);
+
+		}
+	}
+
+	public void randomEnemy(Enemy arr2, int x) {
+		switch(x){
+			case 0:
+				if (board.moveCheckEnemy(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
+					board.enemyUp(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX() - 1);
+					arr2.setEnemyY(arr2.getEnemyY());
+				}else{
+					randomEnemy(arr2, x+1);
+				}
+				break;
+			case 1:
+				if (board.moveCheckEnemy(arr2.getEnemyX(), arr2.getEnemyY() - 1) == true) {
+					board.enemyLeft(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX());
+					arr2.setEnemyY(arr2.getEnemyY() - 1);
+				}else{
+					randomEnemy(arr2,x+1);
+				}
+				break;
+			case 2:
+				if (board.moveCheckEnemy(arr2.getEnemyX(), arr2.getEnemyY() + 1) == true) {
+					board.enemyRight(arr2.getEnemyX(), arr2.getEnemyY(),arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX());
+					arr2.setEnemyY(arr2.getEnemyY() + 1);
+				}else{
+					randomEnemy(arr2,x+1);
+				}
+				break;
+			case 3:
+				if (board.moveCheckEnemy(arr2.getEnemyX() + 1, arr2.getEnemyY()) == true) {
+					board.enemyDown(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX() + 1);
+					arr2.setEnemyY(arr2.getEnemyY());
+				} else {
+					randomEnemy(arr2, x-3);
+				}
+				break;
+			default:
+				break;
+		}
+	}
+
+	public void swtich(int x) {
+
+	}
+
+	/**
+	 * This method will allow the user to save
+	 */
+	public void save() {
+
+	}
+
+	public String getBoard() {
+		return board.toString();
+	}
+
+	public boolean move(int i) {
+		boolean x = false;
+		switch (i) {
+		case 1:
+			if (board.moveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
+				board.playerUp(player.getPlayer());
+				x = true;
+			}
+			break;
+		case 2:
+			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
+				board.playerLeft(player.getPlayer());
+				x = true;
+			}
+			break;
+		case 3:
+			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
+				board.playerRight(player.getPlayer());
+				x = true;
+			}
+			break;
+		case 4:
+			if (board.moveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
+				board.playerDown(player.getPlayer());
+				x = true;
+			}
+			break;
+		default:
+			break;
+		}
+		return x;
+	}
+
+	// public void moveEnemy(){
+	// board.enemyMove();
+	// }
+	/**
+	 * This method will let the user move left
+	 */
+	public void left() {
+
+	}
+
+	/**
+	 * This method will let the user move right
+	 */
+	public void right() {
+
+	}
+
+	/**
+	 * This method will let the user move up
+	 */
+	public void up() {
+
+	}
+
+	/**
+	 * This method will let the user move down
+	 */
+	public void down() {
+
+	}
+
+	/**
+	 * This method will let the user look at any direction
+	 */
+	public void look() {
+
+	}
+
+	/**
+	 * This method will return true if player shoots an enemy, else return false
+	 * 
+	 * @return
+	 */
+	public boolean shoot() {
+		return false;
+
+	}
+
+}
