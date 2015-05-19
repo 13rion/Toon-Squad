@@ -17,6 +17,9 @@ public class Board {
 
 	private int playerX;
 	private int playerY;
+	
+	private int enemyX;
+	private int enemyY;
 
 	/**
 	 * The additional bullet power-up
@@ -100,13 +103,20 @@ public class Board {
 		int rndmY = R.nextInt(9);
 		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
 			board[rndmX][rndmY] = x;
-		} else if (check(rndmX, rndmY) == false) {
-			enemySet(x);
 		} else {
 			enemySet(x);
 		}
 	}
-
+	
+	// public void setEnemyX(int x){
+	// enemyX = x;
+	// }
+	//
+	// public void setEnemyY(int x){
+	// enemyY = x;
+	// }
+	//
+	
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
 		if (i > 4 && k < 3) {
@@ -177,8 +187,8 @@ public class Board {
 		}
 		return x;
 	}
-
-	public boolean moveCheck(int i, int k) {
+	
+	public boolean playerMoveCheck(int i, int k) {
 		boolean x = false;
 		switch (board[i][k]) {
 		case ' ':
@@ -198,18 +208,39 @@ public class Board {
 		}
 		return x;
 	}
+
+	public boolean enemyMoveCheck(int i, int k) {
+		boolean x = false;
+		switch (board[i][k]) {
+		case ' ':
+			x = true;
+			break;
+		default:
+			break;
+		}
+		return x;
+	}
+		
+	public void enemyUp(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X-1][Y] = k;
+	}
+
+	public void enemyLeft(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y-1]= k;
+	}
+
+	public void enemyRight(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y+1]= k;
+	}
+
+	public void enemyDown(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X+1][Y]= k;
+	}
 	
-//	public boolean shootCheck(int i, int k) {
-//		boolean x = false;
-//		switch (board[i][k]) {
-//		case 'E':
-//			x = true;
-//			break;
-//		default:
-//			break;
-//		}
-//		return x;
-//	}
 	
 	public void shootUp(int k) {
 		for (int i = 0; i < playerX; i++) {
@@ -315,12 +346,22 @@ public class Board {
 	public boolean briefcase(char[][] board) {
 		return false;
 	}
-
+	
+	
+	//GETTERS
 	public int getPlayerX() {
 		return playerX;
 	}
 
 	public int getPlayerY() {
 		return playerY;
+	}
+	
+	public int getEnemyX() {
+		return enemyX;
+	}
+
+	public int getEnemyY() {
+		return enemyY;
 	}
 }
