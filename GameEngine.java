@@ -43,73 +43,79 @@ public class GameEngine {
 			board.setEnemies(rndmX, rndmY, arr[i].getEnemy());
 		}
 	}
-
-	/**
-	 * This method will allow the user to save
-	 */
-	public void save() {
+	
+	public String action(int i) {
+		String s = "";
+		switch(i) {
+		case 1:
+			s = "move";
+			break;
+		case 2:
+			s = "shoot";
+			break;
+		case 3:
+			s = "load";
+			break;
+		case 4:
+			s = "save";
+			break;
+		case 5:
+			s = "debug";
+		default:
+			break;
+		}
+		return s;
 
 	}
-	
-	public boolean move(int i) {
-		boolean x = false;
+
+	public void move(int i) {
 		switch(i) {
 		case 1:
 			if (board.moveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
-				board.playerUp(player.getPlayer());
-				x = true;
+			board.playerUp(player.getPlayer());
+
 			}
 			break;
 		case 2:
 			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
 			board.playerLeft(player.getPlayer());
-			x = true;
+
 			}
 			break;
 		case 3:
 			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
 			board.playerRight(player.getPlayer());
-			x = true;
+
 			}
 			break;
 		case 4:
 			if (board.moveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
 			board.playerDown(player.getPlayer());
-			x = true;
+
 			}
 			break;
 		default:
 			break;
 		}
-		return x;
 	}
-
-	/**
-	 * This method will let the user move left
-	 */
-	public void left() {
-		
-	}
-
-	/**
-	 * This method will let the user move right
-	 */
-	public void right() {
-		
-	}
-
-	/**
-	 * This method will let the user move up
-	 */
-	public void up() {
-
-	}
-
-	/**
-	 * This method will let the user move down
-	 */
-	public void down() {
-
+	
+	public void shoot(int i) {
+		switch(i) {
+		case 1:
+			board.shootUp(board.getPlayerY());
+			break;
+		case 2:
+			board.shootLeft(board.getPlayerX());
+			break;
+		case 3:
+			board.shootRight(board.getPlayerX());
+			break;
+		case 4:
+			board.shootDown(board.getPlayerY());
+			break;
+		default:
+			break;
+		}
 	}
 
 	/**
