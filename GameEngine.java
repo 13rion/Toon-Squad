@@ -38,9 +38,60 @@ public class GameEngine {
 		board.setPlayer(8, 0, player.getPlayer());
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = new Enemy();
-			int rndmX = R.nextInt(8);
-			int rndmY = R.nextInt(8);
-			board.setEnemies(rndmX, rndmY, arr[i].getEnemy());
+			board.enemySet(arr[i].getEnemy());
+			arr[i].setEnemyX(board.getEnemyX());
+			arr[i].setEnemyY(board.getEnemyY());
+		}
+	}
+
+	public void enemyMove() {
+		for (int i = 0; i < arr.length; i++) {
+			int rndm = R.nextInt(3);
+			randomEnemy(arr[i],rndm);
+
+		}
+	}
+
+	public void randomEnemy(Enemy arr2, int x) {
+		switch(x){
+			case 0:
+				if (board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
+					board.enemyUp(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX() - 1);
+					arr2.setEnemyY(arr2.getEnemyY());
+				}else{
+					randomEnemy(arr2, x+1);
+				}
+				break;
+			case 1:
+				if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() - 1) == true) {
+					board.enemyLeft(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX());
+					arr2.setEnemyY(arr2.getEnemyY() - 1);
+				}else{
+					randomEnemy(arr2,x+1);
+				}
+				break;
+			case 2:
+				if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() + 1) == true) {
+					board.enemyRight(arr2.getEnemyX(), arr2.getEnemyY(),arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX());
+					arr2.setEnemyY(arr2.getEnemyY() + 1);
+				}else{
+					randomEnemy(arr2,x+1);
+				}
+				break;
+			case 3:
+				if (board.enemyMoveCheck(arr2.getEnemyX() + 1, arr2.getEnemyY()) == true) {
+					board.enemyDown(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
+					arr2.setEnemyX(arr2.getEnemyX() + 1);
+					arr2.setEnemyY(arr2.getEnemyY());
+				} else {
+					randomEnemy(arr2, x-3);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 	
@@ -71,27 +122,27 @@ public class GameEngine {
 	public void move(int i) {
 		switch(i) {
 		case 1:
-			if (board.moveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
-			board.playerUp(player.getPlayer());
-
+			if (board.playerMoveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
+				board.playerUp(player.getPlayer());
+				enemyMove();
 			}
 			break;
 		case 2:
-			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
-			board.playerLeft(player.getPlayer());
-
+			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
+				board.playerLeft(player.getPlayer());
+				enemyMove();
 			}
 			break;
 		case 3:
-			if (board.moveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
-			board.playerRight(player.getPlayer());
-
+			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
+				board.playerRight(player.getPlayer());
+				enemyMove();
 			}
 			break;
 		case 4:
-			if (board.moveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
-			board.playerDown(player.getPlayer());
-
+			if (board.playerMoveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
+				board.playerDown(player.getPlayer());
+				enemyMove();
 			}
 			break;
 		default:
