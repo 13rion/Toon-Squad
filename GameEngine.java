@@ -153,16 +153,24 @@ public class GameEngine {
 	public void shoot(int i) {
 		switch(i) {
 		case 1:
-			board.shootUp(board.getPlayerY());
+			if(player.shoot() == true) {
+				board.shootUp(board.getPlayerY());
+			}
 			break;
 		case 2:
-			board.shootLeft(board.getPlayerX());
+			if(player.shoot() == true) {
+				board.shootLeft(board.getPlayerX());
+			}
 			break;
 		case 3:
-			board.shootRight(board.getPlayerX());
+			if(player.shoot() == true) {
+				board.shootRight(board.getPlayerX());
+			}
 			break;
 		case 4:
-			board.shootDown(board.getPlayerY());
+			if(player.shoot() == true) {
+				board.shootDown(board.getPlayerY());
+			}
 			break;
 		default:
 			break;
