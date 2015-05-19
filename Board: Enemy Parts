@@ -17,7 +17,7 @@ public class Board {
 
 	private int playerX;
 	private int playerY;
-	
+
 	private int enemyX;
 	private int enemyY;
 
@@ -74,9 +74,10 @@ public class Board {
 		}
 	}
 
-	public char[][] getBoard(){
+	public char[][] getBoard() {
 		return board;
 	}
+
 	public void setRooms() {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
@@ -97,8 +98,8 @@ public class Board {
 	}
 
 	public void enemySet(char x) {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
 		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
 			board[rndmX][rndmY] = x;
 			enemyX = rndmX;
@@ -108,22 +109,22 @@ public class Board {
 		}
 	}
 
-//	public void setEnemyX(int x){
-//		enemyX = x;
-//	}
-//	
-//	public void setEnemyY(int x){
-//		enemyY = x;
-//	}
-//	
-	public int getEnemyX(){
+	// public void setEnemyX(int x){
+	// enemyX = x;
+	// }
+	//
+	// public void setEnemyY(int x){
+	// enemyY = x;
+	// }
+	//
+	public int getEnemyX() {
 		return enemyX;
 	}
-	
-	public int getEnemyY(){
+
+	public int getEnemyY() {
 		return enemyY;
 	}
-	
+
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
 		if (i > 4 && k < 3) {
@@ -133,8 +134,8 @@ public class Board {
 	}
 
 	public void itemSet(char x) {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
 		if (check(rndmX, rndmY) == true) {
 			board[rndmX][rndmY] = x;
 		} else if (check(rndmX, rndmY) == false) {
@@ -172,9 +173,6 @@ public class Board {
 		return s;
 	}
 
-	public String gameBoard() {
-		return s;
-	}
 
 	/**
 	 * This method will check to see if a player is able to step in the
@@ -191,62 +189,131 @@ public class Board {
 		return x;
 	}
 
-	public boolean moveCheckEnemy(int i, int k) {
+	public boolean killPlayerUp(int i, int k){
 		boolean x = false;
-		switch (board[i][k]) {
-		case ' ':
-			x = true;
-			break;
-		default:
-			break;
+		if(i < 0){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
 		}
 		return x;
 	}
-		
+	
+	public boolean killPlayerDown(int i, int k){
+		boolean x = false;
+		if(i > 8){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+			board[i][k] = ' ';
+			x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerRight(int i, int k){
+		boolean x = false;
+		if(k > 8){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerLeft(int i, int k){
+		boolean x = false;
+		if(k < 0){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean moveCheckEnemy(int i, int k) {
+		boolean x = false;
+		if (i < 0 || i > 8 || k < 0 || k > 8 == true) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			default:
+				break;
+			}
+		}
+		return x;
+	}
+	
+//	public boolean arrayCheck(int i, int k){
+//		boolean check = false;
+//		if (i < 0 || i > 8 || k < 0 || k > 8) {
+//			check= true;
+//		}
+//		return check;
+//		
+//	}
+
 	public void enemyUp(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X-1][Y] = k;
+		board[X - 1][Y] = k;
 	}
 
 	public void enemyLeft(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X][Y-1]= k;
+		board[X][Y - 1] = k;
 	}
 
 	public void enemyRight(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X][Y+1]= k;
+		board[X][Y + 1] = k;
 	}
 
 	public void enemyDown(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X+1][Y]= k;
+		board[X + 1][Y] = k;
 	}
-	
+
 	public boolean moveCheck(int i, int k) {
 		boolean x = false;
-		switch (board[i][k]) {
-		case ' ':
-			x = true;
-			break;
-		case 'B':
-			x = true;
-			break;
-		case 'R':
-			x = true;
-			break;
-		case 'I':
-			x = true;
-			break;
-		default:
-			break;
+		if (i < 0 || i > 8 || k < 0 || k > 8) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			case 'B':
+				x = true;
+				break;
+			case 'R':
+				x = true;
+				break;
+			case 'I':
+				x = true;
+				break;
+			default:
+				break;
+			}
 		}
 		return x;
 	}
 
 	public void playerUp(char x) {
 		board[playerX][playerY] = ' ';
-		setPlayer(playerX-1, playerY, x);
+		setPlayer(playerX - 1, playerY, x);
 	}
 
 	public void playerLeft(char x) {
