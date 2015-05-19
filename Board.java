@@ -101,28 +101,13 @@ public class Board {
 	public void enemySet(char x) {
 		int rndmX = R.nextInt(9);
 		int rndmY = R.nextInt(9);
-		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
 			board[rndmX][rndmY] = x;
+			enemyX = rndmX;
+			enemyY = rndmY;
 		} else {
 			enemySet(x);
 		}
-	}
-	
-	// public void setEnemyX(int x){
-	// enemyX = x;
-	// }
-	//
-	// public void setEnemyY(int x){
-	// enemyY = x;
-	// }
-	//
-	
-	public boolean enemyCheck(int i, int k) {
-		boolean x = true;
-		if (i > 4 && k < 3) {
-			x = false;
-		}
-		return x;
 	}
 
 	public void itemSet(char x) {
@@ -188,35 +173,103 @@ public class Board {
 		return x;
 	}
 	
+	public boolean enemyCheck(int i, int k) {
+		boolean x = true;
+		if (i > 4 && k < 3) {
+			x = false;
+		}
+		return x;
+	}
+	
 	public boolean playerMoveCheck(int i, int k) {
 		boolean x = false;
-		switch (board[i][k]) {
-		case ' ':
-			x = true;
-			break;
-		case BULLETCHAR:
-			x = true;
-			break;
-		case RADARCHAR:
-			x = true;
-			break;
-		case INVINCHAR:
-			x = true;
-			break;
-		default:
-			break;
+		if (i < 0 || i > 8 || k < 0 || k > 8) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			case BULLETCHAR:
+				x = true;
+				break;
+			case RADARCHAR:
+				x = true;
+				break;
+			case INVINCHAR:
+				x = true;
+				break;
+			default:
+				break;
+			}
 		}
 		return x;
 	}
 
 	public boolean enemyMoveCheck(int i, int k) {
 		boolean x = false;
-		switch (board[i][k]) {
-		case ' ':
+		if (i < 0 || i > 8 || k < 0 || k > 8) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			default:
+				break;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerUp(int i, int k){
+		boolean x = false;
+		if(i < 0){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerLeft(int i, int k){
+		boolean x = false;
+		if(k < 0){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerRight(int i, int k){
+		boolean x = false;
+		if(k > 8){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+	
+	public boolean killPlayerDown(int i, int k){
+		boolean x = false;
+		if(i > 8){
+			x = false;
+		}else{
+			if(board[i][k] == 'P'){
+			board[i][k] = ' ';
 			x = true;
-			break;
-		default:
-			break;
+			}
 		}
 		return x;
 	}
@@ -243,28 +296,28 @@ public class Board {
 	
 	
 	public void shootUp(int k) {
-		for (int i = 0; i < playerX; i++) {
+		for (int i = playerX; i > -1; --i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
 			}
 		}
 	}
 	public void shootLeft(int i) {
-		for (int k = 0; k < playerY; k++) {
+		for (int k = playerY; k > -1; --k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
 			}
 		}
 	}
 	public void shootRight(int i) {
-		for (int k = playerY; k < board.length; k++) {
+		for (int k = playerY; k < board.length; ++k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
 			}
 		}
 	}
 	public void shootDown(int k) {
-		for (int i = playerX; i < board.length; i++) {
+		for (int i = playerX; i < board.length; ++i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
 			}
@@ -295,6 +348,10 @@ public class Board {
 		setPlayer(playerX, playerY, x);
 	}
 
+	
+	
+	
+	
 	/**
 	 * This method will search for an enemy in the direction the gun of the
 	 * player was fired. This will only function if the player has ammo to
