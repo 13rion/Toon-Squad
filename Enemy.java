@@ -10,6 +10,10 @@ package edu.cpp.cs.cs141.teamproject;
 public class Enemy extends ActiveAgents {
 
 	private char enemyChar;
+	
+	private int enemyX;
+	
+	private int enemyY;
 
 	/**
 	 * This constructor will set String enemy.
@@ -17,13 +21,6 @@ public class Enemy extends ActiveAgents {
 	public Enemy() {
 		super();
 		enemyChar = 'E';
-	}
-	/**
-	 * This method will return the String enemy
-	 * @return
-	 */
-	public char getEnemy() {
-		return enemyChar;
 	}
 	/**
 	 * This method will pick randomly where the enemy to go.
@@ -45,6 +42,31 @@ public class Enemy extends ActiveAgents {
 	 */
 	public boolean kill() {
 		return false;
+	}
+	
+	//GETTERS & SETTERS
+	public void setEnemyX(int x){
+		enemyX = x;
+	}
+	
+	public void setEnemyY(int y){
+		enemyY = y;
+	}
+	
+	/**
+	 * This method will return the String enemy
+	 * @return
+	 */
+	public char getEnemy() {
+		return enemyChar;
+	}
+	
+	public int getEnemyX(){
+		return enemyX;
+	}
+	
+	public int getEnemyY(){
+		return enemyY;
 	}
 
 }
