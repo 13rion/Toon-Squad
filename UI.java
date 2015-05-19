@@ -34,16 +34,23 @@ public class UI {
 	 */
 	public void start() {
 		System.out.println(ge.getBoard());
-		System.out.println("1. Move Up\n2. Move Left \n3. Move Right \n4. Move Down");
-		ge.move(sc.nextInt());
+		System.out.println("1. Move \n2. Shoot \n3. Load \n4. Save \n5. Debug Mode");
+		options(ge.action(sc.nextInt()));
 		start();
 	}
-
+	
 	/*
 	 * This method will print out the options to user.
 	 */
-	private void options() {
-		
+	private void options(String s) {
+		if(s == "move") {
+			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down");
+			ge.move(sc.nextInt());
+		}
+		if(s == "shoot") {
+			System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down");
+			ge.shoot(sc.nextInt());
+		}
 	}
 
 	/*
