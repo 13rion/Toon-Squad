@@ -26,6 +26,20 @@ public class Player extends ActiveAgents {
 	}
 
 	/**
+	 * This method will check if player is able to shoot their gun.
+	 * 
+	 * @return true if player has ammo, false if not
+	 */
+	public boolean shoot() {
+		boolean x = false;
+		if(getAmmo() > 0) {
+			x = true;
+			gun.shoot();
+		}
+		return x;
+	}
+
+	/**
 	 * This method will return the player string
 	 * 
 	 * @return player string
@@ -34,16 +48,7 @@ public class Player extends ActiveAgents {
 		return playerChar;
 
 	}
-
-	/**
-	 * This method will check if player is able to shoot their gun.
-	 * 
-	 * @return true if player has ammo, false if not
-	 */
-	public boolean shoot() {
-		return false;
-	}
-
+	
 	public int getAmmo() {
 		return gun.getAmmo();
 
@@ -53,5 +58,4 @@ public class Player extends ActiveAgents {
 		return lives;
 
 	}
-
 }
