@@ -38,6 +38,10 @@ public class Player extends ActiveAgents {
 		}
 		return x;
 	}
+	
+	public void subLives() {
+		--lives;
+	}
 
 	/**
 	 * This method will return the player string
