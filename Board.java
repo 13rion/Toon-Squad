@@ -21,23 +21,26 @@ public class Board {
 	/**
 	 * The additional bullet power-up
 	 */
-	private char bullet;
+	private final char BULLETCHAR = 'B';
 	/**
 	 * The invincibility power-up.
 	 */
-	private char invincibility;
+	private final char INVINCHAR = 'I';
 	/**
 	 * The radar power-up
 	 */
-	private char radar;
+	private final char RADARCHAR = 'R';
 	/**
 	 * The briefcase
 	 */
-	private char briefcase;
+	private final char caseChar = 'C';
+	
+	private int caseX;
+	private int caseY;
 	/**
 	 * The rooms where the briefcase will be.
 	 */
-	private char room;
+	private final char ROOMCHAR = 'X';
 
 	private String s;
 
@@ -50,17 +53,13 @@ public class Board {
 	public Board() {
 		R = new Random();
 		board = new char[9][9];
-		bullet = 'B';
-		invincibility = 'I';
-		radar = 'R';
-		briefcase = 'C';
-		room = 'X';
 		s = "";
 		setBoard();
 		setRooms();
 		setBullet();
 		setInvin();
 		setRadar();
+		setCase();
 	}
 
 	public void setBoard() {
@@ -75,9 +74,9 @@ public class Board {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				if (i == 1 || i == 4 || i == 7) {
-					board[i][1] = room;
-					board[i][4] = room;
-					board[i][7] = room;
+					board[i][1] = ROOMCHAR;
+					board[i][4] = ROOMCHAR;
+					board[i][7] = ROOMCHAR;
 				}
 			}
 		}
@@ -97,9 +96,9 @@ public class Board {
 	}
 
 	public void enemySet(char x) {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
-		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
 			board[rndmX][rndmY] = x;
 		} else if (check(rndmX, rndmY) == false) {
 			enemySet(x);
@@ -117,8 +116,8 @@ public class Board {
 	}
 
 	public void itemSet(char x) {
-		int rndmX = R.nextInt(8);
-		int rndmY = R.nextInt(8);
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
 		if (check(rndmX, rndmY) == true) {
 			board[rndmX][rndmY] = x;
 		} else if (check(rndmX, rndmY) == false) {
@@ -127,19 +126,27 @@ public class Board {
 	}
 
 	public void setBullet() {
-		itemSet(bullet);
+		itemSet(BULLETCHAR);
 	}
 
 	public void setInvin() {
-		itemSet(invincibility);
+		itemSet(INVINCHAR);
 	}
 
 	public void setRadar() {
-		itemSet(radar);
+		itemSet(RADARCHAR);
 	}
 
-	public void setCase(int i, int k) {
-
+	public void setCase() {
+		int rndmX = R.nextInt(7);
+		int rndmY = R.nextInt(7);
+		if ((rndmX == 1 || rndmX == 4 || rndmX == 7) && (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
+			caseX = rndmX;
+			caseY = rndmY;
+//			board[rndmX][rndmY] = briefcase;
+		} else {
+			setCase();
+		}
 	}
 
 	/**
@@ -153,10 +160,6 @@ public class Board {
 			}
 			s = s + "\n";
 		}
-		return s;
-	}
-
-	public String gameBoard() {
 		return s;
 	}
 
@@ -181,19 +184,60 @@ public class Board {
 		case ' ':
 			x = true;
 			break;
-		case 'B':
+		case BULLETCHAR:
 			x = true;
 			break;
-		case 'R':
+		case RADARCHAR:
 			x = true;
 			break;
-		case 'I':
+		case INVINCHAR:
 			x = true;
 			break;
 		default:
 			break;
 		}
 		return x;
+	}
+	
+//	public boolean shootCheck(int i, int k) {
+//		boolean x = false;
+//		switch (board[i][k]) {
+//		case 'E':
+//			x = true;
+//			break;
+//		default:
+//			break;
+//		}
+//		return x;
+//	}
+	
+	public void shootUp(int k) {
+		for (int i = 0; i < playerX; i++) {
+			if(board[i][k] == 'E') {
+				board[i][k] = ' ';
+			}
+		}
+	}
+	public void shootLeft(int i) {
+		for (int k = 0; k < playerY; k++) {
+			if(board[i][k] == 'E') {
+				board[i][k] = ' ';
+			}
+		}
+	}
+	public void shootRight(int i) {
+		for (int k = playerY; k < board.length; k++) {
+			if(board[i][k] == 'E') {
+				board[i][k] = ' ';
+			}
+		}
+	}
+	public void shootDown(int k) {
+		for (int i = playerX; i < board.length; i++) {
+			if(board[i][k] == 'E') {
+				board[i][k] = ' ';
+			}
+		}
 	}
 
 	public void playerUp(char x) {
@@ -204,17 +248,20 @@ public class Board {
 
 	public void playerLeft(char x) {
 		board[playerX][playerY] = ' ';
-		setPlayer(playerX, playerY - 1, x);
+		playerY -= 1;
+		setPlayer(playerX, playerY, x);
 	}
 
 	public void playerRight(char x) {
 		board[playerX][playerY] = ' ';
-		setPlayer(playerX, playerY + 1, x);
+		playerY += 1;
+		setPlayer(playerX, playerY, x);
 	}
 
 	public void playerDown(char x) {
 		board[playerX][playerY] = ' ';
-		setPlayer(playerX + 1, playerY, x);
+		playerX += 1;
+		setPlayer(playerX, playerY, x);
 	}
 
 	/**
