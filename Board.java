@@ -92,13 +92,7 @@ public class Board {
 		playerY = k;
 	}
 
-	public void setEnemies(int i, int k, char x) {
-		// NEED CHECK METHOD IN GAMEENGINE
-		// board[i][k] = x;
-		enemySet(x);
-	}
-
-	public void enemySet(char x) {
+	public void setEnemy(char x) {
 		int rndmX = R.nextInt(9);
 		int rndmY = R.nextInt(9);
 		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
@@ -106,7 +100,7 @@ public class Board {
 			enemyX = rndmX;
 			enemyY = rndmY;
 		} else {
-			enemySet(x);
+			setEnemy(x);
 		}
 	}
 
@@ -295,10 +289,16 @@ public class Board {
 	}
 	
 	
+	public int[] killPosition(int i, int k) {
+		int[] A = {i,k};
+		return A;
+	}
+	
 	public void shootUp(int k) {
 		for (int i = playerX; i > -1; --i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
+				killPosition(i, k);
 			}
 		}
 	}
@@ -306,6 +306,7 @@ public class Board {
 		for (int k = playerY; k > -1; --k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
+				killPosition(i, k);
 			}
 		}
 	}
@@ -313,6 +314,7 @@ public class Board {
 		for (int k = playerY; k < board.length; ++k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
+				killPosition(i, k);
 			}
 		}
 	}
@@ -320,6 +322,7 @@ public class Board {
 		for (int i = playerX; i < board.length; ++i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
+				killPosition(i, k);
 			}
 		}
 	}
