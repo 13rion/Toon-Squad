@@ -54,14 +54,17 @@ public class GameEngine {
 		}
 		for (int i = 0; i < arr.length; i++) {
 			int rndm = R.nextInt(4);
-			randomEnemy(arr[i],rndm,0);
+			randomEnemy(arr[i],rndm);
 		}
 	}
 
-	public void randomEnemy(Enemy arr2, int x, int stop) {
-		if(stop == 4){
+	public void randomEnemy(Enemy arr2, int x) {
+		if((board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == false) &&
+			(board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() - 1) == false)	&&
+			(board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() + 1) == false) &&
+			(board.enemyMoveCheck(arr2.getEnemyX() + 1, arr2.getEnemyY()) == false)) {
 			
-		}else{
+		} else {
 			switch(x){
 				//Up
 				case 0:
@@ -71,7 +74,7 @@ public class GameEngine {
 						arr2.setEnemyY(arr2.getEnemyY());
 					}else{
 						x = R.nextInt(4 - 1) + 1;
-						randomEnemy(arr2, x, stop+1);
+						randomEnemy(arr2, x);
 					}
 					break;
 				//Left
@@ -84,7 +87,7 @@ public class GameEngine {
 						while(x == 1) {
 							x = R.nextInt(4);
 						}
-						randomEnemy(arr2,x,stop+1);
+						randomEnemy(arr2,x);
 					}
 					break;
 				//Right
@@ -98,7 +101,7 @@ public class GameEngine {
 						while(x == 2) {
 							x = R.nextInt(4);
 						}
-						randomEnemy(arr2,x,stop+1);
+						randomEnemy(arr2,x);
 					}
 					break;
 				//Down
@@ -109,7 +112,7 @@ public class GameEngine {
 						arr2.setEnemyY(arr2.getEnemyY());
 					} else {
 						x = R.nextInt(4 - 1);
-						randomEnemy(arr2, x,stop+1);
+						randomEnemy(arr2, x);
 					}
 					break;
 				default:
