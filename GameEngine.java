@@ -38,7 +38,7 @@ public class GameEngine {
 		board.setPlayer(8, 0, player.getPlayer());
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = new Enemy();
-			board.enemySet(arr[i].getEnemy());
+			board.setEnemy(arr[i].getEnemy());
 			arr[i].setEnemyX(board.getEnemyX());
 			arr[i].setEnemyY(board.getEnemyY());
 		}
@@ -53,7 +53,7 @@ public class GameEngine {
 			kill(arr[i]);
 		}
 		for (int i = 0; i < arr.length; i++) {
-			int rndm = R.nextInt(3);
+			int rndm = R.nextInt(4);
 			randomEnemy(arr[i],rndm,0);
 		}
 	}
@@ -63,40 +63,53 @@ public class GameEngine {
 			
 		}else{
 			switch(x){
+				//Up
 				case 0:
 					if (board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
 						board.enemyUp(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
 						arr2.setEnemyX(arr2.getEnemyX() - 1);
 						arr2.setEnemyY(arr2.getEnemyY());
 					}else{
-						randomEnemy(arr2, x+1, stop+1);
+						x = R.nextInt(4 - 1) + 1;
+						randomEnemy(arr2, x, stop+1);
 					}
 					break;
+				//Left
 				case 1:
 					if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() - 1) == true) {
 						board.enemyLeft(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
 						arr2.setEnemyX(arr2.getEnemyX());
 						arr2.setEnemyY(arr2.getEnemyY() - 1);
 					}else{
-						randomEnemy(arr2,x+1,stop+1);
+						while(x == 1) {
+							x = R.nextInt(4);
+						}
+						randomEnemy(arr2,x,stop+1);
 					}
 					break;
+				//Right
 				case 2:
 					if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() + 1) == true) {
 						board.enemyRight(arr2.getEnemyX(), arr2.getEnemyY(),arr2.getEnemy());
 						arr2.setEnemyX(arr2.getEnemyX());
 						arr2.setEnemyY(arr2.getEnemyY() + 1);
 					}else{
-						randomEnemy(arr2,x+1,stop+1);
+						x = R.nextInt(4);
+						while(x == 2) {
+							x = R.nextInt(4);
+						}
+						randomEnemy(arr2,x,stop+1);
 					}
 					break;
+				//Down
 				case 3:
 					if (board.enemyMoveCheck(arr2.getEnemyX() + 1, arr2.getEnemyY()) == true) {
 						board.enemyDown(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
 						arr2.setEnemyX(arr2.getEnemyX() + 1);
 						arr2.setEnemyY(arr2.getEnemyY());
 					} else {
-						randomEnemy(arr2, x-3,stop+1);
+						x = R.nextInt(4 - 1);
+						randomEnemy(arr2, x,stop+1);
 					}
 					break;
 				default:
@@ -127,14 +140,17 @@ public class GameEngine {
 		switch(x) {
 		case "1": 
 		case "start":
+		case "s":
 			s = "start";
 			break;
 		case "2": 
 		case "load":
+		case "l":
 			s = "load";
 			break;
 		case "3": 
 		case "debug":
+		case "d":
 			s = "debug";
 			break;
 		default:
@@ -149,14 +165,17 @@ public class GameEngine {
 		switch(x) {
 		case "1":
 		case "move":
+		case "m":
 			s = "move";
 			break;
 		case "2":
 		case "shoot":
+		case "s":
 			s = "shoot";
 			break;
 		case "3":
 		case "look":
+		case "l":
 			s = "look";
 			break;
 		case "4":
@@ -174,6 +193,7 @@ public class GameEngine {
 		switch(x) {
 		case "1":
 		case "up":
+		case "u":
 			if (board.playerMoveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
 				board.playerUp(player.getPlayer());
 				enemyMove();
@@ -181,6 +201,7 @@ public class GameEngine {
 			break;
 		case "2":
 		case "left":
+		case "l":
 			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
 				board.playerLeft(player.getPlayer());
 				enemyMove();
@@ -188,6 +209,7 @@ public class GameEngine {
 			break;
 		case "3":
 		case "right":
+		case "r":
 			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
 				board.playerRight(player.getPlayer());
 				enemyMove();
@@ -195,6 +217,7 @@ public class GameEngine {
 			break;
 		case "4":
 		case "down":
+		case "d":
 			if (board.playerMoveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
 				board.playerDown(player.getPlayer());
 				enemyMove();
@@ -209,26 +232,34 @@ public class GameEngine {
 		switch(x) {
 		case "1":
 		case "up":
+		case "u":
 			if(player.shoot() == true) {
 				board.shootUp(board.getPlayerY());
+				enemyMove();
 			}
 			break;
 		case "2":
 		case "left":
+		case "l":
 			if(player.shoot() == true) {
 				board.shootLeft(board.getPlayerX());
+				enemyMove();
 			}
 			break;
 		case "3":
 		case "right":
+		case "r":
 			if(player.shoot() == true) {
 				board.shootRight(board.getPlayerX());
+				enemyMove();
 			}
 			break;
 		case "4":
 		case "down":
+		case "d":
 			if(player.shoot() == true) {
 				board.shootDown(board.getPlayerY());
+				enemyMove();
 			}
 			break;
 		default:
