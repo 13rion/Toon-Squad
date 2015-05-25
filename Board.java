@@ -48,6 +48,8 @@ public class Board {
 	private String s;
 
 	private Random R;
+	
+	private int[] A = new int[1];
 
 	/**
 	 * This constructor will set up the game board including the rooms,
@@ -127,12 +129,12 @@ public class Board {
 	}
 
 	public void setCase() {
-		int rndmX = R.nextInt(7);
-		int rndmY = R.nextInt(7);
+		int rndmX = R.nextInt(8);
+		int rndmY = R.nextInt(8);
 		if ((rndmX == 1 || rndmX == 4 || rndmX == 7) && (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
 			caseX = rndmX;
 			caseY = rndmY;
-//			board[rndmX][rndmY] = briefcase;
+			board[rndmX][rndmY] = CASECHAR;
 		} else {
 			setCase();
 		}
@@ -289,8 +291,7 @@ public class Board {
 	}
 	
 	
-	public int[] killPosition(int i, int k) {
-		int[] A = {i,k};
+	public int[] killPosition() {
 		return A;
 	}
 	
@@ -298,7 +299,9 @@ public class Board {
 		for (int i = playerX; i > -1; --i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
-				killPosition(i, k);
+				A[0] = i;
+				A[1] = k;
+				killPosition();
 			}
 		}
 	}
@@ -306,7 +309,9 @@ public class Board {
 		for (int k = playerY; k > -1; --k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
-				killPosition(i, k);
+				A[0] = i;
+				A[1] = k;
+				killPosition();
 			}
 		}
 	}
@@ -314,7 +319,9 @@ public class Board {
 		for (int k = playerY; k < board.length; ++k) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
-				killPosition(i, k);
+				A[0] = i;
+				A[1] = k;
+				killPosition();
 			}
 		}
 	}
@@ -322,7 +329,9 @@ public class Board {
 		for (int i = playerX; i < board.length; ++i) {
 			if(board[i][k] == 'E') {
 				board[i][k] = ' ';
-				killPosition(i, k);
+				A[0] = i;
+				A[1] = k;
+				killPosition();
 			}
 		}
 	}
