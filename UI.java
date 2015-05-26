@@ -1,12 +1,12 @@
 /**
  * 
  */
-package edu.cpp.cs.cs141.teamproject;
+package edu.cpp.cs.cs141.class_project;
 
 import java.util.Scanner;
 
 /**
- * @author Toon Squad
+ * @author Fortu
  *
  */
 public class UI {
@@ -57,19 +57,26 @@ public class UI {
 			play();
 		}
 		if(s == "move") {
-			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down");
-			ge.move(sc.nextLine());
+			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5.Options");
+			if(ge.move(sc.nextLine()) == "move"){
+				play();
+			}
 		}
 		if(s == "shoot") {
-			System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down");
-			ge.shoot(sc.nextLine());
+			System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5.Options");
+			if(ge.shoot(sc.nextLine()) == "move"){
+				play();
+			}
 		}
 	}
+
 
 	/*
 	 *This method will print out the outcomes. 
 	 */
-	private void response() {
+	public void response() {
 
 	}
+	
+
 }
