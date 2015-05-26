@@ -22,6 +22,10 @@ public class Enemy extends ActiveAgents {
 		super();
 		enemyChar = 'E';
 	}
+	
+	public void setEnemyChar(char x){
+		enemyChar = x;
+	}
 	/**
 	 * This method will return the String enemy
 	 * @return
@@ -38,6 +42,18 @@ public class Enemy extends ActiveAgents {
 
 	}
 	
+	public boolean alive(){
+		boolean x = true;
+		if(hp <= 0){
+			enemyChar = ' ';
+			x = false;
+		}
+		return x;
+			
+	}
+	public void subhealth(){
+		hp=-1;
+	}
 	public void move(){ 
 		
 	}
