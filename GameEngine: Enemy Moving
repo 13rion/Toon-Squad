@@ -220,12 +220,14 @@ public class GameEngine {
 
 	}
 
-	public void move(String x) {
+	public String move(String x) {
+		String s ="";
 		switch(x) {
 		case "1":
 		case "up":
 			if (board.playerMoveCheck(board.getPlayerX() - 1, board.getPlayerY()) == true) {
 				board.playerUp(player.getPlayer());
+				s = "";
 				enemyMove();
 			}
 			break;
@@ -233,6 +235,7 @@ public class GameEngine {
 		case "left":
 			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() - 1) == true) {
 				board.playerLeft(player.getPlayer());
+				s = "";
 				enemyMove();
 			}
 			break;
@@ -240,6 +243,7 @@ public class GameEngine {
 		case "right":
 			if (board.playerMoveCheck(board.getPlayerX(), board.getPlayerY() + 1) == true) {
 				board.playerRight(player.getPlayer());
+				s = "";
 				enemyMove();
 			}
 			break;
@@ -247,43 +251,126 @@ public class GameEngine {
 		case "down":
 			if (board.playerMoveCheck(board.getPlayerX() + 1, board.getPlayerY()) == true) {
 				board.playerDown(player.getPlayer());
+				s = "";
 				enemyMove();
 			}
+		case "5":
+		case "options":
+			s ="move";
+			
 			break;
 		default:
 			break;
 		}
+		return s;
 	}
 	
-	public void shoot(String x) {
+	public String shoot(String x) {
+		String s ="";
 		switch(x) {
 		case "1":
 		case "up":
 			if(player.shoot() == true) {
-				board.shootUp(board.getPlayerY());
+				board.shootUp(0);
+				int[] location = board.position();
+				for(int i = 0; i < arr.length; i ++){
+					for(int j = 1; j < location.length; j+=2){
+						if(arr[i].getEnemyY() == location[j]){
+							for(int k = 0; k < location.length;k++){
+								if(arr[i].getEnemyX() == location[k]){
+									arr[i].subhealth();
+									arr[i].setEnemyChar(' ');
+								}
+							}
+							
+						}
+					}
+					
+				}
+		
 			}
+			s = "";
+			enemyMove();
 			break;
 		case "2":
 		case "left":
 			if(player.shoot() == true) {
-				board.shootLeft(board.getPlayerX());
+				board.shootLeft(0);
+				int[] location = board.position();
+				for(int i = 0; i < arr.length; i ++){
+					for(int k = 0; k < location.length; k+=2){
+						if(arr[i].getEnemyX() == location[k]){
+							for(int j = 0; j < location.length;j++){
+								if(arr[i].getEnemyY() == location[j]){
+									arr[i].subhealth();
+									arr[i].setEnemyChar(' ');
+								}
+							}
+							
+						}
+					}
+					
+				}
+		
 			}
+			s ="";
+			enemyMove();
 			break;
 		case "3":
 		case "right":
 			if(player.shoot() == true) {
-				board.shootRight(board.getPlayerX());
+				board.shootRight(0);
+				int[] location = board.position();
+				for(int i = 0; i < arr.length; i ++){
+					for(int k = 0; k < location.length; k+=2){
+						if(arr[i].getEnemyX() == location[k]){
+							for(int j = 0; j < location.length;j++){
+								if(arr[i].getEnemyY() == location[j]){
+									arr[i].subhealth();
+									arr[i].setEnemyChar(' ');
+								}
+							}
+							
+						}
+					}
+					
+				}
+		
 			}
+			s = "";
+			enemyMove();
 			break;
 		case "4":
 		case "down":
 			if(player.shoot() == true) {
-				board.shootDown(board.getPlayerY());
+				board.shootDown(0);
+				int[] location = board.position();
+				for(int i = 0; i < arr.length; i ++){
+					for(int j = 1; j < location.length; j+=2){
+						if(arr[i].getEnemyY() == location[j]){
+							for(int k = 0; k < location.length;k++){
+								if(arr[i].getEnemyX() == location[k]){
+									arr[i].subhealth();
+									arr[i].setEnemyChar(' ');
+								}
+							}
+							
+						}
+					}
+					
+				}
+		
 			}
+			s = "";
+			enemyMove();
 			break;
+		case "5":
+		case "options":
+			s = "move";
 		default:
 			break;
 		}
+		return s;
 	}
 
 	/**
