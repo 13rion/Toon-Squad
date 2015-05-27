@@ -128,15 +128,19 @@ public class Board {
 	}
 
 	public void setCase() {
-		int rndmX = R.nextInt(7);
-		int rndmY = R.nextInt(7);
+		int rndmX = R.nextInt(8);
+		int rndmY = R.nextInt(8);
 		if ((rndmX == 1 || rndmX == 4 || rndmX == 7) && (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
 			caseX = rndmX;
 			caseY = rndmY;
-			board[rndmX][rndmY] = CASECHAR;
+//			board[rndmX][rndmY] = CASECHAR;
 		} else {
 			setCase();
 		}
+	}
+	
+	public void printCase(){
+		board[caseX][caseY] = CASECHAR;
 	}
 
 	/**
@@ -147,6 +151,27 @@ public class Board {
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				s += "[" + board[i][j] + "]";
+			}
+			if(i == 0){
+				s += "   LEGEND";
+			}
+			if(i ==2){
+				s += "   P: Player";
+			}
+			if(i ==3){
+				s += "   E: Enemy";
+			}
+			if(i==4){
+				s+= "   X: Rooms";
+			}
+			if(i==5){
+				s+= "   B: Bullet";
+			}
+			if(i==6){
+				s+= "   I: Invincibility";
+			}
+			if(i==7){
+				s+= "   R: Radar";
 			}
 			s = s + "\n";
 		}
@@ -199,6 +224,14 @@ public class Board {
 			}
 		}
 		return x;
+	}
+	
+	public boolean checkChar(int x, int y, char z){
+		boolean check = false;
+		if(board[x][y] == z){
+			 check = true;
+		}
+		return check;
 	}
 
 	public boolean enemyMoveCheck(int i, int k) {
@@ -301,31 +334,28 @@ public class Board {
 		int i = playerX;
 		int j = playerY;
 		
-		while(i >= 0 && board[i][j] != ROOMCHAR){
+		while(i >= 0 && board[i][j] != ROOMCHAR && board[i][j] != CASECHAR){
 			if(board[i][j] == 'E'){
 				board[i][j] = ' ';
 				arrs[k] = i;
 				k++;
 				arrs[k] = j;
-				k++;
-				
+				k++;	
 			}
 			i--;
-			
 		}
 	}
 	public void shootLeft(int k) {
 		int i = playerX;
 		int j = playerY;
 		
-		while(j >= 0 && board[i][j] != ROOMCHAR){
+		while(j >= 0 && board[i][j] != ROOMCHAR && board[i][j] != CASECHAR){
 			if(board[i][j] == 'E'){
 				board[i][j] = ' ';
 				arrs[k] = i;
 				k++;
 				arrs[k] = j;
 				k++;
-				
 			}
 			j--;
 			
@@ -335,14 +365,13 @@ public class Board {
 		int i = playerX;
 		int j = playerY;
 		
-		while(j <= 8 && board[i][j] != ROOMCHAR){
+		while(j <= 8 && board[i][j] != ROOMCHAR && board[i][j] != CASECHAR){
 			if(board[i][j] == 'E'){
 				board[i][j] = ' ';
 				arrs[k] = i;
 				k++;
 				arrs[k] = j;
 				k++;
-				
 			}
 			j++;
 			
@@ -352,14 +381,13 @@ public class Board {
 		int i = playerX;
 		int j = playerY;
 		
-		while(i <= 8 && board[i][j] != ROOMCHAR){
+		while(i <= 8 && board[i][j] != ROOMCHAR && board[i][j] != CASECHAR){
 			if(board[i][j] == 'E'){
 				board[i][j] = ' ';
 				arrs[k] = i;
 				k++;
 				arrs[k] = j;
 				k++;
-				
 			}
 			i++;
 			
@@ -388,62 +416,6 @@ public class Board {
 		board[playerX][playerY] = ' ';
 		playerX += 1;
 		setPlayer(playerX, playerY, x);
-	}
-
-	
-	
-	
-	
-	/**
-	 * This method will search for an enemy in the direction the gun of the
-	 * player was fired. This will only function if the player has ammo to
-	 * shoot.
-	 * 
-	 * @return true if enemy is in line of sight of bullet, return false if not.
-	 */
-	public boolean searchShot() {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the bullet power-up in
-	 * the next step
-	 * 
-	 * @return
-	 */
-	public boolean bullet(char[][] board) {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the invincibility
-	 * power-up in the next step
-	 * 
-	 * @return
-	 */
-	public boolean invincibility(char[][] board) {
-		return false;
-
-	}
-
-	/**
-	 * This method will check if the player will pick up the radar power-up in
-	 * the next step
-	 * 
-	 * @return
-	 */
-	public boolean radar(char[][] board) {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the briefcase in the
-	 * next step
-	 * 
-	 * @return
-	 */
-	public boolean briefcase(char[][] board) {
-		return false;
 	}
 
 	public void checkDeath(Enemy arr){
