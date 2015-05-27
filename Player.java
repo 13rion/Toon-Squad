@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cpp.cs.cs141.teamproject;
+package edu.cpp.cs.cs141.class_project;
 
 /**
  * @author Toon Squad
@@ -58,6 +58,9 @@ public class Player extends ActiveAgents {
 
 	}
 
+	public void giveAmmo(){
+		gun.addAmmo();
+	}
 	public int getLives() {
 		return lives;
 
