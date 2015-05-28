@@ -22,6 +22,7 @@ public class Enemy extends ActiveAgents {
 		super();
 		enemyChar = 'E';
 	}
+	
 	/**
 	 * This method will pick randomly where the enemy to go.
 	 * @return
@@ -31,6 +32,18 @@ public class Enemy extends ActiveAgents {
 
 	}
 	
+	public boolean alive(){
+		boolean x = true;
+		if(hp <= 0){
+			enemyChar = ' ';
+			x = false;
+		}
+		return x;
+			
+	}
+	public void subhealth(){
+		hp=-1;
+	}
 	public void move(){ 
 		
 	}
@@ -45,6 +58,10 @@ public class Enemy extends ActiveAgents {
 	}
 	
 	//GETTERS & SETTERS
+	public void setEnemyChar(char x){
+		enemyChar = x;
+	}
+	
 	public void setEnemyX(int x){
 		enemyX = x;
 	}
