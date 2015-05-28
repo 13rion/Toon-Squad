@@ -17,7 +17,7 @@ public class Board {
 
 	private int playerX;
 	private int playerY;
-	
+
 	private int enemyX;
 	private int enemyY;
 
@@ -37,7 +37,7 @@ public class Board {
 	 * The briefcase
 	 */
 	private final char CASECHAR = 'C';
-	
+
 	private int caseX;
 	private int caseY;
 	/**
@@ -48,8 +48,15 @@ public class Board {
 	private String s;
 
 	private Random R;
+
+	private int[] A = new int[12];
 	
-	private int[] A = new int[1];
+	private int lookUp;
+	private int lookDown;
+	private int lookLeft;
+	private int lookRight;
+	
+	private String mode;
 
 	/**
 	 * This constructor will set up the game board including the rooms,
@@ -59,25 +66,30 @@ public class Board {
 		R = new Random();
 		board = new char[9][9];
 		s = "";
+		mode = "";
 		setBoard();
 		setRooms();
 		setBullet();
 		setInvin();
 		setRadar();
 		setCase();
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
 	}
 
 	public void setBoard() {
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				board[i][j] = ' ';
+			for (int k = 0; k < board[i].length; k++) {
+				board[i][k] = ' ';
 			}
 		}
 	}
 
 	public void setRooms() {
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
+			for (int k = 0; k < board[i].length; k++) {
 				if (i == 1 || i == 4 || i == 7) {
 					board[i][1] = ROOMCHAR;
 					board[i][4] = ROOMCHAR;
@@ -131,27 +143,100 @@ public class Board {
 	public void setCase() {
 		int rndmX = R.nextInt(8);
 		int rndmY = R.nextInt(8);
-		if ((rndmX == 1 || rndmX == 4 || rndmX == 7) && (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
+		if ((rndmX == 1 || rndmX == 4 || rndmX == 7)
+				&& (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
 			caseX = rndmX;
 			caseY = rndmY;
-			board[rndmX][rndmY] = CASECHAR;
+			// board[rndmX][rndmY] = CASECHAR;
 		} else {
 			setCase();
 		}
+	}
+	
+	public void printCase() {
+		board[caseX][caseY] = CASECHAR;
 	}
 
 	/**
 	 * This method will print out the board.
 	 */
 	public String toString() {
+		if(mode == "debug") {
+			printCase();
+		}
 		s = "";
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				s += "[" + board[i][j] + "]";
+			for (int k = 0; k < board[i].length; k++) {
+				if ((i == playerX && k == playerY)
+						|| ((i >= playerX - lookUp && i < playerX) && k == playerY)
+						|| ((i <= playerX + lookDown && i > playerX) && k == playerY)
+						|| (i == playerX && (k <= playerY + lookRight && k > playerY))
+						|| (i == playerX && (k >= playerY - lookLeft && k < playerY))) {
+					s += "[" + board[i][k] + "]";
+				} else if (board[i][k] == ROOMCHAR || board[i][k] == CASECHAR) {
+					s += "[" + board[i][k] + "]";
+				} else if(mode == "normal") {
+					s += "[" + "*" + "]";
+				} else if(mode == "debug") {
+					s += "[" + board[i][k] + "]";
+				}
+			}
+			if(i == 0){
+				s += "   LEGEND";
+			}
+			if(i ==2){
+				s += "   P: Player";
+			}
+			if(i ==3){
+				s += "   E: Enemy";
+			}
+			if(i==4){
+				s+= "   X: Rooms";
+			}
+			if(i==5){
+				s+= "   B: Bullet";
+			}
+			if(i==6){
+				s+= "   I: Invincibility";
+			}
+			if(i==7){
+				s+= "   R: Radar";
 			}
 			s = s + "\n";
 		}
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
 		return s;
+	}
+	
+	public void lookUp() {
+		if((board[playerX - 2][playerY] != ROOMCHAR) || (board[playerX - 3][playerY] != ROOMCHAR)) {
+			lookUp+=2;
+		}
+	}
+
+	public void lookLeft() {
+		if((board[playerX][playerY - 2] != ROOMCHAR) || (board[playerX][playerY - 3] != ROOMCHAR)) {
+			lookLeft+=2;
+		}
+	}
+
+	public void lookRight() {
+		if((board[playerX][playerY + 2] != ROOMCHAR) || (board[playerX][playerY + 3] != ROOMCHAR)) {
+		lookRight+=2;
+		}
+	}
+
+	public void lookDown() {
+		if((board[playerX + 2][playerY] != ROOMCHAR) || (board[playerX + 3][playerY] != ROOMCHAR)) {
+			lookDown+=2;
+		}
+	}
+	
+	public char[][] getBoard() {
+		return board;
 	}
 
 	/**
@@ -169,6 +254,30 @@ public class Board {
 		return x;
 	}
 	
+	public boolean checkRoom() {
+		boolean x = false;
+		if(playerX + 1 == caseX && playerY == caseY) {
+			x = true;
+		}
+		return x;
+	}
+	
+	public boolean win() {
+		boolean x = false;
+		if(checkRoom() == true) {
+			x = true;
+		}
+		return x;
+	}
+
+	public boolean checkChar(int x, int y, char z){
+		boolean check = false;
+		if(board[x][y] == z){
+			 check = true;
+		}
+		return check;
+	}	
+	
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
 		if (i > 4 && k < 3) {
@@ -176,7 +285,7 @@ public class Board {
 		}
 		return x;
 	}
-	
+
 	public boolean playerMoveCheck(int i, int k) {
 		boolean x = false;
 		if (i < 0 || i > 8 || k < 0 || k > 8) {
@@ -217,122 +326,168 @@ public class Board {
 		}
 		return x;
 	}
-	
-	public boolean killPlayerUp(int i, int k){
+
+	public void checkDeath(Enemy arr) {
+		if (arr.getEnemyX() > 4 && arr.getEnemyY() < 4) {
+			int rndmX = R.nextInt(9);
+			int rndmY = R.nextInt(9);
+			if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
+				board[arr.getEnemyX()][arr.getEnemyY()] = ' ';
+				arr.setEnemyX(rndmX);
+				arr.setEnemyY(rndmY);
+				board[rndmX][rndmY] = arr.getEnemy();
+			} else {
+				checkDeath(arr);
+			}
+		}
+
+	}
+
+	public boolean killPlayerUp(int i, int k) {
 		boolean x = false;
-		if(i < 0){
+		if (i < 0) {
 			x = false;
-		}else{
-			if(board[i][k] == 'P'){
+		} else {
+			if (board[i][k] == 'P') {
 				board[i][k] = ' ';
 				x = true;
 			}
 		}
 		return x;
 	}
-	
-	public boolean killPlayerLeft(int i, int k){
+
+	public boolean killPlayerLeft(int i, int k) {
 		boolean x = false;
-		if(k < 0){
+		if (k < 0) {
 			x = false;
-		}else{
-			if(board[i][k] == 'P'){
+		} else {
+			if (board[i][k] == 'P') {
 				board[i][k] = ' ';
 				x = true;
 			}
 		}
 		return x;
 	}
-	
-	public boolean killPlayerRight(int i, int k){
+
+	public boolean killPlayerRight(int i, int k) {
 		boolean x = false;
-		if(k > 8){
+		if (k > 8) {
 			x = false;
-		}else{
-			if(board[i][k] == 'P'){
+		} else {
+			if (board[i][k] == 'P') {
 				board[i][k] = ' ';
 				x = true;
 			}
 		}
 		return x;
 	}
-	
-	public boolean killPlayerDown(int i, int k){
+
+	public boolean killPlayerDown(int i, int k) {
 		boolean x = false;
-		if(i > 8){
+		if (i > 8) {
 			x = false;
-		}else{
-			if(board[i][k] == 'P'){
-			board[i][k] = ' ';
-			x = true;
+		} else {
+			if (board[i][k] == 'P') {
+				board[i][k] = ' ';
+				x = true;
 			}
 		}
 		return x;
 	}
-		
+
 	public void enemyUp(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X-1][Y] = k;
+		board[X - 1][Y] = k;
 	}
 
 	public void enemyLeft(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X][Y-1]= k;
+		board[X][Y - 1] = k;
 	}
 
 	public void enemyRight(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X][Y+1]= k;
+		board[X][Y + 1] = k;
 	}
 
 	public void enemyDown(int X, int Y, char k) {
 		board[X][Y] = ' ';
-		board[X+1][Y]= k;
+		board[X + 1][Y] = k;
 	}
-	
-	
-	public int[] killPosition() {
+
+	public int[] position() {
 		return A;
 	}
-	
-	public void shootUp(int k) {
-		for (int i = playerX; i > -1; --i) {
-			if(board[i][k] == 'E') {
+
+	public void shootUp(int x) {
+		int i = playerX;
+		int k = playerY;
+
+		while (i >= 0 && (board[i][k] != ROOMCHAR && board[i][k] != CASECHAR)) {
+			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[0] = i;
-				A[1] = k;
-				killPosition();
+				A[x] = i;
+				x++;
+				A[x] = k;
+				x++;
+
 			}
+			i--;
+
 		}
 	}
-	public void shootLeft(int i) {
-		for (int k = playerY; k > -1; --k) {
-			if(board[i][k] == 'E') {
+
+	public void shootLeft(int x) {
+		int i = playerX;
+		int k = playerY;
+
+		while (k >= 0 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[0] = i;
-				A[1] = k;
-				killPosition();
+				A[x] = i;
+				x++;
+				A[x] = k;
+				x++;
+
 			}
+			k--;
+
 		}
 	}
-	public void shootRight(int i) {
-		for (int k = playerY; k < board.length; ++k) {
-			if(board[i][k] == 'E') {
+
+	public void shootRight(int x) {
+		int i = playerX;
+		int k = playerY;
+
+		while (k <= 8 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[0] = i;
-				A[1] = k;
-				killPosition();
+				A[x] = i;
+				x++;
+				A[x] = k;
+				x++;
+
 			}
+			k++;
+
 		}
 	}
-	public void shootDown(int k) {
-		for (int i = playerX; i < board.length; ++i) {
-			if(board[i][k] == 'E') {
+
+	public void shootDown(int x) {
+		int i = playerX;
+		int k = playerY;
+
+		while (i <= 8 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[0] = i;
-				A[1] = k;
-				killPosition();
+				A[x] = i;
+				x++;
+				A[x] = k;
+				x++;
+
 			}
+			i++;
+
 		}
 	}
 
@@ -360,10 +515,6 @@ public class Board {
 		setPlayer(playerX, playerY, x);
 	}
 
-	
-	
-	
-	
 	/**
 	 * This method will search for an enemy in the direction the gun of the
 	 * player was fired. This will only function if the player has ammo to
@@ -415,9 +566,14 @@ public class Board {
 	public boolean briefcase(char[][] board) {
 		return false;
 	}
-	
-	
-	//GETTERS
+
+	public void setMode(String s) {
+		mode = s;
+	}
+	// GETTERS
+	public String getMode() {
+		return mode;
+	}
 	public int getPlayerX() {
 		return playerX;
 	}
@@ -425,7 +581,7 @@ public class Board {
 	public int getPlayerY() {
 		return playerY;
 	}
-	
+
 	public int getEnemyX() {
 		return enemyX;
 	}
