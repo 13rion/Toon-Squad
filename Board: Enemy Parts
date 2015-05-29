@@ -49,6 +49,13 @@ public class Board {
 
 	private Random R;
 	private int[] arrs = new int[12];
+	
+	private int lookUp;
+	private int lookDown;
+	private int lookLeft;
+	private int lookRight;
+	
+	private String mode;
 
 	/**
 	 * This constructor will set up the game board including the rooms,
@@ -64,6 +71,10 @@ public class Board {
 		setInvin();
 		setRadar();
 		setCase();
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
 	}
 
 	public void setBoard() {
@@ -147,10 +158,25 @@ public class Board {
 	 * This method will print out the board.
 	 */
 	public String toString() {
+		if(mode == "debug") {
+			printCase();
+		}
 		s = "";
 		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[i].length; j++) {
-				s += "[" + board[i][j] + "]";
+			for (int k = 0; k < board[i].length; k++) {
+				if ((i == playerX && k == playerY)
+						|| ((i >= playerX - lookUp && i < playerX) && k == playerY)
+						|| ((i <= playerX + lookDown && i > playerX) && k == playerY)
+						|| (i == playerX && (k <= playerY + lookRight && k > playerY))
+						|| (i == playerX && (k >= playerY - lookLeft && k < playerY))) {
+					s += "[" + board[i][k] + "]";
+				} else if (board[i][k] == ROOMCHAR || board[i][k] == CASECHAR) {
+					s += "[" + board[i][k] + "]";
+				} else if(mode == "normal") {
+					s += "[" + "*" + "]";
+				} else if(mode == "debug") {
+					s += "[" + board[i][k] + "]";
+				}
 			}
 			if(i == 0){
 				s += "   LEGEND";
@@ -175,9 +201,64 @@ public class Board {
 			}
 			s = s + "\n";
 		}
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
 		return s;
 	}
 
+	public void lookUp() {
+		if(playerX > 1){	
+			if(board[playerX-1][playerY] != ROOMCHAR && board[playerX - 2][playerY] != ROOMCHAR){
+				if(playerX-2 >= 1){
+					lookUp+=2;
+				}else if(playerX-2 == 0){
+					lookUp+=1;
+				}
+			}
+		}
+	}
+
+	public void lookLeft() {
+		if(playerY > 1){
+			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
+				if(playerY-2 >= 1){
+					lookLeft+=2;
+				}else if(playerY-2 == 0){
+					lookUp+=1;
+				}
+			}
+		}
+	}
+
+	public void lookRight() {
+		if(playerY < 7){
+			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
+				if(playerY+2 <= 7){
+					lookRight+=2;
+				}else if(playerY+1 == 8){
+					lookRight+=1;
+				}
+			}
+		}
+	}
+
+	public void lookDown() {
+		if(playerX < 7){
+			if(board[playerX+1][playerY] != ROOMCHAR && board[playerX +2][playerY] != ROOMCHAR) {
+				if(playerX+2 <= 7){
+					lookDown+=2;
+				}else if(playerX+1 == 8){
+					lookDown+=1;
+				}
+			}
+		}
+	}
+	
+	public char[][] getBoard() {
+		return board;
+	}
 	/**
 	 * This method will check to see if a player is able to step in the
 	 * direction that they chose.
@@ -188,6 +269,22 @@ public class Board {
 	public boolean check(int i, int k) {
 		boolean x = false;
 		if (board[i][k] == ' ') {
+			x = true;
+		}
+		return x;
+	}
+	
+	public boolean checkRoom() {
+		boolean x = false;
+		if(playerX + 1 == caseX && playerY == caseY) {
+			x = true;
+		}
+		return x;
+	}
+	
+	public boolean win() {
+		boolean x = false;
+		if(checkRoom() == true) {
 			x = true;
 		}
 		return x;
@@ -434,6 +531,13 @@ public class Board {
 			
 	}
 	
+	public void setMode(String s) {
+		mode = s;
+	}
+	// GETTERS
+	public String getMode() {
+		return mode;
+	}
 	//GETTERS
 	public int getPlayerX() {
 		return playerX;
