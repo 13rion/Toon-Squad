@@ -54,10 +54,7 @@ public class Enemy extends ActiveAgents {
 	public void subhealth(){
 		hp=-1;
 	}
-	public void move(){ 
 		
-	}
-	
 	public void setEnemyX(int x){
 		enemyX = x;
 	}
