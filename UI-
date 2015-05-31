@@ -1,0 +1,175 @@
+/**
+ * 
+ */
+package edu.cpp.cs.cs141.class_project;
+
+import java.util.Scanner;
+
+/**
+ * @author Fortu
+ *
+ */
+public class UI {
+	/*
+	 * 
+	 */
+	private Scanner sc;
+
+	/*
+	 * 
+	 */
+	private GameEngine ge;
+	
+	private int lookCounter;
+
+	/**
+	 * This constructor will instantiate the scanner and GameEngine.
+	 */
+	public UI() {
+		ge = new GameEngine();
+		sc = new Scanner(System.in);
+		lookCounter = 0;
+		start();
+	}
+	
+	/**
+	 * This method will start the game
+	 */
+	public void start() {
+		System.out.println("1. Start Game \n2. Load Game \n3. Debug Mode");
+		String x = ge.start(sc.nextLine());
+		if(x != "") {
+			options(x);
+		} else {
+			start();
+		}
+	}
+	
+	public void play() {
+		if(ge.playerLives() > 0){
+			if(ge.invinc() == true){
+				System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
+			}
+			System.out.println(ge.getBoard());
+			System.out.println("Lives: "+ ge.playerLives());
+			System.out.println("Bullets: "+ ge.playerAmmo());
+			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug");				
+			options(ge.action(sc.nextLine()));
+		}else{
+			playerDead();
+		}
+	}
+	
+	private void playerDead() {
+		System.out.println("\nYou have failed your mission! \nBetter Luck Next Time");
+		
+	}
+
+	public void playNoBoard() {
+		System.out.println("1. Move \n2. Shoot \n3. Look \n4. Save \n5. Save Game \n6. Debug/Exit");
+		options(ge.action(sc.nextLine()));
+		play();
+	}
+	
+	private void options(String s) {
+		if(s == "start") {
+			play();
+		}
+		else if(s == "debug") {
+			System.out.println("Debug Mode Activated.");
+			play();
+		}
+		else if(s == "normal") {
+			System.out.println("Debug Mode Deactivated.");
+			play();
+		}
+		else if(s == "move") {
+			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5. Options");
+			String t = ge.move(sc.nextLine());
+				if(t == "") {
+					invalid();
+					play();
+				}
+				else if(t == "options") { 
+					playNoBoard();
+				}else{
+					lookCounter = 0;
+					play();
+				}
+		}
+		else if(s == "shoot") {
+			System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
+			String t = ge.shoot(sc.nextLine());
+				if(t == "") {
+					invalid();
+					play();
+				}
+				else if(t == "options") {
+					playNoBoard();
+				}else if(t == "ammo"){
+					System.out.println("You have no ammo, and wasted your turn");
+					play();
+				}else{
+					lookCounter = 0;
+					play();
+				}
+		}
+		else if(s == "check") {
+			System.out.println("Checking room...");
+			if(ge.checkRoom() == true) {
+				System.out.println("Briefcase Found!");
+				win();
+			}
+			if(ge.checkRoom() == false) {
+				System.out.println("Briefcase Not Found");
+				play();
+			}
+		}
+		else if(s == "look") {
+			if(lookCounter == 0){
+				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
+				String t = ge.look(sc.nextLine());
+				if(t == "") {
+					invalid();
+					play();
+				}
+				else if(t == "options") {
+					playNoBoard();
+				}else{
+					lookCounter = 1;
+					play();
+				}
+			}else{
+				System.out.println("You can only use Look once per turn");
+				playNoBoard();
+			}
+		}
+		else if(s == ""){
+			lookCounter = 0;
+			invalid();
+			play();
+		}
+		else if(s == "save"){
+			System.out.println("Save goes here");
+		}
+	}
+	
+	private void win() {
+		for(int i = 0; i < 49; i++) {
+			System.out.println("YOU WON!!!!!");
+		}
+		System.out.println("Want a fucking trophy bitch?");
+//		System.exit(0);
+	}
+	
+	public void invalid(){
+		System.out.println("\nInvalid Entry \nPlease choose one of the following");
+	}
+
+	/*
+	 *This method will print out the outcomes. 
+	 */
+	private void response() {
+
+	}
+}
