@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cpp.cs.cs141.teamproject;
+package edu.cpp.cs.cs141.class_project;
 
 /**
  * @author Toon Squad
