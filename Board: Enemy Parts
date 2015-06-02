@@ -208,52 +208,97 @@ public class Board {
 		return s;
 	}
 
-	public void lookUp() {
+	public boolean lookUp() {
+		boolean x = false;
 		if(playerX > 1){	
 			if(board[playerX-1][playerY] != ROOMCHAR && board[playerX - 2][playerY] != ROOMCHAR){
 				if(playerX-2 >= 1){
+					if(board[playerX-2][playerY] == 'E' || board[playerX-3][playerY] == 'E'){
+						x = true;
+					}
 					lookUp+=2;
 				}else if(playerX-2 == 0){
+					if(board[playerX-1][playerY] == 'E' || board[playerX-2][playerY] == 'E'){
+						x = true;
+					}
 					lookUp+=1;
 				}
 			}
+			if(board[playerX-1][playerY] == 'E'){
+				x = true;	
+			}
 		}
+		return x;
 	}
 
-	public void lookLeft() {
+	public boolean lookLeft() {
+		boolean x = false;
 		if(playerY > 1){
-			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
+			if(board[playerX][playerY-1] != ROOMCHAR && board[playerX][playerY-2] != ROOMCHAR) {
 				if(playerY-2 >= 1){
+					if(board[playerX][playerY-2] == 'E' || board[playerX][playerY-3] == 'E'){										
+						x = true;
+					}
 					lookLeft+=2;
 				}else if(playerY-2 == 0){
-					lookUp+=1;
+					if(board[playerX][playerY-1] == 'E' || board[playerX][playerY-2] == 'E'){
+						x = true;
+					}
+					lookLeft+=1;
 				}
 			}
+			if(board[playerX][playerY-1] == 'E'){
+				x = true;	
+			}
 		}
+		return x;
 	}
 
-	public void lookRight() {
+	public boolean lookRight() {
+		boolean x = false;
 		if(playerY < 7){
 			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
 				if(playerY+2 <= 7){
+					if(board[playerX][playerY+2] == 'E' || board[playerX][playerY+3] == 'E'){
+														
+						x = true;
+					}
 					lookRight+=2;
 				}else if(playerY+1 == 8){
+					if(board[playerX][playerY+1] == 'E' || board[playerX][playerY+2] == 'E'){
+						x = true;
+					}
 					lookRight+=1;
 				}
 			}
+			if(board[playerX][playerY+1] == 'E'){
+				x = true;
+			}
 		}
+		return x;
 	}
 
-	public void lookDown() {
+	public boolean lookDown() {
+		boolean x = false;
 		if(playerX < 7){
 			if(board[playerX+1][playerY] != ROOMCHAR && board[playerX +2][playerY] != ROOMCHAR) {
 				if(playerX+2 <= 7){
+					if(board[playerX+2][playerY] == 'E' || board[playerX+3][playerY] == 'E'){										
+						x = true;
+					}
 					lookDown+=2;
 				}else if(playerX+1 == 8){
+					if(board[playerX+1][playerY] == 'E' || board[playerX+2][playerY] == 'E'){
+						x = true;
+					}
 					lookDown+=1;
 				}
 			}
+			if(board[playerX+1][playerY] == 'E'){
+			x = true;
+			}
 		}
+		return x;
 	}
 	
 	public char[][] getBoard() {
