@@ -4,12 +4,13 @@
 package edu.cpp.cs.cs141.teamproject;
 
 import java.util.Random;
+import java.io.Serializable;
 
 /**
  * @author Toon Squad
  *
  */
-public class GameEngine {
+public class GameEngine implements Serializable {
 
 	/**
 	 * 
@@ -21,13 +22,15 @@ public class GameEngine {
 	private Board board;
 
 	private Random R;
-	private Enemy[] arr;
+	private Enemy[] enemies;
 	
 	private boolean kill;
 
 	private boolean invincibility;
 	
 	private int invin = 0;
+	
+	private int level;
 
 	/**
 	 * This constructor will instantiate Player, Enemy, and Board, as well as
@@ -36,7 +39,17 @@ public class GameEngine {
 		board = new Board();
 		player = new Player();
 		R = new Random();
-		arr = new Enemy[6];
+		level = 1;
+		kill = false;
+		invincibility = false;
+		set();
+	}
+	
+	public GameEngine(int x) {
+		board = new Board();
+		player = new Player();
+		R = new Random();
+		level = 1 + x;
 		kill = false;
 		invincibility = false;
 		set();
@@ -45,97 +58,107 @@ public class GameEngine {
 
 	public void set() {
 		board.setPlayer(8, 0, player.getPlayer());
-		for (int i = 0; i < arr.length; i++) {
-			arr[i] = new Enemy();
-			board.setEnemy(arr[i].getEnemy());
-			arr[i].setEnemyX(board.getEnemyX());
-			arr[i].setEnemyY(board.getEnemyY());
+		enemies = new Enemy[5 + level];
+		for (int i = 0; i < enemies.length; i++) {
+			enemies[i] = new Enemy();
+			board.setEnemy(enemies[i].getEnemy());
+			enemies[i].setEnemyX(board.getEnemyX());
+			enemies[i].setEnemyY(board.getEnemyY());
 		}
 	}
 	
 	public void resetPlayer() {
 		board.setPlayer(8, 0, player.getPlayer());
 	}
+	
+	public boolean invinc(){
+		return invincibility;
+	}
+	
+	public int invincNum(){
+		int num = 6-invin;
+		return num;
+	}
 
 	public void enemyMove() {
 		if(invincibility == true){
 			invin++;
-			if(invin == 5){
+			if(invin > 5){
 				invincibility = false;
 			}
 		}else{
-			for (int i = 0; i < arr.length; i++) {
-				if (arr[i].alive() == true) {
-					kill(arr[i]);
+			for (int i = 0; i < enemies.length; i++) {
+				if (enemies[i].alive() == true) {
+					kill(enemies[i]);
 				}
 			}
 		}
-		for (int j = 0; j < arr.length; j++) {
+		for (int j = 0; j < enemies.length; j++) {
 			if (kill == false) {
-				if (arr[j].alive() == true) {
+				if (enemies[j].alive() == true) {
 					int rndm = R.nextInt(4);
-					randomEnemy(arr[j], rndm);
+					randomEnemy(enemies[j], rndm);
 				}
 			}
 		}
 		kill = false;
 	}
 
-	public void randomEnemy(Enemy arr2, int x) {
-		if((board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == false) &&
-			(board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() - 1) == false)	&&
-			(board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() + 1) == false) &&
-			(board.enemyMoveCheck(arr2.getEnemyX() + 1, arr2.getEnemyY()) == false)) {
+	public void randomEnemy(Enemy enemies2, int x) {
+		if((board.enemyMoveCheck(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == false) &&
+			(board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == false)	&&
+			(board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == false) &&
+			(board.enemyMoveCheck(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == false)) {
 			
 		} else {
 			switch(x){
 				//Up
 				case 0:
-					if (board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
-						board.enemyUp(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
-						arr2.setEnemyX(arr2.getEnemyX() - 1);
-						arr2.setEnemyY(arr2.getEnemyY());
+					if (board.enemyMoveCheck(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == true) {
+						board.enemyUp(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+						enemies2.setEnemyX(enemies2.getEnemyX() - 1);
+						enemies2.setEnemyY(enemies2.getEnemyY());
 					}else{
 						x = R.nextInt(4 - 1) + 1;
-						randomEnemy(arr2, x);
+						randomEnemy(enemies2, x);
 					}
 					break;
 				//Left
 				case 1:
-					if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() - 1) == true) {
-						board.enemyLeft(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
-						arr2.setEnemyX(arr2.getEnemyX());
-						arr2.setEnemyY(arr2.getEnemyY() - 1);
+					if (board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == true) {
+						board.enemyLeft(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+						enemies2.setEnemyX(enemies2.getEnemyX());
+						enemies2.setEnemyY(enemies2.getEnemyY() - 1);
 					}else{
 						while(x == 1) {
 							x = R.nextInt(4);
 						}
-						randomEnemy(arr2,x);
+						randomEnemy(enemies2,x);
 					}
 					break;
 				//Right
 				case 2:
-					if (board.enemyMoveCheck(arr2.getEnemyX(), arr2.getEnemyY() + 1) == true) {
-						board.enemyRight(arr2.getEnemyX(), arr2.getEnemyY(),arr2.getEnemy());
-						arr2.setEnemyX(arr2.getEnemyX());
-						arr2.setEnemyY(arr2.getEnemyY() + 1);
+					if (board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == true) {
+						board.enemyRight(enemies2.getEnemyX(), enemies2.getEnemyY(),enemies2.getEnemy());
+						enemies2.setEnemyX(enemies2.getEnemyX());
+						enemies2.setEnemyY(enemies2.getEnemyY() + 1);
 					}else{
 						x = R.nextInt(4);
 						while(x == 2) {
 							x = R.nextInt(4);
 						}
-						randomEnemy(arr2,x);
+						randomEnemy(enemies2,x);
 					}
 					break;
 				//Down
 				case 3:
-					if (board.enemyMoveCheck(arr2.getEnemyX() + 1, arr2.getEnemyY()) == true) {
-						board.enemyDown(arr2.getEnemyX(), arr2.getEnemyY(), arr2.getEnemy());
-						arr2.setEnemyX(arr2.getEnemyX() + 1);
-						arr2.setEnemyY(arr2.getEnemyY());
+					if (board.enemyMoveCheck(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == true) {
+						board.enemyDown(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+						enemies2.setEnemyX(enemies2.getEnemyX() + 1);
+						enemies2.setEnemyY(enemies2.getEnemyY());
 					} else {
 						x = R.nextInt(4 - 1);
-						randomEnemy(arr2, x);
+						randomEnemy(enemies2, x);
 					}
 					break;
 				default:
@@ -144,33 +167,33 @@ public class GameEngine {
 		}
 	}
 
-	public boolean kill(Enemy arr2) {
-		if (board.killPlayerUp(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
+	public boolean kill(Enemy enemies2) {
+		if (board.killPlayerUp(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == true) {
 			player.subLives();
-			for (int i = 0; i < arr.length; i++) {
-				board.checkDeath(arr[i]);
+			for (int i = 0; i < enemies.length; i++) {
+				board.checkDeath(enemies[i]);
 			}
 			resetPlayer();
 			kill = true;
-		} else if (board.killPlayerDown(arr2.getEnemyX() + 1, arr2.getEnemyY()) == true) {
+		} else if (board.killPlayerDown(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == true) {
 			player.subLives();
-			for (int i = 0; i < arr.length; i++) {
-				board.checkDeath(arr[i]);
+			for (int i = 0; i < enemies.length; i++) {
+				board.checkDeath(enemies[i]);
 			}
 			resetPlayer();
 			kill = true;
 		} else if (board
-				.killPlayerRight(arr2.getEnemyX(), arr2.getEnemyY() + 1) == true) {
+				.killPlayerRight(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == true) {
 			player.subLives();
-			for (int i = 0; i < arr.length; i++) {
-				board.checkDeath(arr[i]);
+			for (int i = 0; i < enemies.length; i++) {
+				board.checkDeath(enemies[i]);
 			}
 			resetPlayer();
 			kill = true;
-		} else if (board.killPlayerLeft(arr2.getEnemyX(), arr2.getEnemyY() - 1) == true) {
+		} else if (board.killPlayerLeft(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == true) {
 			player.subLives();
-			for (int i = 0; i < arr.length; i++) {
-				board.checkDeath(arr[i]);
+			for (int i = 0; i < enemies.length; i++) {
+				board.checkDeath(enemies[i]);
 			}
 			resetPlayer();
 			kill = true;
@@ -185,7 +208,7 @@ public class GameEngine {
 		case "start":
 		case "s":
 			s = "start";
-			board.setMode("normal");
+			board.setMode(1);
 			break;
 		case "2": 
 		case "load":
@@ -196,7 +219,38 @@ public class GameEngine {
 		case "debug":
 		case "d":
 			s = "debug";
-			board.setMode("debug");
+			board.setMode(2);
+			break;
+		default:
+			break;
+		}
+		return s;
+
+	}
+	
+	public String level(String t) {
+		String s = "";
+		switch(t) {
+		case "1": 
+		case "continue":
+		case "c":
+			s = "continue";
+			if(board.getMode() == 1 || board.getMode() == 0) {
+				s = "debug";
+				board.setMode(2);
+			} else if(board.getMode() == 2) {
+				s = "normal";
+				board.setMode(1);
+			}
+			break;
+		case "2": 
+		case "save":
+			s = "save";
+			break;
+		case "3": 
+		case "quit":
+		case "q":
+			s = "quit";
 			break;
 		default:
 			break;
@@ -235,12 +289,12 @@ public class GameEngine {
 		case "6":
 		case "debug":
 		case "d":
-			if(board.getMode() == "normal" || board.getMode() == "") {
+			if(board.getMode() == 1 || board.getMode() == 0) {
 				s = "debug";
-				board.setMode("debug");
-			} else if(board.getMode() == "debug") {
+				board.setMode(2);
+			} else if(board.getMode() == 2) {
 				s = "normal";
-				board.setMode("normal");
+				board.setMode(1);
 			}
 			break;
 		default:
@@ -270,7 +324,7 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerUp(player.getPlayer());
-				s = "";
+				s = "1";
 				enemyMove();
 			}
 			break;
@@ -287,7 +341,7 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerLeft(player.getPlayer());
-				s = "";
+				s = "2";
 				enemyMove();
 			}
 			break;
@@ -304,7 +358,7 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerRight(player.getPlayer());
-				s = "";
+				s = "3";
 				enemyMove();
 			}
 			break;
@@ -321,13 +375,12 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerDown(player.getPlayer());
-				s = "";
+				s = "4";
 				enemyMove();
 			}
 		case "5":
 		case "options":
 			s = "move";
-
 			break;
 		default:
 			break;
@@ -343,13 +396,13 @@ public class GameEngine {
 			if(player.shoot() == true) {
 				board.shootUp(0);
 				int[] location = board.position();
-				for(int i = 0; i < arr.length; i ++){
+				for(int i = 0; i < enemies.length; i ++){
 					for(int j = 1; j < location.length; j+=2){
-						if(arr[i].getEnemyY() == location[j]){
+						if(enemies[i].getEnemyY() == location[j]){
 							for(int k = 0; k < location.length;k++){
-								if(arr[i].getEnemyX() == location[k]){
-									arr[i].subhealth();
-									arr[i].setEnemyChar(' ');
+								if(enemies[i].getEnemyX() == location[k]){
+									enemies[i].subhealth();
+									enemies[i].setEnemyChar(' ');
 								}
 							}
 							
@@ -367,13 +420,13 @@ public class GameEngine {
 			if(player.shoot() == true) {
 				board.shootLeft(0);
 				int[] location = board.position();
-				for(int i = 0; i < arr.length; i ++){
+				for(int i = 0; i < enemies.length; i ++){
 					for(int k = 0; k < location.length; k+=2){
-						if(arr[i].getEnemyX() == location[k]){
+						if(enemies[i].getEnemyX() == location[k]){
 							for(int j = 0; j < location.length;j++){
-								if(arr[i].getEnemyY() == location[j]){
-									arr[i].subhealth();
-									arr[i].setEnemyChar(' ');
+								if(enemies[i].getEnemyY() == location[j]){
+									enemies[i].subhealth();
+									enemies[i].setEnemyChar(' ');
 								}
 							}
 							
@@ -391,13 +444,13 @@ public class GameEngine {
 			if(player.shoot() == true) {
 				board.shootRight(0);
 				int[] location = board.position();
-				for(int i = 0; i < arr.length; i ++){
+				for(int i = 0; i < enemies.length; i ++){
 					for(int k = 0; k < location.length; k+=2){
-						if(arr[i].getEnemyX() == location[k]){
+						if(enemies[i].getEnemyX() == location[k]){
 							for(int j = 0; j < location.length;j++){
-								if(arr[i].getEnemyY() == location[j]){
-									arr[i].subhealth();
-									arr[i].setEnemyChar(' ');
+								if(enemies[i].getEnemyY() == location[j]){
+									enemies[i].subhealth();
+									enemies[i].setEnemyChar(' ');
 								}
 							}
 							
@@ -415,13 +468,13 @@ public class GameEngine {
 			if(player.shoot() == true) {
 				board.shootDown(0);
 				int[] location = board.position();
-				for(int i = 0; i < arr.length; i ++){
+				for(int i = 0; i < enemies.length; i ++){
 					for(int j = 1; j < location.length; j+=2){
-						if(arr[i].getEnemyY() == location[j]){
+						if(enemies[i].getEnemyY() == location[j]){
 							for(int k = 0; k < location.length;k++){
-								if(arr[i].getEnemyX() == location[k]){
-									arr[i].subhealth();
-									arr[i].setEnemyChar(' ');
+								if(enemies[i].getEnemyX() == location[k]){
+									enemies[i].subhealth();
+									enemies[i].setEnemyChar(' ');
 								}
 							}
 							
@@ -447,33 +500,43 @@ public class GameEngine {
 	 * This method will let the user look at any direction
 	 */
 	public String look(String t) {
-		String s ="";
+		String s =" ";
 		switch(t) {
 		case "1":
 		case "up":
-				board.lookUp();
-				s = "";
+		case "u":
+			if(board.lookUp() == true){
+				s = "enemy";
+			}
 			break;
 		case "2":
 		case "left":
-				board.lookLeft();
-				s = "";
+		case "l":
+			if(board.lookLeft() == true){
+				s = "enemy";
+			}
 			break;
 		case "3":
 		case "right":
-				board.lookRight();
-				s = "";
+		case "r":
+			if(board.lookRight() == true){
+				s = "enemy";
+			}
 			break;
 		case "4":
 		case "down":
-				board.lookDown();
-				s = "";
+		case "d":
+			if(board.lookDown() == true){
+				s = "enemy";
+			}
 			break;
 		case "5":
 		case "options":
+		case "o":
 			s = "options";
 			break;
 		default:
+			s = "";
 			break;
 		}
 		return s;
@@ -495,5 +558,17 @@ public class GameEngine {
 	
 	public char[][] board() {
 		return board.getBoard();
+	}
+	
+	public int playerLives(){
+		return player.getLives();
+	}
+	
+	public int playerAmmo(){
+		return player.getAmmo();
+	}
+	
+	public int getLevel() {
+		return level;
 	}
 }
