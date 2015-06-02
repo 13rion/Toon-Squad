@@ -1,13 +1,15 @@
 /**
  * 
  */
-package edu.cpp.cs.cs141.class_project;
+package edu.cpp.cs.cs141.teamproject;
+
+import java.io.Serializable;
 
 /**
  * @author Toon Squad
  *
  */
-public class Player extends ActiveAgents {
+public class Player extends ActiveAgents implements Serializable {
 
 	private int lives;
 
