@@ -21,6 +21,7 @@ public class UI {
 	private GameEngine ge;
 	
 	private int lookCounter;
+	private int playerLives;
 
 	/**
 	 * This constructor will instantiate the scanner and GameEngine.
@@ -29,6 +30,7 @@ public class UI {
 		ge = new GameEngine();
 		sc = new Scanner(System.in);
 		lookCounter = 0;
+		playerLives = 3;
 		start();
 	}
 	
@@ -50,6 +52,10 @@ public class UI {
 			if(ge.invinc() == true){
 				System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
 			}
+			if(playerLives > ge.playerLives()){
+				playerLives--;
+				System.out.println("A NINJA KILLED YOU!");
+			}
 			System.out.println(ge.getBoard());
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
@@ -60,30 +66,30 @@ public class UI {
 		}
 	}
 	
-	private void playerDead() {
-		System.out.println("\nYou have failed your mission! \nBetter Luck Next Time");
+	public void playerDead() {
+		System.out.println("\nYOU FAILED YOUR MISSION! \nBETTER LUCK NEXT TIME");
 		
 	}
 
-	public void playNoBoard() {
-		System.out.println("1. Move \n2. Shoot \n3. Look \n4. Save \n5. Save Game \n6. Debug/Exit");
-		options(ge.action(sc.nextLine()));
-		play();
-	}
+//	public void playNoBoard() {
+//		System.out.println("1. Move \n2. Shoot \n3. Look \n4. Save \n5. Save Game \n6. Debug/Exit");
+//		options(ge.action(sc.nextLine()));
+////		play();
+//	}
 	
-	private void options(String s) {
+	public void options(String s) {
 		if(s == "start") {
 			play();
 		}
-		else if(s == "debug") {
+		if(s == "debug") {
 			System.out.println("Debug Mode Activated.");
 			play();
 		}
-		else if(s == "normal") {
+		if(s == "normal") {
 			System.out.println("Debug Mode Deactivated.");
 			play();
 		}
-		else if(s == "move") {
+		if(s == "move") {
 			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5. Options");
 			String t = ge.move(sc.nextLine());
 				if(t == "") {
@@ -91,41 +97,49 @@ public class UI {
 					play();
 				}
 				else if(t == "options") { 
-					playNoBoard();
-				}else{
-					lookCounter = 0;
-					play();
-				}
-		}
-		else if(s == "shoot") {
-			System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
-			String t = ge.shoot(sc.nextLine());
-				if(t == "") {
-					invalid();
-					play();
-				}
-				else if(t == "options") {
-					playNoBoard();
-				}else if(t == "ammo"){
-					System.out.println("You have no ammo, and wasted your turn");
 					play();
 				}else{
 					lookCounter = 0;
 					play();
 				}
 		}
-		else if(s == "check") {
-			System.out.println("Checking room...");
+		if(s == "shoot") {
+			if(ge.playerAmmo() == 0){
+				System.out.println("YOU HAVE NO BULLETS TO SHOOT");
+				play();
+			}else{
+				System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
+				String t = ge.shoot(sc.nextLine());
+					if(t == "") {
+						invalid();
+						play();
+					}
+					else if(t == "kill"){
+						System.out.println("YOU KILLED AN ENEMY!");
+						lookCounter = 0;
+						play();
+					}
+					else if(t == "options") {
+						play();
+					}else{
+						System.out.println("YOU FIRED BLANKLY DOWN THE HALL AND HIT THE WALL");
+						lookCounter = 0;
+						play();
+					}
+			}
+		}
+		if(s == "check") {
+			System.out.println("CHECKING ROOM...");
 			if(ge.checkRoom() == true) {
-				System.out.println("Briefcase Found!");
+				System.out.println("BRIEFCASE FOUND!");
 				win();
 			}
-			if(ge.checkRoom() == false) {
-				System.out.println("Briefcase Not Found");
+			else{
+				System.out.println("BRIEFCASE NOT FOUND");
 				play();
 			}
 		}
-		else if(s == "look") {
+		if(s == "look") {
 			if(lookCounter == 0){
 				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
 				String t = ge.look(sc.nextLine());
@@ -134,27 +148,32 @@ public class UI {
 					play();
 				}
 				else if(t == "options") {
-					playNoBoard();
+					play();
+				}else if(t == "enemy"){
+					System.out.println("NINJA AHEAD");
+					lookCounter = 1;
+					play();
 				}else{
+					System.out.println("AREA CLEAR");
 					lookCounter = 1;
 					play();
 				}
 			}else{
-				System.out.println("You can only use Look once per turn");
-				playNoBoard();
+				System.out.println("YOU CAN ONLY USE 'LOOK' ONCE PER TURN");
+				play();
 			}
 		}
-		else if(s == ""){
+		if(s == ""){
 			lookCounter = 0;
 			invalid();
 			play();
 		}
-		else if(s == "save"){
+		if(s == "save"){
 			System.out.println("Save goes here");
 		}
 	}
 	
-	private void win() {
+	public void win() {
 		for(int i = 0; i < 49; i++) {
 			System.out.println("YOU WON!!!!!");
 		}
@@ -166,10 +185,4 @@ public class UI {
 		System.out.println("\nInvalid Entry \nPlease choose one of the following");
 	}
 
-	/*
-	 *This method will print out the outcomes. 
-	 */
-	private void response() {
-
-	}
 }
