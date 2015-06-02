@@ -55,7 +55,6 @@ public class GameEngine implements Serializable {
 		set();
 	}
 
-
 	public void set() {
 		board.setPlayer(8, 0, player.getPlayer());
 		enemies = new Enemy[5 + level];
@@ -79,6 +78,10 @@ public class GameEngine implements Serializable {
 		int num = 6-invin;
 		return num;
 	}
+	
+	public boolean checkKill(){
+		return kill;
+	}
 
 	public void enemyMove() {
 		if(invincibility == true){
@@ -96,6 +99,7 @@ public class GameEngine implements Serializable {
 		for (int j = 0; j < enemies.length; j++) {
 			if (kill == false) {
 				if (enemies[j].alive() == true) {
+					R = new Random();
 					int rndm = R.nextInt(4);
 					randomEnemy(enemies[j], rndm);
 				}
@@ -229,23 +233,26 @@ public class GameEngine implements Serializable {
 	}
 	
 	public String level(String t) {
-		String s = "";
+		String s = " ";
 		switch(t) {
 		case "1": 
 		case "continue":
 		case "c":
 			s = "continue";
 			if(board.getMode() == 1 || board.getMode() == 0) {
-				s = "debug";
 				board.setMode(2);
 			} else if(board.getMode() == 2) {
-				s = "normal";
 				board.setMode(1);
 			}
 			break;
 		case "2": 
 		case "save":
 			s = "save";
+			if(board.getMode() == 1 || board.getMode() == 0) {
+				board.setMode(2);
+			} else if(board.getMode() == 2) {
+				board.setMode(1);
+			}
 			break;
 		case "3": 
 		case "quit":
@@ -253,6 +260,7 @@ public class GameEngine implements Serializable {
 			s = "quit";
 			break;
 		default:
+			s = "";
 			break;
 		}
 		return s;
@@ -260,7 +268,7 @@ public class GameEngine implements Serializable {
 	}
 	
 	public String action(String t) {
-		String s = "";
+		String s = " ";
 		switch(t) {
 		case "1":
 		case "move":
@@ -298,6 +306,7 @@ public class GameEngine implements Serializable {
 			}
 			break;
 		default:
+			s = "";
 			break;
 		}
 		return s;
@@ -309,7 +318,7 @@ public class GameEngine implements Serializable {
 	}
 
 	public String move(String x) {
-		String s = "";
+		String s = " ";
 		switch (x) {
 		case "1":
 		case "up":
@@ -383,13 +392,14 @@ public class GameEngine implements Serializable {
 			s = "move";
 			break;
 		default:
+			s = "";
 			break;
 		}
 		return s;
 	}
 	
 	public String shoot(String x) {
-		String s ="";
+		String s =" ";
 		switch(x) {
 		case "1":
 		case "up":
@@ -403,6 +413,7 @@ public class GameEngine implements Serializable {
 								if(enemies[i].getEnemyX() == location[k]){
 									enemies[i].subhealth();
 									enemies[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 							
@@ -412,7 +423,6 @@ public class GameEngine implements Serializable {
 				}
 		
 			}
-			s = "";
 			enemyMove();
 			break;
 		case "2":
@@ -427,6 +437,7 @@ public class GameEngine implements Serializable {
 								if(enemies[i].getEnemyY() == location[j]){
 									enemies[i].subhealth();
 									enemies[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 							
@@ -436,7 +447,6 @@ public class GameEngine implements Serializable {
 				}
 		
 			}
-			s ="";
 			enemyMove();
 			break;
 		case "3":
@@ -451,6 +461,7 @@ public class GameEngine implements Serializable {
 								if(enemies[i].getEnemyY() == location[j]){
 									enemies[i].subhealth();
 									enemies[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 							
@@ -458,9 +469,7 @@ public class GameEngine implements Serializable {
 					}
 					
 				}
-		
 			}
-			s = "";
 			enemyMove();
 			break;
 		case "4":
@@ -475,6 +484,7 @@ public class GameEngine implements Serializable {
 								if(enemies[i].getEnemyX() == location[k]){
 									enemies[i].subhealth();
 									enemies[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 							
@@ -482,15 +492,14 @@ public class GameEngine implements Serializable {
 					}
 					
 				}
-		
 			}
-			s = "";
 			enemyMove();
 			break;
 		case "5":
 		case "options":
 			s = "options";
 		default:
+			s = "";
 			break;
 		}
 		return s;
