@@ -31,7 +31,6 @@ public class UI {
 	public UI() {
 		ge = new GameEngine();
 		sc = new Scanner(System.in);
-		level = ge.getLevel();
 		start();
 	}
 	/**
@@ -41,9 +40,9 @@ public class UI {
 		System.out.println("1. Start Game \n2. Load Game \n3. Debug Mode");
 		String x = ge.start(sc.nextLine());
 		if(x != "") {
-			options(x);
 			lookCounter = 0;
 			playerLives = 3;
+			options(x);
 		} else {
 			start();
 		}
@@ -53,15 +52,16 @@ public class UI {
 		System.out.println("\n1. Continue to next level \n2. Save Game \n3. Quit Game");
 		String x = ge.level(sc.nextLine());
 		if(x != "") {
-			options(x);
 			lookCounter = 0;
 			playerLives = 3;
+			options(x);
 		} else {
 			start();
 		}
 	}
 	
 	public void play() {
+		level = ge.getLevel();
 		if(ge.playerLives() > 0){
 			if(ge.invinc() == true){
 				System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
@@ -70,7 +70,7 @@ public class UI {
 				playerLives--;
 				System.out.println("A NINJA KILLED YOU!");
 			}
-			System.out.println("Level " + ge.getLevel());
+			System.out.println("Level " + level);
 			System.out.println(ge.getBoard());
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
@@ -106,33 +106,30 @@ public class UI {
 				if(t == "") {
 					invalid();
 					play();
-				}
-				else if(t == "options") { 
+				} else if(t == "options") { 
 					play();
-				}else{
+				} else {
 					lookCounter = 0;
 					play();
 				}
 			break;
 		case "shoot":
-			if(ge.playerAmmo() == 0){
+			if(ge.playerAmmo() == 0) {
 				System.out.println("YOU HAVE NO BULLETS TO SHOOT");
 				play();
-			}else{
+			} else {
 				System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
 				String t1 = ge.shoot(sc.nextLine());
 					if(t1 == "") {
 						invalid();
 						play();
-					}
-					else if(t1 == "kill"){
+					} else if(t1 == "kill") {
 						System.out.println("YOU KILLED AN ENEMY!");
 						lookCounter = 0;
 						play();
-					}
-					else if(t1 == "options") {
+					} else if(t1 == "options") {
 						play();
-					}else{
+					} else {
 						System.out.println("YOU FIRED BLANKLY DOWN THE HALL AND HIT THE WALL");
 						lookCounter = 0;
 						play();
@@ -144,39 +141,39 @@ public class UI {
 			if(ge.checkRoom() == true) {
 				System.out.println("BRIEFCASE FOUND!");
 				win();
-			}
-			else{
+			} else {
 				System.out.println("BRIEFCASE NOT FOUND");
 				play();
 			}
 			break;
 		case "look":
-			if(lookCounter == 0){
+			if(lookCounter == 0) {
 				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
 				String t1 = ge.look(sc.nextLine());
 				if(t1 == "") {
 					invalid();
 					play();
-				}
-				else if(t1 == "options") {
+				} else if(t1 == "options") {
 					play();
-				}else if(t1 == "enemy"){
+				} else if(t1 == "enemy") {
 					System.out.println("NINJA AHEAD");
 					lookCounter = 1;
 					play();
-				}else{
+				} else {
 					System.out.println("AREA CLEAR");
 					lookCounter = 1;
 					play();
 				}
-			}else{
+			} else {
 				System.out.println("YOU CAN ONLY USE 'LOOK' ONCE PER TURN");
 				play();
 			}
 			break;
 		case "save":
+			System.out.print("Filename: ");
+			String saveFile = sc.nextLine();
 			try {
-				FileOutputStream fos = new FileOutputStream("save.dat");
+				FileOutputStream fos = new FileOutputStream(saveFile);
 				ObjectOutputStream oos = new ObjectOutputStream(fos); 
 				oos.writeObject(ge);
 				oos.close();
@@ -187,8 +184,10 @@ public class UI {
 			play();
 			break;
 		case "load":
+			System.out.print("Filename: ");
+			String loadFile = sc.nextLine();
 			try {
-				FileInputStream fis = new FileInputStream("save.dat");
+				FileInputStream fis = new FileInputStream(loadFile);
 				ObjectInputStream ois = new ObjectInputStream(fis); 
 				ge = (GameEngine) ois.readObject();
 				ois.close();
@@ -197,6 +196,9 @@ public class UI {
 				e.printStackTrace();
 			}
 			play();
+			break;
+		case "quit":
+			System.out.println("OH SO YOU'RE TOO SCARED TO CONTINUE, EH?\n So be it. You WILL be back.");
 			break;
 		case "":
 			lookCounter = 0;
@@ -214,12 +216,11 @@ public class UI {
 		}
 		System.out.println("Want a fucking trophy bitch?");
 		
-		level++;
 		ge = new GameEngine(level);
 		nextLevel();
 	}
 	
-	public void invalid(){
+	public void invalid() {
 		System.out.println("\nInvalid Entry \nPlease choose one of the following");
 	}
 
