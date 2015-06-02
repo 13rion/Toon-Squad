@@ -3,11 +3,13 @@
  */
 package edu.cpp.cs.cs141.teamproject;
 
+import java.io.*;
+
 /**
  * @author Toon Squad
  *
  */
-public class Gun {
+public class Gun implements Serializable {
 	/**
 	 * This is the ammo for the gun
 	 */
