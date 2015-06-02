@@ -3,11 +3,13 @@
  */
 package edu.cpp.cs.cs141.teamproject;
 
+import java.io.Serializable;
+
 /**
  * @author Toon Squad
  *
  */
-public class Enemy extends ActiveAgents {
+public class Enemy extends ActiveAgents implements Serializable {
 
 	private char enemyChar;
 	
