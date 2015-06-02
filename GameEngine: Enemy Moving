@@ -89,7 +89,8 @@ public class GameEngine {
 		kill = false;
 	}
 
-	public boolean kill(Enemy arr2) {
+	
+	public void kill(Enemy arr2) {
 		if (board.killPlayerUp(arr2.getEnemyX() - 1, arr2.getEnemyY()) == true) {
 			player.subLives();
 			for (int i = 0; i < arr.length; i++) {
@@ -120,9 +121,11 @@ public class GameEngine {
 			resetPlayer();
 			kill = true;
 		}
-		return kill;
 	}
 
+	public boolean checkkill(){
+		return kill;
+	}
 	public void randomEnemy(Enemy arr2, int x) {
 		if ((board.enemyMoveCheck(arr2.getEnemyX() - 1, arr2.getEnemyY()) == false)
 				&& (board
@@ -285,7 +288,7 @@ public class GameEngine {
 	}
 
 	public String move(String x) {
-		String s = "";
+		String s = " ";
 		switch (x) {
 		case "1":
 		case "up":
@@ -302,7 +305,6 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerUp(player.getPlayer());
-				s = "1";
 				enemyMove();
 			}
 			break;
@@ -321,7 +323,6 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerLeft(player.getPlayer());
-				s = "2";
 				enemyMove();
 			}
 			break;
@@ -340,7 +341,6 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerRight(player.getPlayer());
-				s = "3";
 				enemyMove();
 			}
 			break;
@@ -359,7 +359,6 @@ public class GameEngine {
 					board.printCase();
 				}
 				board.playerDown(player.getPlayer());
-				s = "4";
 				enemyMove();
 			}
 			break;
@@ -368,16 +367,14 @@ public class GameEngine {
 			s = "options";
 			break;
 		default:
+			s ="";
 			break;
 		}
 		return s;
 	}
 
 	public String shoot(String x) {
-		String s = "";
-		if(player.getAmmo() == 0){
-			x = "6";
-		}
+		String s = " ";
 		switch (x) {
 		case "1":
 		case "up":
@@ -391,13 +388,13 @@ public class GameEngine {
 								if (arr[i].getEnemyX() == location[k]) {
 									arr[i].subhealth();
 									arr[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 						}
 					}
 				}
 			}
-			s = "1";
 			enemyMove();
 			break;
 		case "2":
@@ -412,13 +409,13 @@ public class GameEngine {
 								if (arr[i].getEnemyY() == location[j]) {
 									arr[i].subhealth();
 									arr[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 						}
 					}
 				}
 			}
-			s = "2";
 			enemyMove();
 			break;
 		case "3":
@@ -433,13 +430,13 @@ public class GameEngine {
 								if (arr[i].getEnemyY() == location[j]) {
 									arr[i].subhealth();
 									arr[i].setEnemyChar(' ');
+									s = "kill";
 								}
 							}
 						}
 					}
 				}
 			}
-			s = "3";
 			enemyMove();
 			break;
 		case "4":
@@ -454,55 +451,59 @@ public class GameEngine {
 								if (arr[i].getEnemyX() == location[k]) {
 									arr[i].subhealth();
 									arr[i].setEnemyChar(' ');
+									s ="kill";
 								}
 							}
 						}
 					}
 				}
 			}
-			s = "4";
 			enemyMove();
-			break;
-		case "5":
-		case "options":
-			s = "move";
-			break;
-		case"6":
-			s = "ammo";
-		default:
-			break;
-		}
-		return s;
-	}
-
-	public String look(String t) {
-		String s = "";
-		switch (t) {
-		case "1":
-		case "up":
-			board.lookUp();
-			s = "1";
-			break;
-		case "2":
-		case "left":
-			board.lookLeft();
-			s = "2";
-			break;
-		case "3":
-		case "right":
-			board.lookRight();
-			s = "3";
-			break;
-		case "4":
-		case "down":
-			board.lookDown();
-			s = "4";
 			break;
 		case "5":
 		case "options":
 			s = "options";
 			break;
 		default:
+			s = "";
+			break;
+		}
+		return s;
+	}
+
+	public String look(String t) {
+		String s = " ";
+		switch (t) {
+		case "1":
+		case "up":
+			if(board.lookUp() == true){
+				s = "enemy";
+			}
+			break;
+		case "2":
+		case "left":
+			if(board.lookLeft() == true){
+				s = "enemy";
+			}
+			break;
+		case "3":
+		case "right":
+			if(board.lookRight() == true){
+				s = "enemy";
+			}
+			break;
+		case "4":
+		case "down":
+			if(board.lookDown() == true){
+				s = "enemy";
+			}
+			break;
+		case "5":
+		case "options":
+			s = "options";
+			break;
+		default:
+			s ="";
 			break;
 		}
 		return s;
