@@ -3,15 +3,16 @@
  */
 package edu.cpp.cs.cs141.teamproject;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /**
  * @author Toon Squad
  *
  */
-public class Board {
+public class Board implements Serializable {
 	/**
-	 * A 2D array that will be the game board.
+	 * A 2D enemiesay that will be the game board.
 	 */
 	private char[][] board;
 
@@ -49,14 +50,14 @@ public class Board {
 
 	private Random R;
 
-	private int[] A = new int[12];
+	private int[] pos = new int[12];
 	
 	private int lookUp;
 	private int lookDown;
 	private int lookLeft;
 	private int lookRight;
 	
-	private String mode;
+	private int mode;
 
 	/**
 	 * This constructor will set up the game board including the rooms,
@@ -65,14 +66,14 @@ public class Board {
 	public Board() {
 		R = new Random();
 		board = new char[9][9];
-		s = "";
-		mode = "";
 		setBoard();
 		setRooms();
 		setBullet();
 		setInvin();
 		setRadar();
 		setCase();
+		s = "";
+		mode = 0;
 		lookUp = 1;
 		lookDown = 1;
 		lookLeft = 1;
@@ -161,7 +162,7 @@ public class Board {
 	 * This method will print out the board.
 	 */
 	public String toString() {
-		if(mode == "debug") {
+		if(mode == 2) {
 			printCase();
 		}
 		s = "";
@@ -175,9 +176,9 @@ public class Board {
 					s += "[" + board[i][k] + "]";
 				} else if (board[i][k] == ROOMCHAR || board[i][k] == CASECHAR) {
 					s += "[" + board[i][k] + "]";
-				} else if(mode == "normal") {
+				} else if(mode == 1) {
 					s += "[" + "*" + "]";
-				} else if(mode == "debug") {
+				} else if(mode == 2) {
 					s += "[" + board[i][k] + "]";
 				}
 			}
@@ -211,28 +212,97 @@ public class Board {
 		return s;
 	}
 	
-	public void lookUp() {
-		if((board[playerX - 2][playerY] != ROOMCHAR) || (board[playerX - 3][playerY] != ROOMCHAR)) {
-			lookUp+=2;
+	public boolean lookUp() {
+		boolean x = false;
+		if(playerX > 1){	
+			if(board[playerX-1][playerY] != ROOMCHAR && board[playerX - 2][playerY] != ROOMCHAR){
+				if(playerX-2 >= 1){
+					if(board[playerX-2][playerY] == 'E' || board[playerX-3][playerY] == 'E'){
+						x = true;
+					}
+					lookUp+=2;
+				}else if(playerX-2 == 0){
+					if(board[playerX-1][playerY] == 'E' || board[playerX-2][playerY] == 'E'){
+						x = true;
+					}
+					lookUp+=1;
+				}
+			}
+			if(board[playerX-1][playerY] == 'E'){
+				x = true;	
+			}
 		}
+		return x;
 	}
 
-	public void lookLeft() {
-		if((board[playerX][playerY - 2] != ROOMCHAR) || (board[playerX][playerY - 3] != ROOMCHAR)) {
-			lookLeft+=2;
+	public boolean lookLeft() {
+		boolean x = false;
+		if(playerY > 1){
+			if(board[playerX][playerY-1] != ROOMCHAR && board[playerX][playerY-2] != ROOMCHAR) {
+				if(playerY-2 >= 1){
+					if(board[playerX][playerY-2] == 'E' || board[playerX][playerY-3] == 'E'){										
+						x = true;
+					}
+					lookLeft+=2;
+				}else if(playerY-2 == 0){
+					if(board[playerX][playerY-1] == 'E' || board[playerX][playerY-2] == 'E'){
+						x = true;
+					}
+					lookLeft+=1;
+				}
+			}
+			if(board[playerX][playerY-1] == 'E'){
+				x = true;	
+			}
 		}
+		return x;
 	}
 
-	public void lookRight() {
-		if((board[playerX][playerY + 2] != ROOMCHAR) || (board[playerX][playerY + 3] != ROOMCHAR)) {
-		lookRight+=2;
+	public boolean lookRight() {
+		boolean x = false;
+		if(playerY < 7){
+			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
+				if(playerY+2 <= 7){
+					if(board[playerX][playerY+2] == 'E' || board[playerX][playerY+3] == 'E'){
+														
+						x = true;
+					}
+					lookRight+=2;
+				}else if(playerY+1 == 8){
+					if(board[playerX][playerY+1] == 'E' || board[playerX][playerY+2] == 'E'){
+						x = true;
+					}
+					lookRight+=1;
+				}
+			}
+			if(board[playerX][playerY+1] == 'E'){
+				x = true;
+			}
 		}
+		return x;
 	}
 
-	public void lookDown() {
-		if((board[playerX + 2][playerY] != ROOMCHAR) || (board[playerX + 3][playerY] != ROOMCHAR)) {
-			lookDown+=2;
+	public boolean lookDown() {
+		boolean x = false;
+		if(playerX < 7){
+			if(board[playerX+1][playerY] != ROOMCHAR && board[playerX +2][playerY] != ROOMCHAR) {
+				if(playerX+2 <= 7){
+					if(board[playerX+2][playerY] == 'E' || board[playerX+3][playerY] == 'E'){										
+						x = true;
+					}
+					lookDown+=2;
+				}else if(playerX+1 == 8){
+					if(board[playerX+1][playerY] == 'E' || board[playerX+2][playerY] == 'E'){
+						x = true;
+					}
+					lookDown+=1;
+				}
+			}
+			if(board[playerX+1][playerY] == 'E'){
+			x = true;
+			}
 		}
+		return x;
 	}
 	
 	public char[][] getBoard() {
@@ -327,17 +397,17 @@ public class Board {
 		return x;
 	}
 
-	public void checkDeath(Enemy arr) {
-		if (arr.getEnemyX() > 4 && arr.getEnemyY() < 4) {
+	public void checkDeath(Enemy enemies) {
+		if (enemies.getEnemyX() > 4 && enemies.getEnemyY() < 4) {
 			int rndmX = R.nextInt(9);
 			int rndmY = R.nextInt(9);
 			if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
-				board[arr.getEnemyX()][arr.getEnemyY()] = ' ';
-				arr.setEnemyX(rndmX);
-				arr.setEnemyY(rndmY);
-				board[rndmX][rndmY] = arr.getEnemy();
+				board[enemies.getEnemyX()][enemies.getEnemyY()] = ' ';
+				enemies.setEnemyX(rndmX);
+				enemies.setEnemyY(rndmY);
+				board[rndmX][rndmY] = enemies.getEnemy();
 			} else {
-				checkDeath(arr);
+				checkDeath(enemies);
 			}
 		}
 
@@ -416,7 +486,7 @@ public class Board {
 	}
 
 	public int[] position() {
-		return A;
+		return pos;
 	}
 
 	public void shootUp(int x) {
@@ -426,9 +496,9 @@ public class Board {
 		while (i >= 0 && (board[i][k] != ROOMCHAR && board[i][k] != CASECHAR)) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[x] = i;
+				pos[x] = i;
 				x++;
-				A[x] = k;
+				pos[x] = k;
 				x++;
 
 			}
@@ -444,9 +514,9 @@ public class Board {
 		while (k >= 0 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[x] = i;
+				pos[x] = i;
 				x++;
-				A[x] = k;
+				pos[x] = k;
 				x++;
 
 			}
@@ -462,9 +532,9 @@ public class Board {
 		while (k <= 8 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[x] = i;
+				pos[x] = i;
 				x++;
-				A[x] = k;
+				pos[x] = k;
 				x++;
 
 			}
@@ -480,9 +550,9 @@ public class Board {
 		while (i <= 8 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				A[x] = i;
+				pos[x] = i;
 				x++;
-				A[x] = k;
+				pos[x] = k;
 				x++;
 
 			}
@@ -567,11 +637,11 @@ public class Board {
 		return false;
 	}
 
-	public void setMode(String s) {
-		mode = s;
+	public void setMode(int x) {
+		mode = x;
 	}
 	// GETTERS
-	public String getMode() {
+	public int getMode() {
 		return mode;
 	}
 	public int getPlayerX() {
