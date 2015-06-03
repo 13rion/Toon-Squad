@@ -268,7 +268,7 @@ public class Board implements Serializable {
 						x = true;
 					}
 					lookRight+=2;
-				}else if(playerY+1 == 8){
+				}else if(playerY+2 == 8){
 					if(board[playerX][playerY+1] == 'E' || board[playerX][playerY+2] == 'E'){
 						x = true;
 					}
@@ -291,7 +291,7 @@ public class Board implements Serializable {
 						x = true;
 					}
 					lookDown+=2;
-				}else if(playerX+1 == 8){
+				}else if(playerX+2 == 8){
 					if(board[playerX+1][playerY] == 'E' || board[playerX+2][playerY] == 'E'){
 						x = true;
 					}
