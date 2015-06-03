@@ -45,13 +45,14 @@ public class GameEngine implements Serializable {
 		set();
 	}
 	
-	public GameEngine(int x) {
+	public GameEngine(int x, int mode) {
 		board = new Board();
 		player = new Player();
 		R = new Random();
 		level = 1 + x;
 		kill = false;
 		invincibility = false;
+		board.setMode(mode);
 		set();
 	}
 
@@ -70,11 +71,11 @@ public class GameEngine implements Serializable {
 		board.setPlayer(8, 0, player.getPlayer());
 	}
 	
-	public boolean invinc(){
+	public boolean invinc() {
 		return invincibility;
 	}
 	
-	public int invincNum(){
+	public int invincNum() {
 		int num = 6-invin;
 		return num;
 	}
@@ -84,7 +85,7 @@ public class GameEngine implements Serializable {
 	}
 
 	public void enemyMove() {
-		if(invincibility == true){
+		if(invincibility == true) {
 			invin++;
 			if(invin > 5){
 				invincibility = false;
@@ -239,20 +240,10 @@ public class GameEngine implements Serializable {
 		case "continue":
 		case "c":
 			s = "continue";
-			if(board.getMode() == 1 || board.getMode() == 0) {
-				board.setMode(2);
-			} else if(board.getMode() == 2) {
-				board.setMode(1);
-			}
 			break;
 		case "2": 
 		case "save":
 			s = "save";
-			if(board.getMode() == 1 || board.getMode() == 0) {
-				board.setMode(2);
-			} else if(board.getMode() == 2) {
-				board.setMode(1);
-			}
 			break;
 		case "3": 
 		case "quit":
@@ -328,13 +319,13 @@ public class GameEngine implements Serializable {
 		case "1":
 		case "up":
 			if (board.playerMoveCheck(board.getPlayerX() - 1,board.getPlayerY()) == true) {
-				if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'B') == true){
+				if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'B') == true) {
 					player.giveAmmo();
 				}
-				else if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'I') == true){
+				else if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'I') == true) {
 					invincibility = true;
 				}
-				else if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'R') == true){
+				else if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'R') == true) {
 					board.printCase();
 				}
 				board.playerUp(player.getPlayer());
@@ -519,28 +510,28 @@ public class GameEngine implements Serializable {
 		case "1":
 		case "up":
 		case "u":
-			if(board.lookUp() == true){
+			if(board.lookUp() == true) {
 				s = "enemy";
 			}
 			break;
 		case "2":
 		case "left":
 		case "l":
-			if(board.lookLeft() == true){
+			if(board.lookLeft() == true) {
 				s = "enemy";
 			}
 			break;
 		case "3":
 		case "right":
 		case "r":
-			if(board.lookRight() == true){
+			if(board.lookRight() == true) {
 				s = "enemy";
 			}
 			break;
 		case "4":
 		case "down":
 		case "d":
-			if(board.lookDown() == true){
+			if(board.lookDown() == true) {
 				s = "enemy";
 			}
 			break;
@@ -568,6 +559,10 @@ public class GameEngine implements Serializable {
 
 	public String getBoard() {
 		return board.toString();
+	}
+	
+	public int getMode() {
+		return board.getMode();
 	}
 	
 	public char[][] board() {
