@@ -31,7 +31,24 @@ public class UI {
 	public UI() {
 		ge = new GameEngine();
 		sc = new Scanner(System.in);
+		welcome();
 		start();
+	}
+	
+	public void welcome() {
+		String message = "WELCOME TO SATAN'S HOUSE OF HAPPINESS";
+        for (int k=0; k < message.length( ); k++)
+        {
+              System.out.print(message.charAt(k)+ " ");
+
+              try {
+				Thread.sleep (100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        System.out.print("\n\n");
 	}
 	/**
 	 * This method will start the game
@@ -74,7 +91,7 @@ public class UI {
 			System.out.println(ge.getBoard());
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
-			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug");				
+			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug \n7. Quit Game");				
 			options(ge.action(sc.nextLine()));
 		}else{
 			playerDead();
@@ -211,10 +228,45 @@ public class UI {
 	}
 	
 	public void win() {
-		for(int i = 0; i < 9; i++) {
-			System.out.println("YOU WON!!!!!");
+		System.out.println("\nCONGRATUALATIONS YOU JUST WON A FREE MACINTOSH COMPUTER!");
+		System.out.println("Please enter your credit card information below for A FREE MAC!\n");
+		switch(level) {
+		case 1:
+			System.out.println("(This ad is totally legit because it is)");
+			break;
+		case 2:
+			System.out.println("(This add is totally legit, and you should enter your credit card information because why not?)");
+			break;
+		case 3:
+			System.out.println("(This ad is brought to you by Burger King. Have it your way!)");
+			break;
+		case 4:
+			System.out.println("(This ad is brought to you by Linux. Who is using this OS again?)");
+			break;
+		case 5:
+			System.out.println("(This ad does not contain a virus. No siree. Please click to download)");
+			break;
+		case 6:
+			System.out.println("(This ad is...ok I'm sure you're pretty tired of this now)");
+			break;
+		case 7:
+			System.out.println("(I was dropped once when I was a baby y'know. Please donate by entering your credit card information!)");
+			break;
+		case 8:
+			System.out.println("(Is this real life?)");
+			break;
+		case 9: 
+			System.out.println("(Bonus question!: What is the meaning of life?)");
+			if(sc.nextInt() == 42) {
+				System.out.println("CORRECT! 5 POINTS TO GRYFFINDOR");
+			} else {
+				System.out.println("How do you not know this?");
+			}
+			break;
+		default:
+			System.out.println("(This ad is totally legit because it is)");
+			break;
 		}
-		System.out.println("Want a fucking trophy bitch?");
 		
 		ge = new GameEngine(level);
 		nextLevel();
