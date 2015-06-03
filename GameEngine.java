@@ -305,6 +305,11 @@ public class GameEngine implements Serializable {
 				board.setMode(1);
 			}
 			break;
+		case "7":
+		case "quit":
+		case "q":
+			s = "quit";
+			break;
 		default:
 			s = "";
 			break;
