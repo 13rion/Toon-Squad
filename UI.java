@@ -215,7 +215,7 @@ public class UI {
 			play();
 			break;
 		case "quit":
-			System.out.println("OH SO YOU'RE TOO SCARED TO CONTINUE, EH?\n So be it. You WILL be back.");
+			System.out.println("OH SO YOU'RE TOO SCARED TO CONTINUE, EH?\nSo be it. You WILL be back.");
 			break;
 		case "":
 			lookCounter = 0;
@@ -268,7 +268,7 @@ public class UI {
 			break;
 		}
 		
-		ge = new GameEngine(level);
+		ge = new GameEngine(level, ge.getMode());
 		nextLevel();
 	}
 	
