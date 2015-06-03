@@ -148,7 +148,6 @@ public class Board implements Serializable {
 				&& (rndmY == 1 || rndmY == 4 || rndmY == 7)) {
 			caseX = rndmX;
 			caseY = rndmY;
-			// board[rndmX][rndmY] = CASECHAR;
 		} else {
 			setCase();
 		}
@@ -214,21 +213,21 @@ public class Board implements Serializable {
 	
 	public boolean lookUp() {
 		boolean x = false;
-		if(playerX > 1){	
-			if(board[playerX-1][playerY] != ROOMCHAR && board[playerX - 2][playerY] != ROOMCHAR){
-				if(playerX-2 >= 1){
-					if(board[playerX-2][playerY] == 'E' || board[playerX-3][playerY] == 'E'){
+		if(playerX > 1) {	
+			if(board[playerX-1][playerY] != ROOMCHAR && board[playerX - 2][playerY] != ROOMCHAR) {
+				if(playerX-2 >= 1) {
+					if(board[playerX-2][playerY] == 'E' || board[playerX-3][playerY] == 'E') {
 						x = true;
 					}
 					lookUp+=2;
-				}else if(playerX-2 == 0){
-					if(board[playerX-1][playerY] == 'E' || board[playerX-2][playerY] == 'E'){
+				}else if(playerX-2 == 0) {
+					if(board[playerX-1][playerY] == 'E' || board[playerX-2][playerY] == 'E') {
 						x = true;
 					}
 					lookUp+=1;
 				}
 			}
-			if(board[playerX-1][playerY] == 'E'){
+			if(board[playerX-1][playerY] == 'E') {
 				x = true;	
 			}
 		}
@@ -237,21 +236,21 @@ public class Board implements Serializable {
 
 	public boolean lookLeft() {
 		boolean x = false;
-		if(playerY > 1){
+		if(playerY > 1) {
 			if(board[playerX][playerY-1] != ROOMCHAR && board[playerX][playerY-2] != ROOMCHAR) {
-				if(playerY-2 >= 1){
-					if(board[playerX][playerY-2] == 'E' || board[playerX][playerY-3] == 'E'){										
+				if(playerY-2 >= 1) {
+					if(board[playerX][playerY-2] == 'E' || board[playerX][playerY-3] == 'E') {										
 						x = true;
 					}
 					lookLeft+=2;
-				}else if(playerY-2 == 0){
-					if(board[playerX][playerY-1] == 'E' || board[playerX][playerY-2] == 'E'){
+				}else if(playerY-2 == 0) {
+					if(board[playerX][playerY-1] == 'E' || board[playerX][playerY-2] == 'E') {
 						x = true;
 					}
 					lookLeft+=1;
 				}
 			}
-			if(board[playerX][playerY-1] == 'E'){
+			if(board[playerX][playerY-1] == 'E') {
 				x = true;	
 			}
 		}
@@ -260,22 +259,22 @@ public class Board implements Serializable {
 
 	public boolean lookRight() {
 		boolean x = false;
-		if(playerY < 7){
+		if(playerY < 7) {
 			if(board[playerX][playerY+1] != ROOMCHAR && board[playerX][playerY+2] != ROOMCHAR) {
-				if(playerY+2 <= 7){
-					if(board[playerX][playerY+2] == 'E' || board[playerX][playerY+3] == 'E'){
+				if(playerY+2 <= 7) {
+					if(board[playerX][playerY+2] == 'E' || board[playerX][playerY+3] == 'E') {
 														
 						x = true;
 					}
 					lookRight+=2;
-				}else if(playerY+2 == 8){
-					if(board[playerX][playerY+1] == 'E' || board[playerX][playerY+2] == 'E'){
+				}else if(playerY+2 == 8) {
+					if(board[playerX][playerY+1] == 'E' || board[playerX][playerY+2] == 'E') {
 						x = true;
 					}
 					lookRight+=1;
 				}
 			}
-			if(board[playerX][playerY+1] == 'E'){
+			if(board[playerX][playerY+1] == 'E') {
 				x = true;
 			}
 		}
@@ -284,21 +283,21 @@ public class Board implements Serializable {
 
 	public boolean lookDown() {
 		boolean x = false;
-		if(playerX < 7){
+		if(playerX < 7) {
 			if(board[playerX+1][playerY] != ROOMCHAR && board[playerX +2][playerY] != ROOMCHAR) {
-				if(playerX+2 <= 7){
-					if(board[playerX+2][playerY] == 'E' || board[playerX+3][playerY] == 'E'){										
+				if(playerX+2 <= 7) {
+					if(board[playerX+2][playerY] == 'E' || board[playerX+3][playerY] == 'E') {										
 						x = true;
 					}
 					lookDown+=2;
-				}else if(playerX+2 == 8){
-					if(board[playerX+1][playerY] == 'E' || board[playerX+2][playerY] == 'E'){
+				}else if(playerX+2 == 8) {
+					if(board[playerX+1][playerY] == 'E' || board[playerX+2][playerY] == 'E') {
 						x = true;
 					}
 					lookDown+=1;
 				}
 			}
-			if(board[playerX+1][playerY] == 'E'){
+			if(board[playerX+1][playerY] == 'E') {
 			x = true;
 			}
 		}
