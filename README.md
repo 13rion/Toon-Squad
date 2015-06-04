@@ -9,9 +9,10 @@ Fort - GameEngine & Board:
      - UI:
 - Input Feedback
 
-Brion - 
+Brion - GameEngine & UI:
+- Shoot
 
-6/1:
+6/1 & 6/2:
 
 Fort - UI:
 - Input Feedback 
