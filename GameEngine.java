@@ -31,6 +31,8 @@ public class GameEngine implements Serializable {
 	private int invin = 0;
 	
 	private int level;
+	
+	private boolean hardmode;
 
 	/**
 	 * This constructor will instantiate Player, Enemy, and Board, as well as
@@ -45,19 +47,28 @@ public class GameEngine implements Serializable {
 		set();
 	}
 	
-	public GameEngine(int x, int mode) {
+	public GameEngine(int x, String mode, boolean hard) {
 		board = new Board();
 		player = new Player();
 		R = new Random();
 		level = 1 + x;
 		kill = false;
 		invincibility = false;
+		hardmode = hard;
 		board.setMode(mode);
 		set();
 	}
 
 	public void set() {
+		setPlayer();
+		setEnemies();
+	}
+	
+	public void setPlayer() {
 		board.setPlayer(8, 0, player.getPlayer());
+	}
+	
+	public void setEnemies() {
 		enemies = new Enemy[5 + level];
 		for (int i = 0; i < enemies.length; i++) {
 			enemies[i] = new Enemy();
@@ -65,10 +76,6 @@ public class GameEngine implements Serializable {
 			enemies[i].setEnemyX(board.getEnemyX());
 			enemies[i].setEnemyY(board.getEnemyY());
 		}
-	}
-	
-	public void resetPlayer() {
-		board.setPlayer(8, 0, player.getPlayer());
 	}
 	
 	public boolean invinc() {
@@ -90,7 +97,7 @@ public class GameEngine implements Serializable {
 			if(invin > 5){
 				invincibility = false;
 			}
-		}else{
+		} else {
 			for (int i = 0; i < enemies.length; i++) {
 				if (enemies[i].alive() == true) {
 					kill(enemies[i]);
@@ -100,9 +107,13 @@ public class GameEngine implements Serializable {
 		for (int j = 0; j < enemies.length; j++) {
 			if (kill == false) {
 				if (enemies[j].alive() == true) {
-					R = new Random();
-					int rndm = R.nextInt(4);
-					randomEnemy(enemies[j], rndm);
+					if(hardmode == true){
+						hardMode(enemies[j]);
+					}else{
+						R = new Random();
+						int rndm = R.nextInt(4);
+						randomEnemy(enemies[j], rndm);
+					}
 				}
 			}
 		}
@@ -114,7 +125,6 @@ public class GameEngine implements Serializable {
 			(board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == false)	&&
 			(board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == false) &&
 			(board.enemyMoveCheck(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == false)) {
-			
 		} else {
 			switch(x){
 				//Up
@@ -171,6 +181,48 @@ public class GameEngine implements Serializable {
 			}
 		}
 	}
+	
+	public void hardMode(Enemy enemies2){
+		String pos = board.enemyRowCheck(enemies2.getEnemyX(), enemies2.getEnemyY());
+		if(pos == ""){
+			R = new Random();
+			int rndm = R.nextInt(4);
+			randomEnemy(enemies2, rndm);
+		}else{
+			switch(pos){
+			case "up":
+				if (board.enemyMoveCheck(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == true) {
+					board.enemyUp(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+					enemies2.setEnemyX(enemies2.getEnemyX() - 1);
+					enemies2.setEnemyY(enemies2.getEnemyY());
+				}
+				break;
+			case "down":
+				if (board.enemyMoveCheck(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == true) {
+					board.enemyDown(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+					enemies2.setEnemyX(enemies2.getEnemyX() + 1);
+					enemies2.setEnemyY(enemies2.getEnemyY());
+				}
+				break;
+			case "left":
+				if (board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == true) {
+					board.enemyLeft(enemies2.getEnemyX(), enemies2.getEnemyY(), enemies2.getEnemy());
+					enemies2.setEnemyX(enemies2.getEnemyX());
+					enemies2.setEnemyY(enemies2.getEnemyY() - 1);
+				}
+				break;
+			case "right":
+				if (board.enemyMoveCheck(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == true) {
+					board.enemyRight(enemies2.getEnemyX(), enemies2.getEnemyY(),enemies2.getEnemy());
+					enemies2.setEnemyX(enemies2.getEnemyX());
+					enemies2.setEnemyY(enemies2.getEnemyY() + 1);
+				}
+				break;
+			default:
+				break;	
+			}
+		}
+	}
 
 	public boolean kill(Enemy enemies2) {
 		if (board.killPlayerUp(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == true) {
@@ -178,14 +230,14 @@ public class GameEngine implements Serializable {
 			for (int i = 0; i < enemies.length; i++) {
 				board.checkDeath(enemies[i]);
 			}
-			resetPlayer();
+			setPlayer();
 			kill = true;
 		} else if (board.killPlayerDown(enemies2.getEnemyX() + 1, enemies2.getEnemyY()) == true) {
 			player.subLives();
 			for (int i = 0; i < enemies.length; i++) {
 				board.checkDeath(enemies[i]);
 			}
-			resetPlayer();
+			setPlayer();
 			kill = true;
 		} else if (board
 				.killPlayerRight(enemies2.getEnemyX(), enemies2.getEnemyY() + 1) == true) {
@@ -193,14 +245,14 @@ public class GameEngine implements Serializable {
 			for (int i = 0; i < enemies.length; i++) {
 				board.checkDeath(enemies[i]);
 			}
-			resetPlayer();
+			setPlayer();
 			kill = true;
 		} else if (board.killPlayerLeft(enemies2.getEnemyX(), enemies2.getEnemyY() - 1) == true) {
 			player.subLives();
 			for (int i = 0; i < enemies.length; i++) {
 				board.checkDeath(enemies[i]);
 			}
-			resetPlayer();
+			setPlayer();
 			kill = true;
 		}
 		return kill;
@@ -213,7 +265,7 @@ public class GameEngine implements Serializable {
 		case "start":
 		case "s":
 			s = "start";
-			board.setMode(1);
+			board.setMode("normal");
 			break;
 		case "2": 
 		case "load":
@@ -221,10 +273,17 @@ public class GameEngine implements Serializable {
 			s = "load";
 			break;
 		case "3": 
+		case "hard":
+		case "h":
+			s = "hard";
+			board.setMode("normal");
+			hardmode = true;
+			break;
+		case "4": 
 		case "debug":
 		case "d":
 			s = "debug";
-			board.setMode(2);
+			board.setMode("debug");
 			break;
 		default:
 			break;
@@ -288,12 +347,12 @@ public class GameEngine implements Serializable {
 		case "6":
 		case "debug":
 		case "d":
-			if(board.getMode() == 1 || board.getMode() == 0) {
+			if(board.getMode().equals("normal") || board.getMode().equals("")) {
 				s = "debug";
-				board.setMode(2);
-			} else if(board.getMode() == 2) {
+				board.setMode("debug");
+			} else if(board.getMode().equals("debug")) {
 				s = "normal";
-				board.setMode(1);
+				board.setMode("normal");
 			}
 			break;
 		case "7":
@@ -326,7 +385,7 @@ public class GameEngine implements Serializable {
 					invincibility = true;
 				}
 				else if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'R') == true) {
-					board.printCase();
+					board.setRadar(true);
 				}
 				board.playerUp(player.getPlayer());
 				s = "1";
@@ -343,7 +402,7 @@ public class GameEngine implements Serializable {
 					invincibility = true;
 				}
 				else if(board.checkChar(board.getPlayerX(),board.getPlayerY()-1,'R') == true){
-					board.printCase();
+					board.setRadar(true);
 				}
 				board.playerLeft(player.getPlayer());
 				s = "2";
@@ -360,7 +419,7 @@ public class GameEngine implements Serializable {
 					invincibility = true;
 				}
 				else if(board.checkChar(board.getPlayerX(),board.getPlayerY()+1,'R') == true){
-					board.printCase();
+					board.setRadar(true);
 				}
 				board.playerRight(player.getPlayer());
 				s = "3";
@@ -377,7 +436,7 @@ public class GameEngine implements Serializable {
 					invincibility = true;
 				}
 				else if(board.checkChar(board.getPlayerX()+1,board.getPlayerY(),'R') == true){
-					board.printCase();
+					board.setRadar(true);
 				}
 				board.playerDown(player.getPlayer());
 				s = "4";
@@ -400,22 +459,14 @@ public class GameEngine implements Serializable {
 		case "1":
 		case "up":
 			if(player.shoot() == true) {
-				board.shootUp(0);
+				board.shootUp();
 				int[] location = board.position();
-				for(int i = 0; i < enemies.length; i ++){
-					for(int j = 1; j < location.length; j+=2){
-						if(enemies[i].getEnemyY() == location[j]){
-							for(int k = 0; k < location.length;k++){
-								if(enemies[i].getEnemyX() == location[k]){
-									enemies[i].subhealth();
-									enemies[i].setEnemyChar(' ');
-									s = "kill";
-								}
-							}
-							
-						}
+				for (int i = 0; i < enemies.length; i++) {
+					if (enemies[i].getEnemyY() == location[1] && enemies[i].getEnemyX() == location[0]) {
+						enemies[i].subhealth();
+						enemies[i].setEnemyChar(' ');
+						s = "kill";
 					}
-					
 				}
 		
 			}
@@ -424,22 +475,14 @@ public class GameEngine implements Serializable {
 		case "2":
 		case "left":
 			if(player.shoot() == true) {
-				board.shootLeft(0);
+				board.shootLeft();
 				int[] location = board.position();
-				for(int i = 0; i < enemies.length; i ++){
-					for(int k = 0; k < location.length; k+=2){
-						if(enemies[i].getEnemyX() == location[k]){
-							for(int j = 0; j < location.length;j++){
-								if(enemies[i].getEnemyY() == location[j]){
-									enemies[i].subhealth();
-									enemies[i].setEnemyChar(' ');
-									s = "kill";
-								}
-							}
-							
-						}
+				for (int i = 0; i < enemies.length; i++) {
+					if (enemies[i].getEnemyX() == location[0] && enemies[i].getEnemyY() == location[1]) {
+						enemies[i].subhealth();
+						enemies[i].setEnemyChar(' ');
+						s = "kill";
 					}
-					
 				}
 		
 			}
@@ -448,46 +491,32 @@ public class GameEngine implements Serializable {
 		case "3":
 		case "right":
 			if(player.shoot() == true) {
-				board.shootRight(0);
+				board.shootRight();
 				int[] location = board.position();
-				for(int i = 0; i < enemies.length; i ++){
-					for(int k = 0; k < location.length; k+=2){
-						if(enemies[i].getEnemyX() == location[k]){
-							for(int j = 0; j < location.length;j++){
-								if(enemies[i].getEnemyY() == location[j]){
-									enemies[i].subhealth();
-									enemies[i].setEnemyChar(' ');
-									s = "kill";
-								}
-							}
-							
-						}
+				for (int i = 0; i < enemies.length; i++) {
+					if (enemies[i].getEnemyX() == location[0] && enemies[i].getEnemyY() == location[1]) {
+						enemies[i].subhealth();
+						enemies[i].setEnemyChar(' ');
+						s = "kill";
 					}
-					
 				}
+		
 			}
 			enemyMove();
 			break;
 		case "4":
 		case "down":
 			if(player.shoot() == true) {
-				board.shootDown(0);
+				board.shootDown();
 				int[] location = board.position();
-				for(int i = 0; i < enemies.length; i ++){
-					for(int j = 1; j < location.length; j+=2){
-						if(enemies[i].getEnemyY() == location[j]){
-							for(int k = 0; k < location.length;k++){
-								if(enemies[i].getEnemyX() == location[k]){
-									enemies[i].subhealth();
-									enemies[i].setEnemyChar(' ');
-									s = "kill";
-								}
-							}
-							
-						}
+				for (int i = 0; i < enemies.length; i++) {
+					if (enemies[i].getEnemyY() == location[1] && enemies[i].getEnemyX() == location[0]) {
+						enemies[i].subhealth();
+						enemies[i].setEnemyChar(' ');
+						s = "kill";
 					}
-					
 				}
+		
 			}
 			enemyMove();
 			break;
@@ -561,8 +590,16 @@ public class GameEngine implements Serializable {
 		return board.toString();
 	}
 	
-	public int getMode() {
+	public String getMode() {
 		return board.getMode();
+	}
+	
+	public boolean getHardMode(){
+		return hardmode;
+	}
+	
+	public boolean getMove(){
+		return board.avaliableMove();
 	}
 	
 	public char[][] board() {
