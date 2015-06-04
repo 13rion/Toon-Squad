@@ -6,6 +6,8 @@ package edu.cpp.cs.cs141.teamproject;
 import java.io.*;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author Toon Squad
  *
@@ -31,7 +33,7 @@ public class UI {
 	public UI() {
 		ge = new GameEngine();
 		sc = new Scanner(System.in);
-		welcome();
+		//welcome();
 		start();
 	}
 	
@@ -54,7 +56,7 @@ public class UI {
 	 * This method will start the game
 	 */
 	public void start() {
-		System.out.println("1. Start Game \n2. Load Game \n3. Debug Mode");
+		System.out.println("1. Start Game \n2. Load Game \n3. Hard Mode \n4. Debug Mode");
 		String x = ge.start(sc.nextLine());
 		if(x != "") {
 			lookCounter = 0;
@@ -79,22 +81,29 @@ public class UI {
 	
 	public void play() {
 		level = ge.getLevel();
-		if(ge.playerLives() > 0){
-			if(ge.invinc() == true){
-				System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
-			}
-			if(playerLives > ge.playerLives()){
-				playerLives--;
-				System.out.println("A NINJA KILLED YOU!");
-			}
+		if(ge.getMove() == false){
+			System.out.println("NINJAS CORNERED YOU! \nYOU WILL DIE A SLOW PAINFUL DEATH");
+			System.out.println(ge.getBoard());
+			playerDead();
+		}else{
+			level = ge.getLevel();
+			if(ge.playerLives() > 0) {
+				if(ge.invinc() == true){
+					System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
+				}
+				if(playerLives > ge.playerLives()) {
+					playerLives--;
+					System.out.println("A NINJA KILLED YOU!");
+				}
 			System.out.println("Level " + level);
 			System.out.println(ge.getBoard());
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
 			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug \n7. Quit Game");				
 			options(ge.action(sc.nextLine()));
-		}else{
-			playerDead();
+			}else{
+				playerDead();
+			}
 		}
 	}
 	
@@ -115,6 +124,10 @@ public class UI {
 			break;
 		case "normal":
 			System.out.println("Debug Mode Deactivated.");
+			play();
+			break;
+		case "hard":
+			System.out.println("Hard Mode Activated.");
 			play();
 			break;
 		case "move":
@@ -233,6 +246,8 @@ public class UI {
 		switch(level) {
 		case 1:
 			System.out.println("(This ad is totally legit because it is)");
+			//JOptionPane.showInputDialog(null, "YOU WON AN IPAD , JESUS LOVES YOU, NOW ENTER YOUR CREDIT CARD NUMBER", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(null, "YOUR IPAD WILL SHIP IN 6-7 MONTHS");
 			break;
 		case 2:
 			System.out.println("(This add is totally legit, and you should enter your credit card information because why not?)");
@@ -263,12 +278,15 @@ public class UI {
 				System.out.println("How do you not know this?");
 			}
 			break;
+		case 10:
+			System.out.println("(Your Mac will ship between 6 months to NEVER!)");
+			break;
 		default:
 			System.out.println("(This ad is totally legit because it is)");
 			break;
 		}
 		
-		ge = new GameEngine(level, ge.getMode());
+		ge = new GameEngine(level, ge.getMode(), ge.getHardMode());
 		nextLevel();
 	}
 	
