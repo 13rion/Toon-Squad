@@ -51,7 +51,7 @@ Fort - GameEngine & Board
 
 Brion - GameEngine & Board
 
-Cristian - UI
+Cristian - Welcome Message
 
 Tristan - Player, Enemy, Gun (Never Completed)
 
@@ -61,6 +61,6 @@ Fort - GameEngine & Board
 
 Brion - GameEngine & Board
 
-Cristian - UI
+Cristian - Game Board
 
 Tristan - Player, Enemy, Gun (Never Completed)
