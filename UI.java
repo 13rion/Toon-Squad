@@ -33,7 +33,7 @@ public class UI {
 	public UI() {
 		ge = new GameEngine();
 		sc = new Scanner(System.in);
-		//welcome();
+		welcome();
 		start();
 	}
 	
