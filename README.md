@@ -58,7 +58,10 @@ Fort
      - Input Feedback
 
 Brion
-- Check, Look, Saving & Loading
+- GameEngine, UI, Board
+     - Check
+     - Look
+     - Saving & Loading
 
 Cristian 
 - UI:
