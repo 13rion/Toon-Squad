@@ -3,7 +3,37 @@ Rodriguez Team Project
 
 #Tasks
 
-Current:
+6/3:
+
+Fort -
+
+Brion -
+
+Cristian - Save & Load (Never Completed)
+
+5/29:
+
+Fort -
+
+Brion - 
+
+Cristian - Save & Load (Never Completed)
+
+5/27:
+
+Fort -
+
+Brion -
+
+Cristian - Save & Load (Never Completed)
+
+5/22:
+
+Fort - 
+
+Brion - 
+
+5/20:
 
 Fort - Enemy Kill Action, Power Ups
 
