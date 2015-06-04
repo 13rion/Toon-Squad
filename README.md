@@ -5,19 +5,15 @@ Rodriguez Team Project
 
 Current:
 
-Fort - Enemy Kill Action
+Fort - Enemy Kill Action, Power Ups
 
 Brion - Shoot Action
 
-Cristian - Power ups
-
 5/17
 
-Fort - Player, Enemy
+Fort - Player, Enemy, Gun
 
-Brion - Player, Enemy
-
-Cristian - Gun
+Brion - Player, Enemy, Gun
 
 5/16
 
@@ -27,7 +23,7 @@ Brion - GameEngine & Board
 
 Cristian - UI
 
-Tristan - Player, Enemy, Gun
+Tristan - Player, Enemy, Gun (Never Completed)
 
 5/14
 
@@ -37,4 +33,4 @@ Brion - GameEngine & Board
 
 Cristian - UI
 
-Tristan - Player, Enemy, Gun
+Tristan - Player, Enemy, Gun (Never Completed)
