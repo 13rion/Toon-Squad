@@ -265,7 +265,7 @@ public class GameEngine implements Serializable {
 		case "start":
 		case "s":
 			s = "start";
-			board.setMode("normal");
+			board.setMode("default");
 			break;
 		case "2": 
 		case "load":
@@ -273,16 +273,9 @@ public class GameEngine implements Serializable {
 			s = "load";
 			break;
 		case "3": 
-		case "hard":
-		case "h":
-			s = "hard";
-			board.setMode("normal");
-			hardmode = true;
-			break;
-		case "4": 
 		case "debug":
 		case "d":
-			s = "debug";
+			s = "stdebug";
 			board.setMode("debug");
 			break;
 		default:
@@ -292,7 +285,7 @@ public class GameEngine implements Serializable {
 
 	}
 	
-	public String level(String t) {
+	public String nextLevel(String t) {
 		String s = " ";
 		switch(t) {
 		case "1": 
@@ -347,12 +340,12 @@ public class GameEngine implements Serializable {
 		case "6":
 		case "debug":
 		case "d":
-			if(board.getMode().equals("normal") || board.getMode().equals("")) {
+			if(board.getMode().equals("default") || board.getMode().equals("")) {
 				s = "debug";
 				board.setMode("debug");
 			} else if(board.getMode().equals("debug")) {
-				s = "normal";
-				board.setMode("normal");
+				s = "default";
+				board.setMode("default");
 			}
 			break;
 		case "7":
@@ -584,6 +577,11 @@ public class GameEngine implements Serializable {
 	public boolean shoot() {
 		return false;
 
+	}
+	
+	public void setHardMode() {
+		board.setMode("default");
+		hardmode = true;
 	}
 
 	public String getBoard() {
