@@ -12,7 +12,7 @@ import java.util.Random;
  */
 public class Board implements Serializable {
 	/**
-	 * A 2D enemiesay that will be the game board.
+	 * A 2D array that will be the game board.
 	 */
 	private char[][] board;
 
@@ -50,14 +50,16 @@ public class Board implements Serializable {
 
 	private Random R;
 
-	private int[] pos = new int[12];
+	private int[] pos = new int[2];
 	
 	private int lookUp;
 	private int lookDown;
 	private int lookLeft;
 	private int lookRight;
 	
-	private int mode;
+	private String mode;
+	
+	private boolean radar;
 
 	/**
 	 * This constructor will set up the game board including the rooms,
@@ -66,18 +68,20 @@ public class Board implements Serializable {
 	public Board() {
 		R = new Random();
 		board = new char[9][9];
+		set();
+		s = "";
+		mode = "";
+		radar = false;
+	}
+	
+	public void set() {
 		setBoard();
 		setRooms();
 		setBullet();
 		setInvin();
 		setRadar();
 		setCase();
-		s = "";
-		mode = 0;
-		lookUp = 1;
-		lookDown = 1;
-		lookLeft = 1;
-		lookRight = 1;
+		setLook();
 	}
 
 	public void setBoard() {
@@ -97,25 +101,6 @@ public class Board implements Serializable {
 					board[i][7] = ROOMCHAR;
 				}
 			}
-		}
-	}
-
-	public void setPlayer(int i, int k, char x) {
-		// NEED CHECK METHOD IN GAMEENGINE
-		board[i][k] = x;
-		playerX = i;
-		playerY = k;
-	}
-
-	public void setEnemy(char x) {
-		int rndmX = R.nextInt(9);
-		int rndmY = R.nextInt(9);
-		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
-			board[rndmX][rndmY] = x;
-			enemyX = rndmX;
-			enemyY = rndmY;
-		} else {
-			setEnemy(x);
 		}
 	}
 
@@ -153,16 +138,47 @@ public class Board implements Serializable {
 		}
 	}
 	
+	public void setLook() {
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
+	}
+	
+	public void setPlayer(int i, int k, char x) {
+		board[i][k] = x;
+		playerX = i;
+		playerY = k;
+	}
+
+	public void setEnemy(char x) {
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
+			board[rndmX][rndmY] = x;
+			enemyX = rndmX;
+			enemyY = rndmY;
+		} else {
+			setEnemy(x);
+		}
+	}
+	
 	public void printCase() {
 		board[caseX][caseY] = CASECHAR;
+	}
+	
+	public void printRoom() {
+		board[caseX][caseY] = ROOMCHAR;
 	}
 
 	/**
 	 * This method will print out the board.
 	 */
 	public String toString() {
-		if(mode == 2) {
+		if(mode.equals("debug") || radar == true) {
 			printCase();
+		} else {
+			printRoom();
 		}
 		s = "";
 		for (int i = 0; i < board.length; i++) {
@@ -175,9 +191,9 @@ public class Board implements Serializable {
 					s += "[" + board[i][k] + "]";
 				} else if (board[i][k] == ROOMCHAR || board[i][k] == CASECHAR) {
 					s += "[" + board[i][k] + "]";
-				} else if(mode == 1) {
+				} else if(mode.equals("normal")) {
 					s += "[" + "*" + "]";
-				} else if(mode == 2) {
+				} else if(mode.equals("debug")) {
 					s += "[" + board[i][k] + "]";
 				}
 			}
@@ -204,10 +220,7 @@ public class Board implements Serializable {
 			}
 			s = s + "\n";
 		}
-		lookUp = 1;
-		lookDown = 1;
-		lookLeft = 1;
-		lookRight = 1;
+		setLook();
 		return s;
 	}
 	
@@ -349,8 +362,68 @@ public class Board implements Serializable {
 	
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
-		if (i > 4 && k < 3) {
+		if (i > 4 && k < 4) {
 			x = false;
+		}
+		return x;
+	}
+	
+	public String enemyRowCheck(int enemyX2, int enemyY2) {
+		String s = ""; 
+		boolean up = true;
+		boolean down = true;
+		boolean right = true;
+		boolean left = true;
+		
+		for(int i = enemyX2; i < board.length; i++){
+			if(board[i][enemyY2] == ROOMCHAR || board[i][enemyY2] == CASECHAR){
+				down = false;
+			}
+			if(board[i][enemyY2] == 'P'){
+				if(down == true){
+					s = "down";
+				}
+			}
+		}
+		
+		for(int i = enemyX2; i >= 0; i--){
+			if(board[i][enemyY2] == ROOMCHAR || board[i][enemyY2] == CASECHAR){
+				up = false;
+			}
+			if(board[i][enemyY2] == 'P'){
+				if(up == true){
+					s = "up";
+				}
+			}
+		}
+		for(int i = enemyY2; i < board.length; i++){
+			if(board[enemyX2][i] == ROOMCHAR || board[enemyX2][i] == CASECHAR){
+				right = false;
+			}
+			if(board[enemyX2][i] == 'P'){
+				if(right == true){
+					s = "right";
+				}
+			}
+		}
+	
+		for(int i = enemyY2; i >= 0; i--){
+			if(board[enemyX2][i] == ROOMCHAR || board[enemyX2][i] == CASECHAR){
+				left = false;
+			}
+			if(board[enemyX2][i] == 'P'){
+				if(left == true){
+					s = "left";
+				}
+			}
+		}
+		return s;
+	}
+	public boolean avaliableMove(){
+		boolean x = false;
+		if(playerMoveCheck(playerX+1, playerY) == true || playerMoveCheck(playerX-1, playerY) == true
+		||playerMoveCheck(playerX, playerY+1) == true||playerMoveCheck(playerX, playerY-1) == true){
+			x = true;
 		}
 		return x;
 	}
@@ -488,75 +561,64 @@ public class Board implements Serializable {
 		return pos;
 	}
 
-	public void shootUp(int x) {
-		int i = playerX;
+	public void shootUp() {
+		int i = playerX - 1;
 		int k = playerY;
 
 		while (i >= 0 && (board[i][k] != ROOMCHAR && board[i][k] != CASECHAR)) {
+
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
+				pos[0] = i;
+				pos[1] = k;
+				i = 0;
 			}
 			i--;
-
 		}
 	}
 
-	public void shootLeft(int x) {
+	public void shootLeft() {
 		int i = playerX;
-		int k = playerY;
+		int k = playerY - 1;
 
 		while (k >= 0 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
+				pos[0] = i;
+				pos[1] = k;
+				k = 0;
 			}
 			k--;
-
 		}
 	}
 
-	public void shootRight(int x) {
+	public void shootRight() {
 		int i = playerX;
-		int k = playerY;
+		int k = playerY + 1;
 
 		while (k <= 8 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
+				pos[0] = i;
+				pos[1] = k;
+				k = 8;
 			}
 			k++;
-
 		}
 	}
 
-	public void shootDown(int x) {
-		int i = playerX;
+	public void shootDown() {
+		int i = playerX + 1;
 		int k = playerY;
 
 		while (i <= 8 && board[i][k] != ROOMCHAR) {
 			if (board[i][k] == 'E') {
 				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
+				pos[0] = i;
+				pos[1] = k;
+				i = 8;
 			}
 			i++;
-
 		}
 	}
 
@@ -636,11 +698,16 @@ public class Board implements Serializable {
 		return false;
 	}
 
-	public void setMode(int x) {
+	public void setMode(String x) {
 		mode = x;
 	}
+	
+	public void setRadar(boolean x) {
+		radar = x;
+	}
+	
 	// GETTERS
-	public int getMode() {
+	public String getMode() {
 		return mode;
 	}
 	public int getPlayerX() {
