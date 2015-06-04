@@ -19,6 +19,8 @@ Brion -
 
 Cristian - Save & Load (Never Completed)
 
+Tristan - Report & Powerpoint (Rough Draft)
+
 5/27:
 
 Fort -
@@ -26,6 +28,8 @@ Fort -
 Brion -
 
 Cristian - Save & Load (Never Completed)
+
+Tristan - Report & Powerpoint (Rough Draft)
 
 5/22:
 
