@@ -6,8 +6,6 @@ package edu.cpp.cs.cs141.teamproject;
 import java.io.*;
 import java.util.Scanner;
 
-import javax.swing.JOptionPane;
-
 /**
  * @author Toon Squad
  *
@@ -37,8 +35,11 @@ public class UI {
 		start();
 	}
 	
+	/**
+	 * This method houses the welcome message for the game. It will start when the game starts.
+	 */
 	public void welcome() {
-		String message = "WELCOME TO SATAN'S HOUSE OF HAPPINESS";
+		String message = "WELCOME TO NINJA ASYLUM";
         for (int k=0; k < message.length( ); k++)
         {
               System.out.print(message.charAt(k)+ " ");
@@ -52,11 +53,12 @@ public class UI {
         }
         System.out.print("\n\n");
 	}
+	
 	/**
 	 * This method will start the game
 	 */
 	public void start() {
-		System.out.println("1. Start Game \n2. Load Game \n3. Hard Mode \n4. Debug Mode");
+		System.out.println("1. Start Game \n2. Load Game \n3. Debug Mode");
 		String x = ge.start(sc.nextLine());
 		if(x != "") {
 			lookCounter = 0;
@@ -69,11 +71,11 @@ public class UI {
 	
 	public void nextLevel() {
 		System.out.println("\n1. Continue to next level \n2. Save Game \n3. Quit Game");
-		String x = ge.level(sc.nextLine());
-		if(x != "") {
+		String s = ge.nextLevel(sc.nextLine());
+		if(s != "") {
 			lookCounter = 0;
 			playerLives = 3;
-			options(x);
+			options(s);
 		} else {
 			start();
 		}
@@ -88,15 +90,25 @@ public class UI {
 		}else{
 			level = ge.getLevel();
 			if(ge.playerLives() > 0) {
-				if(ge.invinc() == true){
-					System.out.println("YOU'RE INVINCIBLE FOR " +ge.invincNum() +" TURNS");
-				}
-				if(playerLives > ge.playerLives()) {
+				if (playerLives > ge.playerLives()) {
 					playerLives--;
 					System.out.println("A NINJA KILLED YOU!");
 				}
-			System.out.println("Level " + level);
+				if (ge.getHardMode() == true) {
+					System.out.println("Level " + level + " - Hard");
+				} else {
+					System.out.println("Level " + level + " - Normal");
+				}
 			System.out.println(ge.getBoard());
+			if (ge.invinc() == true) {
+				System.out.println("YOU'RE INVINCIBLE FOR "
+						+ ge.invincNum() + " TURNS");
+			}
+			/*if (ge.invinc() == true) {
+			System.out.println("ACTIVE STATUS EFFECT(S): ");
+			System.out.println("Invincible For: "
+					+ ge.invincNum() + " TURNS\n");
+			}*/
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
 			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug \n7. Quit Game");				
@@ -115,6 +127,39 @@ public class UI {
 	public void options(String s) {
 		switch(s) {
 		case "start":
+		case "stdebug":
+			System.out.println("Game Difficulty:\n1. Easy 2. Normal 3. Hard");
+			String t = sc.nextLine();
+			switch(t) {
+			case "1":
+			case "easy":
+				System.out.println("This difficulty was so easy we didn't even implement it." 
+								+ "\n" + "We'll take you to the next one up, Normal.\n");
+				if(s == "stdebug") {
+					System.out.println("Debug Mode Activated.");
+				}
+				play();
+				break;
+			case "2":
+			case "normal":
+				if(s == "stdebug") {
+					System.out.println("Debug Mode Activated.");
+				}
+				play();
+				break;
+			case "3":
+			case "hard":
+				ge.setHardMode();
+				if(s == "stdebug") {
+					System.out.println("Debug Mode Activated.");
+				}
+				play();
+				break;
+			default:
+				break;
+			}
+			
+			break;
 		case "continue":
 			play();
 			break;
@@ -122,21 +167,17 @@ public class UI {
 			System.out.println("Debug Mode Activated.");
 			play();
 			break;
-		case "normal":
+		case "default":
 			System.out.println("Debug Mode Deactivated.");
-			play();
-			break;
-		case "hard":
-			System.out.println("Hard Mode Activated.");
 			play();
 			break;
 		case "move":
 			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5. Options");
-			String t = ge.move(sc.nextLine());
-				if(t == "") {
+			String t1 = ge.move(sc.nextLine());
+				if(t1 == "") {
 					invalid();
 					play();
-				} else if(t == "options") { 
+				} else if(t1 == "options") { 
 					play();
 				} else {
 					lookCounter = 0;
@@ -149,15 +190,15 @@ public class UI {
 				play();
 			} else {
 				System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
-				String t1 = ge.shoot(sc.nextLine());
-					if(t1 == "") {
+				String t2 = ge.shoot(sc.nextLine());
+					if(t2 == "") {
 						invalid();
 						play();
-					} else if(t1 == "kill") {
+					} else if(t2 == "kill") {
 						System.out.println("YOU KILLED AN ENEMY!");
 						lookCounter = 0;
 						play();
-					} else if(t1 == "options") {
+					} else if(t2 == "options") {
 						play();
 					} else {
 						System.out.println("YOU FIRED BLANKLY DOWN THE HALL AND HIT THE WALL");
@@ -179,13 +220,13 @@ public class UI {
 		case "look":
 			if(lookCounter == 0) {
 				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
-				String t1 = ge.look(sc.nextLine());
-				if(t1 == "") {
+				String t3 = ge.look(sc.nextLine());
+				if(t3 == "") {
 					invalid();
 					play();
-				} else if(t1 == "options") {
+				} else if(t3 == "options") {
 					play();
-				} else if(t1 == "enemy") {
+				} else if(t3 == "enemy") {
 					System.out.println("NINJA AHEAD");
 					lookCounter = 1;
 					play();
