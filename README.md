@@ -3,7 +3,7 @@ Rodriguez Team Project
 
 #Tasks
 6/3:
-
+-
 Fort - GameEngine & Board:
 - Hard Mode
      - UI:
@@ -13,7 +13,7 @@ Brion - GameEngine & UI:
 - Shoot
 
 6/1 & 6/2:
-
+-
 Fort - UI:
 - Input Feedback 
 
