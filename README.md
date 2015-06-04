@@ -2,20 +2,30 @@
 Rodriguez Team Project
 
 #Tasks
-
 6/3:
 
-Fort -
+Fort - GameEngine & Board:
+- Hard Mode
+     - UI:
+- Input Feedback
 
-Brion - UI:
-- Saving & Loading
+Brion - 
+
+6/1:
+
+Fort - UI:
+- Input Feedback 
+
+Brion - GameEngine & UI:
+- Levels
 
 Cristian - UI:
-- Saving & Loading
+- Won Method
 
 5/29:
 
-Fort -
+Fort - UI:
+- Input Feedback
 
 Brion - UI:
 - Saving & Loading
@@ -27,7 +37,11 @@ Tristan - Report & Powerpoint (Rough Draft)
 
 5/27:
 
-Fort - Enemy Die,
+Fort - GameEngine & Board
+- Enemy Die
+- 
+     - UI:
+- Input Feedback
 
 Brion - Check, Look, Saving & Loading
 
@@ -37,10 +51,12 @@ Tristan - Report & Powerpoint (Rough Draft)
 
 5/22:
 
-Fort - GameEngine & Board
+Fort - GameEngine & Board:
 - Look
 - Shoot
 - Legend
+     - UI:
+- Input Feedback
 
 Brion - GameEngine & Board:
 - Look
@@ -51,7 +67,9 @@ Brion - GameEngine & Board:
 5/20:
 
 Fort - GameEngine & Board:
+- Check Methods
 - Enemy Kill
+- Enemy Movement
      - UI
 
 Brion - GameEngine & Board:
