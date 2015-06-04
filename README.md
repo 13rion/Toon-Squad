@@ -5,10 +5,11 @@ Rodriguez Team Project
 
 6/3
 -
-Fort - GameEngine & Board:
-- Hard Mode
-     - UI:
-- Input Feedback
+Fort 
+- GameEngine & Board:
+     - Hard Mode
+- UI:
+     - Input Feedback
 
 Brion - GameEngine & UI:
 - Shoot
