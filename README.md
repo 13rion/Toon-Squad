@@ -49,7 +49,7 @@ Fort - GameEngine & Board
 
 Brion - Check, Look, Saving & Loading
 
-Cristian - Saving & Load (Load: Never Completed)
+Cristian - Saving & Loading
 
 Tristan - Report & Powerpoint (Rough Draft)
 
