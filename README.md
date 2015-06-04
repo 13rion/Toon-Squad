@@ -15,6 +15,7 @@ Brion - GameEngine & UI:
 
 6/1 & 6/2
 -
+
 Fort - UI:
 - Input Feedback 
 
@@ -26,6 +27,7 @@ Cristian - UI:
 
 5/29
 -
+
 Fort - UI:
 - Input Feedback
 
@@ -39,6 +41,7 @@ Tristan - Report & Powerpoint (Rough Draft)
 
 5/27
 -
+
 Fort - GameEngine & Board
 - Enemy Die
      - UI:
@@ -52,6 +55,7 @@ Tristan - Report & Powerpoint (Rough Draft)
 
 5/22
 -
+
 Fort - GameEngine & Board:
 - Look
 - Shoot
@@ -67,6 +71,7 @@ Brion - GameEngine & Board:
 
 5/20
 -
+
 Fort - GameEngine & Board:
 - Check Methods
 - Enemy Kill
@@ -79,6 +84,7 @@ Brion - GameEngine & Board:
 
 5/17
 -
+
 Fort - GameEngine & Board:
 - Check Board
 - Enemy Movement
@@ -100,6 +106,7 @@ Cristian - Power Ups (Never Completed)
 
 5/16
 -
+
 Fort - GameEngine & Board:
 - Player, Enemy, Gun
 - Setting Characters on Board
@@ -117,6 +124,7 @@ Tristan - Player, Enemy, Gun (Never Completed)
 
 5/14
 -
+
 Fort - GameEngine & Board
 
 Brion - GameEngine & Board
