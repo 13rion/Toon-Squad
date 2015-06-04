@@ -7,55 +7,92 @@ Rodriguez Team Project
 
 Fort -
 
-Brion -
+Brion - UI:
+- Saving & Loading
 
-Cristian - Save & Load (Never Completed)
+Cristian - UI:
+- Saving & Loading
 
 5/29:
 
 Fort -
 
-Brion - 
+Brion - UI:
+- Saving & Loading
 
-Cristian - Save & Load (Never Completed)
+Cristian - UI:
+- Saving & Loading
 
 Tristan - Report & Powerpoint (Rough Draft)
 
 5/27:
 
-Fort -
+Fort - Enemy Die,
 
-Brion -
+Brion - Check, Look, Saving & Loading
 
-Cristian - Save & Load (Never Completed)
+Cristian - Saving & Load (Load: Never Completed)
 
 Tristan - Report & Powerpoint (Rough Draft)
 
 5/22:
 
-Fort - 
+Fort - GameEngine & Board
+- Look
+- Shoot
+- Legend
 
-Brion - 
+Brion - GameEngine & Board:
+- Look
+- Shoot
+- Debug Mode
+- Normal Mode
 
 5/20:
 
-Fort - Enemy Kill Action, Power Ups
+Fort - GameEngine & Board:
+- Enemy Kill
+     - UI
 
-Brion - Shoot Action
+Brion - GameEngine & Board:
+- Shoot
+      - UI
 
 5/17
 
-Fort - Player, Enemy, Gun
+Fort - GameEngine & Board:
+- Check Board
+- Enemy Movement
+- Enemy Array
+- Enemy Check
+- Power Ups
+- Setting Characters on Board
+     - UI
 
-Brion - Player, Enemy, Gun
+Brion - GameEngine & Board:
+- Check Board
+- Player Movement
+- Player Check
+- Player Shoot
+- Setting Characters on Board
+      - UI
+
+Cristian - Power Ups (Never Completed)
 
 5/16
 
-Fort - GameEngine & Board
+Fort - GameEngine & Board:
+- Player, Enemy, Gun
+- Setting Characters on Board
+- Game Board
+     - UI
 
-Brion - GameEngine & Board
+Brion - GameEngine & Board:
+- Player, Enemy, Gun
+- Setting Characters on Board
+      - UI
 
-Cristian - Welcome Message
+Cristian - Welcome Message, Power Ups (Power Ups: Never Completed)
 
 Tristan - Player, Enemy, Gun (Never Completed)
 
