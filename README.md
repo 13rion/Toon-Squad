@@ -2,6 +2,7 @@
 Rodriguez Team Project
 
 #Tasks
+
 6/3:
 -
 Fort - GameEngine & Board:
@@ -24,7 +25,7 @@ Cristian - UI:
 - Won Method
 
 5/29:
-
+-
 Fort - UI:
 - Input Feedback
 
@@ -37,7 +38,7 @@ Cristian - UI:
 Tristan - Report & Powerpoint (Rough Draft)
 
 5/27:
-
+-
 Fort - GameEngine & Board
 - Enemy Die
      - UI:
@@ -50,7 +51,7 @@ Cristian - Saving & Load (Load: Never Completed)
 Tristan - Report & Powerpoint (Rough Draft)
 
 5/22:
-
+-
 Fort - GameEngine & Board:
 - Look
 - Shoot
@@ -65,7 +66,7 @@ Brion - GameEngine & Board:
 - Normal Mode
 
 5/20:
-
+-
 Fort - GameEngine & Board:
 - Check Methods
 - Enemy Kill
@@ -77,7 +78,7 @@ Brion - GameEngine & Board:
       - UI
 
 5/17
-
+-
 Fort - GameEngine & Board:
 - Check Board
 - Enemy Movement
@@ -98,7 +99,7 @@ Brion - GameEngine & Board:
 Cristian - Power Ups (Never Completed)
 
 5/16
-
+-
 Fort - GameEngine & Board:
 - Player, Enemy, Gun
 - Setting Characters on Board
@@ -115,7 +116,7 @@ Cristian - Welcome Message, Power Ups (Power Ups: Never Completed)
 Tristan - Player, Enemy, Gun (Never Completed)
 
 5/14
-
+-
 Fort - GameEngine & Board
 
 Brion - GameEngine & Board
