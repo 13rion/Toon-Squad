@@ -100,15 +100,15 @@ public class UI {
 					System.out.println("Level " + level + " - Normal");
 				}
 			System.out.println(ge.getBoard());
-			if (ge.invinc() == true) {
+			/*if (ge.invinc() == true) {
 				System.out.println("YOU'RE INVINCIBLE FOR "
 						+ ge.invincNum() + " TURNS");
-			}
-			/*if (ge.invinc() == true) {
+			}*/
+			if (ge.invinc() == true) {
 			System.out.println("ACTIVE STATUS EFFECT(S): ");
 			System.out.println("Invincible For: "
 					+ ge.invincNum() + " TURNS\n");
-			}*/
+			}
 			System.out.println("Lives: "+ ge.playerLives());
 			System.out.println("Bullets: "+ ge.playerAmmo());
 			System.out.println("1. Move \n2. Shoot \n3. Look \n4. Check \n5. Save Game \n6. Debug/Exit Debug \n7. Quit Game");				
@@ -257,14 +257,14 @@ public class UI {
 						k = -1;
 					}
 				}
-				if(k == 0) {
+				if (k == 0) {
 					FileWriter fw = new FileWriter("Saves.txt", true);
 					fw.write(saveFile + "\n");
 					fw.close();
 				}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			
 			try {
 				FileOutputStream fos = new FileOutputStream(saveFile);
@@ -274,8 +274,9 @@ public class UI {
 				System.out.println("Saved");
 			} catch (IOException e) {
 				e.printStackTrace();
+			} finally {
+				play();
 			}
-			play();
 			break;
 		case "load":
 			try {
@@ -292,16 +293,23 @@ public class UI {
 			}
 			System.out.print("Filename: ");
 			String loadFile = sc.nextLine();
+			File file2 = new File(loadFile);
+			while(!file2.exists()) {
+				System.out.print("Filename: ");
+				loadFile = sc.nextLine();
+				file2 = new File(loadFile);
+			}
 			try {
 				FileInputStream fis = new FileInputStream(loadFile);
 				ObjectInputStream ois = new ObjectInputStream(fis); 
 				ge = (GameEngine) ois.readObject();
 				ois.close();
 				System.out.println("Game Loaded\n");
-			} catch (IOException | ClassNotFoundException e) {
+			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
+			} finally {
+				play();
 			}
-			play();
 			break;
 		case "quit":
 			System.out.println("OH SO YOU'RE TOO SCARED TO CONTINUE, EH?\nSo be it. You WILL be back.");
