@@ -127,7 +127,7 @@ public class UI {
 	public void options(String s) {
 		switch(s) {
 		case "start":
-		case "stdebug":
+		case "startdebug":
 			System.out.println("Game Difficulty:\n1. Easy 2. Normal 3. Hard");
 			String t = sc.nextLine();
 			switch(t) {
@@ -135,14 +135,14 @@ public class UI {
 			case "easy":
 				System.out.println("This difficulty was so easy we didn't even implement it." 
 								+ "\n" + "We'll take you to the next one up, Normal.\n");
-				if(s == "stdebug") {
+				if(s.equals("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
 				break;
 			case "2":
 			case "normal":
-				if(s == "stdebug") {
+				if(s.equals("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
@@ -150,7 +150,7 @@ public class UI {
 			case "3":
 			case "hard":
 				ge.setHardMode();
-				if(s == "stdebug") {
+				if(s.equals("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
@@ -174,10 +174,10 @@ public class UI {
 		case "move":
 			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5. Options");
 			String t1 = ge.move(sc.nextLine());
-				if(t1 == "") {
+				if(t1.equals("")) {
 					invalid();
 					play();
-				} else if(t1 == "options") { 
+				} else if(t1.equals("options")) { 
 					play();
 				} else {
 					lookCounter = 0;
@@ -191,14 +191,14 @@ public class UI {
 			} else {
 				System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
 				String t2 = ge.shoot(sc.nextLine());
-					if(t2 == "") {
+					if(t2.equals("")) {
 						invalid();
 						play();
-					} else if(t2 == "kill") {
+					} else if(t2.equals("kill")) {
 						System.out.println("YOU KILLED AN ENEMY!");
 						lookCounter = 0;
 						play();
-					} else if(t2 == "options") {
+					} else if(t2.equals("options")) {
 						play();
 					} else {
 						System.out.println("YOU FIRED BLANKLY DOWN THE HALL AND HIT THE WALL");
@@ -221,12 +221,12 @@ public class UI {
 			if(lookCounter == 0) {
 				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
 				String t3 = ge.look(sc.nextLine());
-				if(t3 == "") {
+				if(t3.equals("")) {
 					invalid();
 					play();
-				} else if(t3 == "options") {
+				} else if(t3.equals("options")) {
 					play();
-				} else if(t3 == "enemy") {
+				} else if(t3.equals("enemy")) {
 					System.out.println("NINJA AHEAD");
 					lookCounter = 1;
 					play();
@@ -287,8 +287,6 @@ public class UI {
 		switch(level) {
 		case 1:
 			System.out.println("(This ad is totally legit because it is)");
-			//JOptionPane.showInputDialog(null, "YOU WON AN IPAD , JESUS LOVES YOU, NOW ENTER YOUR CREDIT CARD NUMBER", JOptionPane.INFORMATION_MESSAGE);
-            //JOptionPane.showMessageDialog(null, "YOUR IPAD WILL SHIP IN 6-7 MONTHS");
 			break;
 		case 2:
 			System.out.println("(This add is totally legit, and you should enter your credit card information because why not?)");
@@ -313,7 +311,7 @@ public class UI {
 			break;
 		case 9: 
 			System.out.println("(Bonus question!: What is the meaning of life?)");
-			if(sc.nextInt() == 42) {
+			if(sc.nextLine().equals("42")) {
 				System.out.println("CORRECT! 5 POINTS TO GRYFFINDOR");
 			} else {
 				System.out.println("How do you not know this?");
