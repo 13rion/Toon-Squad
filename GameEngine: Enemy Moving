@@ -356,7 +356,7 @@ public class GameEngine implements Serializable {
 		}
 	}
 	
-	public boolean kill(Enemy enemies2) {
+	public void kill(Enemy enemies2) {
 		if (board.killPlayerUp(enemies2.getEnemyX() - 1, enemies2.getEnemyY()) == true) {
 			playerDeath();
 			setPlayer();
@@ -374,7 +374,7 @@ public class GameEngine implements Serializable {
 			setPlayer();
 			kill = true;
 		}
-		return kill;
+//		return kill;
 	}
 	
 	public boolean checkRoom() {
@@ -386,7 +386,7 @@ public class GameEngine implements Serializable {
 		switch (x) {
 		case "1":
 		case "up":
-			s ="noMove";
+			s ="nomove";
 			if (board.playerMoveCheck(board.getPlayerX() - 1,board.getPlayerY()) == true) {
 				if(board.checkChar(board.getPlayerX()-1,board.getPlayerY(),'B') == true) {
 					player.giveAmmo();
@@ -404,7 +404,7 @@ public class GameEngine implements Serializable {
 			break;
 		case "2":
 		case "left":
-			s ="noMove";
+			s ="nomove";
 			if (board.playerMoveCheck(board.getPlayerX(),board.getPlayerY() - 1) == true) {
 				if(board.checkChar(board.getPlayerX(),board.getPlayerY() -1,'B') == true) {
 					player.giveAmmo();
@@ -422,7 +422,7 @@ public class GameEngine implements Serializable {
 			break;
 		case "3":
 		case "right":
-			s ="noMove";
+			s ="nomove";
 			if (board.playerMoveCheck(board.getPlayerX(),board.getPlayerY() + 1) == true) {
 				if(board.checkChar(board.getPlayerX(),board.getPlayerY()+1,'B') == true) {
 					player.giveAmmo();
@@ -440,7 +440,7 @@ public class GameEngine implements Serializable {
 			break;
 		case "4":
 		case "down":
-			s ="noMove";
+			s ="nomove";
 			if (board.playerMoveCheck(board.getPlayerX() + 1,board.getPlayerY()) == true) {
 				if(board.checkChar(board.getPlayerX()+1,board.getPlayerY(),'B') == true) {
 					player.giveAmmo();
@@ -556,12 +556,20 @@ public class GameEngine implements Serializable {
 			if(board.lookUp() == true) {
 				s = "enemy";
 			}
+			else if(board.checkChar(board.getPlayerX()-1, board.getPlayerY(), 'X') == true
+					||board.checkChar(board.getPlayerX()-1, board.getPlayerY(), 'C') == true){
+				s = "nolook";
+			}
+			
 			break;
 		case "2":
 		case "left":
 		case "l":
 			if(board.lookLeft() == true) {
 				s = "enemy";
+			}else if(board.checkChar(board.getPlayerX(), board.getPlayerY()-1, 'X') == true
+					||board.checkChar(board.getPlayerX(), board.getPlayerY()-1, 'C') == true){
+				s = "nolook";
 			}
 			break;
 		case "3":
@@ -570,12 +578,20 @@ public class GameEngine implements Serializable {
 			if(board.lookRight() == true) {
 				s = "enemy";
 			}
+			else if(board.checkChar(board.getPlayerX(), board.getPlayerY()+1, 'X') == true
+					||board.checkChar(board.getPlayerX(), board.getPlayerY()+1, 'C') == true){
+				s = "nolook";
+			}
 			break;
 		case "4":
 		case "down":
 		case "d":
 			if(board.lookDown() == true) {
 				s = "enemy";
+			}
+			else if(board.checkChar(board.getPlayerX()+1, board.getPlayerY(), 'X') == true 
+					||board.checkChar(board.getPlayerX()+1, board.getPlayerY(), 'C') == true){
+				s = "nolook";
 			}
 			break;
 		case "5":
