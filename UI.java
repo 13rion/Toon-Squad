@@ -135,14 +135,14 @@ public class UI {
 			case "easy":
 				System.out.println("This difficulty was so easy we didn't even implement it." 
 								+ "\n" + "We'll take you to the next one up, Normal.\n");
-				if(s.equals("startdebug")) {
+				if(s.equalsIgnoreCase("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
 				break;
 			case "2":
 			case "normal":
-				if(s.equals("startdebug")) {
+				if(s.equalsIgnoreCase("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
@@ -150,7 +150,7 @@ public class UI {
 			case "3":
 			case "hard":
 				ge.setHardMode();
-				if(s.equals("startdebug")) {
+				if(s.equalsIgnoreCase("startdebug")) {
 					System.out.println("Debug Mode Activated.");
 				}
 				play();
@@ -174,10 +174,13 @@ public class UI {
 		case "move":
 			System.out.println("1. Move Up 2. Move Left 3. Move Right 4. Move Down 5. Options");
 			String t1 = ge.move(sc.nextLine());
-				if(t1.equals("")) {
+				if(t1.equalsIgnoreCase("")) {
 					invalid();
 					play();
-				} else if(t1.equals("options")) { 
+				} else if(t1.equalsIgnoreCase("nomove")) {
+					System.out.println("YOU CANNOT MOVE THERE!");
+					play();
+				} else if(t1.equalsIgnoreCase("options")) { 
 					play();
 				} else {
 					lookCounter = 0;
@@ -191,14 +194,14 @@ public class UI {
 			} else {
 				System.out.println("1. Shoot Up 2. Shoot Left 3. Shoot Right 4. Shoot Down 5. Options");
 				String t2 = ge.shoot(sc.nextLine());
-					if(t2.equals("")) {
+					if(t2.equalsIgnoreCase("")) {
 						invalid();
 						play();
-					} else if(t2.equals("kill")) {
+					} else if(t2.equalsIgnoreCase("kill")) {
 						System.out.println("YOU KILLED AN ENEMY!");
 						lookCounter = 0;
 						play();
-					} else if(t2.equals("options")) {
+					} else if(t2.equalsIgnoreCase("options")) {
 						play();
 					} else {
 						System.out.println("YOU FIRED BLANKLY DOWN THE HALL AND HIT THE WALL");
@@ -221,12 +224,12 @@ public class UI {
 			if(lookCounter == 0) {
 				System.out.println("1. Look Up 2. Look Left 3. Look Right 4. Look Down 5. Options");
 				String t3 = ge.look(sc.nextLine());
-				if(t3.equals("")) {
+				if(t3.equalsIgnoreCase("")) {
 					invalid();
 					play();
-				} else if(t3.equals("options")) {
+				} else if(t3.equalsIgnoreCase("options")) {
 					play();
-				} else if(t3.equals("enemy")) {
+				} else if(t3.equalsIgnoreCase("enemy")) {
 					System.out.println("NINJA AHEAD");
 					lookCounter = 1;
 					play();
@@ -244,6 +247,26 @@ public class UI {
 			System.out.print("Filename: ");
 			String saveFile = sc.nextLine();
 			try {
+				File file = new File("Saves.txt");
+				file.createNewFile();
+				Scanner kb = new Scanner(file);
+				int k = 0;
+				while (kb.hasNextLine()) {
+					String input = kb.nextLine();
+					if (input.equalsIgnoreCase(saveFile) || input.isEmpty()) {
+						k = -1;
+					}
+				}
+				if(k == 0) {
+					FileWriter fw = new FileWriter("Saves.txt", true);
+					fw.write(saveFile + "\n");
+					fw.close();
+				}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			
+			try {
 				FileOutputStream fos = new FileOutputStream(saveFile);
 				ObjectOutputStream oos = new ObjectOutputStream(fos); 
 				oos.writeObject(ge);
@@ -255,6 +278,18 @@ public class UI {
 			play();
 			break;
 		case "load":
+			try {
+				System.out.println("List of Saves:");
+				File file = new File("Saves.txt");
+				Scanner kb = new Scanner(file);
+				while (kb.hasNextLine()) {
+					System.out.println(kb.nextLine());
+				}
+				System.out.println();
+			} catch (FileNotFoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			System.out.print("Filename: ");
 			String loadFile = sc.nextLine();
 			try {
@@ -311,7 +346,7 @@ public class UI {
 			break;
 		case 9: 
 			System.out.println("(Bonus question!: What is the meaning of life?)");
-			if(sc.nextLine().equals("42")) {
+			if(sc.nextLine().equalsIgnoreCase("42")) {
 				System.out.println("CORRECT! 5 POINTS TO GRYFFINDOR");
 			} else {
 				System.out.println("How do you not know this?");
