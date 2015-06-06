@@ -3,6 +3,11 @@ Rodriguez Team Project
 
 #Tasks
 
+6/5
+-
+Fort, Cristian - Commenting
+Brion - Report (Final Draft)
+
 6/3
 -
 Fort 
@@ -20,15 +25,18 @@ Brion
 
 Fort
 - UI:
-     - Input Feedback 
+     - Input Feedback
+     - PowerPoint (Final Draft)
 
 Brion
 - GameEngine & UI:
      - Levels
+     - PowerPoint (Final Draft)
 
 Cristian
 - UI:
      - Won Method
+     - PowerPoint (Final Draft)
 
 5/29
 -
