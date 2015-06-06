@@ -3,80 +3,135 @@
  */
 package edu.cpp.cs.cs141.class_project;
 
-/**
- * @author Toon Squad
- *
- */
-public class Enemy extends ActiveAgents {
+import java.io.Serializable;
 
+/**
+ * This class represents an enemy and the attributes/behaviors it has. The enemy
+ * starts with 1 health point and holds its X and Y position.
+ */
+public class Enemy implements Serializable {
+	
+	/**
+	 * This field represents the {@link Enemy}'s {@link #hp} health points. Initially
+	 * {@code 1}, this field is changed when received {@link #subhealth()} damage from 
+	 * the {@link Player}'s {@link Gun}.
+	 */
+	private int hp;
+	
+	/**
+	 * This field represents the {@link Enemy} using the character {@code E} in the game
+	 * {@link Board}.
+	 */
 	private char enemyChar;
 	
+	/**
+	 * This field represents the {@link Enemy}'s X-position in the game {@link Board}.
+	 * This field is initialized with a random number from {@code 0} to {@code 8} by the
+	 * {@link Board}. 
+	 */
 	private int enemyX;
 	
+	/**
+	 * This field represents the {@link Enemy}'s Y-position in the game{@link Board}.
+	 * This field is initialized with a random number from {@code 0} to {@code 8} by the 
+	 * {@link Board}.
+	 */
 	private int enemyY;
 
 	/**
-	 * This constructor will set String enemy.
+	 * A constructor that will set the {@link #hp} of the {@link Enemy} to {@code 1} and set
+	 * the {@link #enemyChar} to {@code E}.
 	 */
 	public Enemy() {
-		super();
+		hp = 1;
 		enemyChar = 'E';
 	}
 	
-	public void setEnemyChar(char x){
-		enemyChar = x;
-	}
 	/**
-	 * This method will return the String enemy
-	 * @return
+	 * This method will check to see if the {@link Enemy}'s {@link #hp} is equal to {@code 0}. If
+	 * it is, then it will set the {@link #enemyChar} to {@code ' '} and return false meaning the
+	 * {@link Enemy} is dead. Otherwise will return true.
+	 * 
+	 * @return false if {@link #hp} is {@code 0}, otherwise return true.
 	 */
-	public char getEnemy() {
-		return enemyChar;
-	}
-	/**
-	 * This method will pick randomly where the enemy to go.
-	 * @return
-	 */
-	public int random() {
-		return 0;
-
-	}
-	
 	public boolean alive(){
 		boolean x = true;
-		if(hp <= 0){
+		if(hp == 0){
 			enemyChar = ' ';
 			x = false;
 		}
 		return x;
 			
 	}
+	
+	/**
+	 * This method will subtract the {@link Enemy}'s {@link #hp} health points by {@code 1}. Leaving
+	 * the {@link Enemy} with {@code 0} health points.
+	 */
 	public void subhealth(){
 		hp=-1;
 	}
-		
+	
+	/**
+	 * This method will set the {@link Enemy}'s {@link #enemyChar} character to the character in the 
+	 * parameter.
+	 * 
+	 * @param x
+	 * 			The new character that the {@link #enemyChar} will be set too.
+	 */
+	public void setEnemyChar(char x){
+		enemyChar = x;
+	}
+	/**
+	 * This method will set the {@link Enemy}'s {@link #enemyX} position to the integer in the 
+	 * parameter.
+	 * 
+	 * @param x
+	 * 			The new integer that will be set to the {@link #enemyX} position.
+	 */
 	public void setEnemyX(int x){
 		enemyX = x;
 	}
 	
+	/**
+	 * This method will set the {@link Enemy}'s {@link #enemyY} position to the integer in the 
+	 * parameter
+	 * 
+	 * @param y
+	 * 			The new integer that will be set to the {@link #enemyY} position.
+	 */
 	public void setEnemyY(int y){
 		enemyY = y;
 	}
 	
+	/**
+	 * This method will return the {@link Enemy}'s {@link #enemyChar} character.
+	 * 
+	 * @return
+	 * 			The {@link Enemy}'s {@link #enemyChar} character.
+	 */
+	public char getEnemy() {
+		return enemyChar;
+	}
+	
+	/**
+	 * This method will return the {@link Enemy}'s {@link #enemyX} integer.
+	 * 
+	 * @return
+	 * 			The {@link Enemy}'s {@link #enemyX} integer.
+	 */
 	public int getEnemyX(){
 		return enemyX;
 	}
 	
+	/**
+	 * This method will return the {@link Enemy}'s {@link #enemyY} integer.
+	 * 
+	 * @return
+	 * 			The {@link Enemy}'s {@link #enemyY} integer.
+	 */
 	public int getEnemyY(){
 		return enemyY;
-	}
-	/**
-	 * This method will kill the player if the enemy has a chance too.
-	 * 
-	 * @return true if enemy can kill, false if cannot
-	 */
-	public boolean kill() {
-		return false;
 	}
 
 }
