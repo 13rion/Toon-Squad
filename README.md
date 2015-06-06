@@ -36,7 +36,6 @@ Brion
 Cristian
 - UI:
      - Won Method
-     - PowerPoint (Final Draft)
 
 5/29
 -
