@@ -7,79 +7,183 @@ import java.io.Serializable;
 import java.util.Random;
 
 /**
- * @author Toon Squad
+ * This class represents the game board and the attributes/behaviors of 
+ * with the game board. This class creates the game board and sets the 
+ * different characters that will be on the game board with their initial positions
+ * such as the player, enemies, power-ups, rooms, and case. The board will also
+ * print out the game board after every turn with their new positions on the game board.
  *
  */
 public class Board implements Serializable {
 	/**
-	 * A 2D enemiesay that will be the game board.
+	 * This field represents the 9x9 2-D Character Array that will create the {@link Board}
+	 * and be use to set the characters in. Initially filled with {@code ' '} blanks by the {@link #setBoard},
+	 * it will change when the user plays normal {@link #mode} in which case the {@link Board} will be filled with {@code *} 
+	 * wherever the other game characters are not in. While in debug {@link #mode} they will revert back to 
+	 * {@code ' '} blanks.
 	 */
 	private char[][] board;
 
+	/**
+	 * This field represents the {@link Player}'s X-position inside the {@link #board}. This field
+	 * is initialized by the {@link #setPlayer(int, int, char)} and set to {@code 8}. It then can be changed by the methods
+	 * {@link #playerDown(char)}, and {@link #playerUp(char)}.
+	 * 
+	 */
 	private int playerX;
+	
+	/**
+	 * This field represents the {@link Player}'s Y-position inside the {@link #board}. This field is 
+	 * initialized by the {@link #setPlayer(int, int, char)} and set to {@code 0}. It then can be change by the methods
+	 * {@link #playerLeft(char)}, and {@link #playerRight(char)}.
+	 */
 	private int playerY;
 
+	/**
+	 * This field represents the {@link Enemy}'s X-position inside the {@link #board}. This field is initialized 
+	 * by the {@link #setEnemy(char)} with a random number from {@code 0} to {@code 8}.
+	 */
 	private int enemyX;
+	
+	/**
+	 * This field represents the {@link Enemy}'s Y-position inside the {@link #board}. This field is initialized 
+	 * by the {@link #setEnemy(char)} with a random number from {@code 0} to {@code 8}.
+	 */
 	private int enemyY;
 
 	/**
-	 * The additional bullet power-up
+	 * This field represents the {@link #BULLETCHAR} bullet power-up. This field is set to the character {@code B} and cannot
+	 * be changed. The {@link Player} is able to pick up the power-up, while the {@link Enemy} cannot.
+	 * The {@link #itemSet(char)} is used to randomly place the power-up in the {@link #board}.
 	 */
+	
 	private final char BULLETCHAR = 'B';
 	/**
-	 * The invincibility power-up.
+	 * This field represents the {@link #INVINCHAR} invincibility power-up. This field is set to the character {@code I} and 
+	 * cannot be changed. The {@link Player} is able to pick up the power-up, while the {@link Enemy} cannot.
+	 * The {@link #itemSet(char)} is used to randomly place the power-up in the {@link #board}.
 	 */
+	
 	private final char INVINCHAR = 'I';
+	
 	/**
-	 * The radar power-up
+	 * This field represents the {@link #RADARCHAR} radar power-up. This field is set to the character {@code R} and cannot be changed.
+	 * The {@link Player} is able to pick up the power-up, while the {@link Enemy} cannot. The {@link #itemSet(char)}
+	 * is used to randomly place the power-up in the {@link #board}.
 	 */
 	private final char RADARCHAR = 'R';
 	/**
-	 * The briefcase
+	 * This field represents the {@link #CASECHAR} case that the {@link Player} wants to find in the {@link #board}.
+	 * This field is set to {@code C} and cannot be changed. the {@link #setCase()} is used to place it randomly in one
+	 * of 9 {@link #ROOMCHAR} rooms in the {@link #board}.
 	 */
 	private final char CASECHAR = 'C';
 
-	private int caseX;
-	private int caseY;
 	/**
-	 * The rooms where the briefcase will be.
+	 * This field represents the {@link #CASECHAR}'s X-position in the {@link #board}. This is set in the {@link #setCase()}.
+	 */
+	private int caseX;
+	
+	/**
+	 * This field represents the {@link #CASECHAR}'s Y-position in the {@link #board}.This is set in the {@link #setCase()}.
+	 */
+	private int caseY;
+	
+	/**
+	 * This field represents the {@link #ROOMCHAR} rooms that the {@link Player} needs to {@link #checkRoom()} in order
+	 * to find the {@link #CASECHAR}.
 	 */
 	private final char ROOMCHAR = 'X';
 
+	/**
+	 * This field represents the String {@link #s} that will be used to print out the {@link #board} in the {@link #toString()}.
+	 */
 	private String s;
 
+	/**
+	 * This field represents the {@link #R} random number generator that will be used to randomly choose the positions
+	 * of the characters in the {@link #board}.
+	 */
 	private Random R;
 
-	private int[] pos = new int[12];
+	/**
+	 * This field represents the array of integers {@link #position()} that will be used in the {@link #shootDown()}, {@link #shootLeft()},
+	 * {@link #shootRight()}, {@link #shootUp()} methods in order to determine the location of the {@link Enemy} that
+	 * was shoot.
+	 */
+	private int[] pos = new int[2];
 	
+	/**
+	 * This field represents the {@link #lookUp()} look function that the {@link Player} uses to see by default 
+	 * {@code 1} spot ahead. This field is set with the {@link #setLook()} and can be changed in the {@link #lookUp()}
+	 * method by adding {@code 2} or {@code 1} depending where the {@link Player} is in the {@link #board}.
+	 */
 	private int lookUp;
+	
+	/**
+	 * This field represents the {@link #lookDown()} look function that the {@link Player} uses to see by default 
+	 * {@code 1} spot ahead. This field is set with the {@link #setLook()} and can be changed in the {@link #lookDown()}
+	 * method by adding {@code 2} or {@code 1} depending where the {@link Player} is in the {@link #board}.
+	 */
 	private int lookDown;
+	
+	/**
+	 * This field represents the {@link #lookLeft()} look function that the {@link Player} uses to see by default 
+	 * {@code 1} spot ahead. This field is set with the {@link #setLook()} and can be changed in the {@link #lookLeft()}
+	 * method by adding {@code 2} or {@code 1} depending where the {@link Player} is in the {@link #board}.
+	 */
 	private int lookLeft;
+	
+	/**
+	 * This field represents the {@link #lookRight()} look function that the {@link Player} uses to see by default 
+	 * {@code 1} spot ahead. This field is set with the {@link #setLook()} and can be changed in the {@link #lookRight()}
+	 * method by adding {@code 2} or {@code 1} depending where the {@link Player} is in the {@link #board}.
+	 */
 	private int lookRight;
 	
-	private int mode;
+	/**
+	 * This field represents the {@link #mode} that the {@link #Board()} is in. It is initialized from the {@link GameEngine}
+	 * by the {@link #setMode(String)} method. If it is in normal mode then, all empty space in the {@link #board}
+	 * will be filled with {@code *}, while in debug mode it will be filled with {@code ' '} blanks.
+	 */
+	private String mode;
+	
+	/**
+	 * This field represents the whether or not the {@link #CASECHAR} is visible in the {@link #board} depending on 
+	 * which {@link #mode} the {@link GameEngine} sets it too, in the {@link #setRadar(boolean)}.
+	 */
+	private boolean radar;
 
 	/**
-	 * This constructor will set up the game board including the rooms,
-	 * power-ups, and the briefcase.
+	 * A constructor that creates the object {@link #R}, creates the 2-D Array {@link #board},
+	 * calls the {@link #set()} method, sets {@link #s} and {@link #mode} to {@code ""}, and
+	 * {@link #radar} to {@code false}.
 	 */
 	public Board() {
 		R = new Random();
 		board = new char[9][9];
+		set();
+		s = "";
+		mode = "";
+		radar = false;
+	}
+	
+	/**
+	 * This method that calls the {@link #setBoard()}, {@link #setRooms()}, {@link #setBullet()},
+	 * {@link #setInvin()}, {@link #setRadar()}, {@link #setCase()}, and {@link #setLook()} methods.
+	 */
+	public void set() {
 		setBoard();
 		setRooms();
 		setBullet();
 		setInvin();
 		setRadar();
 		setCase();
-		s = "";
-		mode = 0;
-		lookUp = 1;
-		lookDown = 1;
-		lookLeft = 1;
-		lookRight = 1;
+		setLook();
 	}
-
+/**
+ * This method that fills the 2D Array {@link #board} with {@code " "}.
+ */
 	public void setBoard() {
 		for (int i = 0; i < board.length; i++) {
 			for (int k = 0; k < board[i].length; k++) {
@@ -88,6 +192,11 @@ public class Board implements Serializable {
 		}
 	}
 
+	/**
+	 * This method that goes through the {@link #board} and sets 9 {@link #ROOMCHAR}s 
+	 * at locations (1,1) (1,4) (1,7) (4,1) (4,4) (4,7) (1,7) (4,7) and (7,7).
+	 * 
+	 */
 	public void setRooms() {
 		for (int i = 0; i < board.length; i++) {
 			for (int k = 0; k < board[i].length; k++) {
@@ -100,25 +209,15 @@ public class Board implements Serializable {
 		}
 	}
 
-	public void setPlayer(int i, int k, char x) {
-		// NEED CHECK METHOD IN GAMEENGINE
-		board[i][k] = x;
-		playerX = i;
-		playerY = k;
-	}
-
-	public void setEnemy(char x) {
-		int rndmX = R.nextInt(9);
-		int rndmY = R.nextInt(9);
-		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
-			board[rndmX][rndmY] = x;
-			enemyX = rndmX;
-			enemyY = rndmY;
-		} else {
-			setEnemy(x);
-		}
-	}
-
+	/**
+	 * This method is given a character and then pick a random number to its X and Y
+	 * positions on the {@link #board}. It then call the {@link #check(int, int)} method
+	 * in order to check if the X and Y location is empty to set the character. Otherwise,
+	 * it will call the {@link #itemSet(char)} with the same character and try again.
+	 * 
+	 * @param x
+	 * 			The character that will be placed in a random location in the {@link #board}.
+	 */
 	public void itemSet(char x) {
 		int rndmX = R.nextInt(9);
 		int rndmY = R.nextInt(9);
@@ -129,18 +228,36 @@ public class Board implements Serializable {
 		}
 	}
 
+	/**
+	 * This method calls the {@link #itemSet(char)} with the parameter {@link #BULLETCHAR}
+	 * to be randomly placed in the {@link #board}.
+	 */
 	public void setBullet() {
 		itemSet(BULLETCHAR);
 	}
 
+	/**
+	 * This method calls the {@link #itemSet(char)} with the parameter {@link #INVINCHAR}
+	 * to be randomly placed in the {@link #board}.
+	 */
 	public void setInvin() {
 		itemSet(INVINCHAR);
 	}
 
+	/**
+	 * This method calls the {@link #itemSet(char)} with the parameter {@link #RADARCHAR}
+	 * to be randomly placed in the {@link #board}.
+	 */
 	public void setRadar() {
 		itemSet(RADARCHAR);
 	}
 
+	/**
+	 * This method randomly generates numbers so that it matches to one of the {@link #ROOMCHAR}
+	 * inside the {@link #board} and sets the X position to {@link #caseX} and the Y position
+	 * to {@link #caseY}. If the generated numbers do not match the {@link #ROOMCHAR} then it will
+	 * call {@link #setCase()} and try again.
+	 */
 	public void setCase() {
 		int rndmX = R.nextInt(8);
 		int rndmY = R.nextInt(8);
@@ -152,17 +269,91 @@ public class Board implements Serializable {
 			setCase();
 		}
 	}
+	/**
+	 * This method sets the {@link #lookLeft()}, {@link #lookDown}, {@link #lookRight}, and
+	 * {@link #lookUp} to (@code 0}.
+	 */
+	public void setLook() {
+		lookUp = 1;
+		lookDown = 1;
+		lookLeft = 1;
+		lookRight = 1;
+	}
 	
-	public void printCase() {
-		board[caseX][caseY] = CASECHAR;
+	/**
+	 * This method is used to takes in two integers and the {@link Player}'s character
+	 * in order to move the {@link Player}'s position. Then it sets the {@link #playerX}
+	 * and {@link #playerY} with the integers it received.
+	 * 
+	 * @param i
+	 * 			The integer that is used to set the new {@link #playerX} position and the
+	 * first integer in the {@link #board}.
+	 * @param k
+	 * 			the integer that is used to set the new {@link #playerY} position and the
+	 * first integer in the {@link #board}.
+	 * @param x
+	 * 			The character that will be placed in the new {@link #board} positions.
+	 */
+	public void setPlayer(int i, int k, char x) {
+		board[i][k] = x;
+		playerX = i;
+		playerY = k;
 	}
 
 	/**
-	 * This method will print out the board.
+	 * This method takes in a character for {@link Enemy} and creates to random integers.
+	 * It then calls the {@link #check(int, int)} and {@link #enemyCheck(int, int)} to 
+	 * check if an {@link Enemy} can be place in the {@link #board}, else it will call the 
+	 * {@link #setEnemy(char)} and try again.
+	 * 
+	 * @param x
+	 * 			The {@link Enemy} character that is being randomly place into the {@link #board}.
+	 */
+	public void setEnemy(char x) {
+		int rndmX = R.nextInt(9);
+		int rndmY = R.nextInt(9);
+		if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY)) {
+			board[rndmX][rndmY] = x;
+			enemyX = rndmX;
+			enemyY = rndmY;
+		} else {
+			setEnemy(x);
+		}
+	}
+	
+	/**
+	 * This method sets the {@link #CASECHAR} in the {@link #board} with the positions
+	 * {@link #caseX} and {@link #caseY}. This will make the {@link #CASECHAR} visible in
+	 * the {@link #board}.
+	 */
+	public void printCase() {
+		board[caseX][caseY] = CASECHAR;
+	}
+	/**
+	 * This method sets the {@link #ROOMCHAR} in the {@link #board} with the positions
+	 * {@link #caseX} and {@link #caseY}. This will make the {@link #ROOMCHAR} visible in
+	 * the {@link #board}.
+	 */
+	public void printRoom() {
+		board[caseX][caseY] = ROOMCHAR;
+	}
+
+	/**
+	 * This method will check to see if the {@link #mode} is equal to {@code debug} or if 
+	 * {@link #radar} is equal to {@code true}. If either one is {@code true} then it will
+	 * call {@link #printCase()}. Otherwise, it will call the {@link #printRoom()}. Then it
+	 * sets {@link #s} to {@code ""} and looks through the {@link #board} and checks whether
+	 * the integers for {@code i} and {@code k} matches to the {@link Player}'s {@link #playerX}
+	 * and {@link #playerY} position or the positions after adding and/or subtracting from the look
+	 * fields. If that is true it will print out the {@link #board}'s entry, and then print out either
+	 * {@code *} or {@link #board} entry depending if it is default or debug. It then adds the Legend and all the information
+	 * and then returns {@link #s}.
 	 */
 	public String toString() {
-		if(mode == 2) {
+		if(mode.equals("debug") || radar == true) {
 			printCase();
+		} else {
+			printRoom();
 		}
 		s = "";
 		for (int i = 0; i < board.length; i++) {
@@ -175,9 +366,9 @@ public class Board implements Serializable {
 					s += "[" + board[i][k] + "]";
 				} else if (board[i][k] == ROOMCHAR || board[i][k] == CASECHAR) {
 					s += "[" + board[i][k] + "]";
-				} else if(mode == 1) {
+				} else if(mode.equals("default")) {
 					s += "[" + "*" + "]";
-				} else if(mode == 2) {
+				} else if(mode.equals("debug")) {
 					s += "[" + board[i][k] + "]";
 				}
 			}
@@ -204,13 +395,15 @@ public class Board implements Serializable {
 			}
 			s = s + "\n";
 		}
-		lookUp = 1;
-		lookDown = 1;
-		lookLeft = 1;
-		lookRight = 1;
+		setLook();
 		return s;
 	}
-	
+	/**
+	 * This method checks the to see if the {@link #lookUp} is able to find an {@link Enemy}. If it does it returns {@code true}.
+	 * 
+	 * @return
+	 * 			true if {@link #lookUp} found an {@link Enemy}.
+	 */
 	public boolean lookUp() {
 		boolean x = false;
 		if(playerX > 1) {	
@@ -234,6 +427,12 @@ public class Board implements Serializable {
 		return x;
 	}
 
+	/**
+	 * This method checks the to see if the {@link #lookLeft} is able to find an {@link Enemy}. If it does it returns {@code true}.
+	 * 
+	 * @return
+	 * 			true if {@link #lookLeft} found an {@link Enemy}.
+	 */
 	public boolean lookLeft() {
 		boolean x = false;
 		if(playerY > 1) {
@@ -257,6 +456,12 @@ public class Board implements Serializable {
 		return x;
 	}
 
+	/**
+	 * This method checks the to see if the {@link #lookRight} is able to find an {@link Enemy}. If it does it returns {@code true}.
+	 * 
+	 * @return
+	 * 			true if {@link #lookRight} found an {@link Enemy}.
+	 */
 	public boolean lookRight() {
 		boolean x = false;
 		if(playerY < 7) {
@@ -281,6 +486,12 @@ public class Board implements Serializable {
 		return x;
 	}
 
+	/**
+	 * This method checks the to see if the {@link #lookDown} is able to find an {@link Enemy}. If it does it returns {@code true}.
+	 * 
+	 * @return
+	 * 			true if {@link #lookDown} found an {@link Enemy}.
+	 */
 	public boolean lookDown() {
 		boolean x = false;
 		if(playerX < 7) {
@@ -323,6 +534,12 @@ public class Board implements Serializable {
 		return x;
 	}
 	
+	/**
+	 * This method returns {@code true} if the {@link Player} has found the {@link #CASECHAR}.
+	 * 
+	 * @return
+	 * 			{@code true} if the {@link Player} has found the {@link #CASECHAR}.
+	 */
 	public boolean checkRoom() {
 		boolean x = false;
 		if(playerX + 1 == caseX && playerY == caseY) {
@@ -331,6 +548,12 @@ public class Board implements Serializable {
 		return x;
 	}
 	
+	/**
+	 * This method calls {@link #checkRoom()} in order to return {@code true} to tell the {@link Player} they have won.
+	 * 
+	 * @return
+	 * 			{@code true} if {@link #checkRoom()} is {@code true}.
+	 */
 	public boolean win() {
 		boolean x = false;
 		if(checkRoom() == true) {
@@ -339,14 +562,38 @@ public class Board implements Serializable {
 		return x;
 	}
 
+	/**
+	 * This method takes in the {@link Player}'s new position and checks if the position is not out of bounds and 
+	 * if the {@link #board} is equal to the character z. If so then it will return {@code true}. 
+	 * 
+	 * @param x
+	 * 			The integer of the X position.
+	 * @param y
+	 * 			The integer of the Y position.
+	 * @param z
+	 * 			The character the {@link #board} will check
+	 * @return
+	 * 			{@code true} if the {@link #board} equals z.
+	 */
 	public boolean checkChar(int x, int y, char z){
 		boolean check = false;
-		if(board[x][y] == z){
+		if (x < 0 || x > 8 || y < 0 || y > 8 || board[x][y] == z) {
 			 check = true;
 		}
 		return check;
 	}	
 	
+	/**
+	 * This method check to see if the {@link Enemy} is inside the {@link Player}'s safe zone. If it is, it will return
+	 * {@code false}.
+	 * 
+	 * @param i
+	 * 			The {@link Enemy}'s X position.
+	 * @param k
+	 * 			The {@link Enemy}'s Y position.
+	 * @return
+	 * 			true if the {@link Enemy} is not in the {@link Player}'s safe zone.
+	 */
 	public boolean enemyCheck(int i, int k) {
 		boolean x = true;
 		if (i > 4 && k < 4) {
@@ -354,311 +601,20 @@ public class Board implements Serializable {
 		}
 		return x;
 	}
-
-	public boolean playerMoveCheck(int i, int k) {
-		boolean x = false;
-		if (i < 0 || i > 8 || k < 0 || k > 8) {
-			x = false;
-		} else {
-			switch (board[i][k]) {
-			case ' ':
-				x = true;
-				break;
-			case BULLETCHAR:
-				x = true;
-				break;
-			case RADARCHAR:
-				x = true;
-				break;
-			case INVINCHAR:
-				x = true;
-				break;
-			default:
-				break;
-			}
-		}
-		return x;
-	}
-
-	public boolean enemyMoveCheck(int i, int k) {
-		boolean x = false;
-		if (i < 0 || i > 8 || k < 0 || k > 8) {
-			x = false;
-		} else {
-			switch (board[i][k]) {
-			case ' ':
-				x = true;
-				break;
-			default:
-				break;
-			}
-		}
-		return x;
-	}
-
-	public void checkDeath(Enemy enemies) {
-		if (enemies.getEnemyX() > 4 && enemies.getEnemyY() < 4) {
-			int rndmX = R.nextInt(9);
-			int rndmY = R.nextInt(9);
-			if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
-				board[enemies.getEnemyX()][enemies.getEnemyY()] = ' ';
-				enemies.setEnemyX(rndmX);
-				enemies.setEnemyY(rndmY);
-				board[rndmX][rndmY] = enemies.getEnemy();
-			} else {
-				checkDeath(enemies);
-			}
-		}
-
-	}
-
-	public boolean killPlayerUp(int i, int k) {
-		boolean x = false;
-		if (i < 0) {
-			x = false;
-		} else {
-			if (board[i][k] == 'P') {
-				board[i][k] = ' ';
-				x = true;
-			}
-		}
-		return x;
-	}
-
-	public boolean killPlayerLeft(int i, int k) {
-		boolean x = false;
-		if (k < 0) {
-			x = false;
-		} else {
-			if (board[i][k] == 'P') {
-				board[i][k] = ' ';
-				x = true;
-			}
-		}
-		return x;
-	}
-
-	public boolean killPlayerRight(int i, int k) {
-		boolean x = false;
-		if (k > 8) {
-			x = false;
-		} else {
-			if (board[i][k] == 'P') {
-				board[i][k] = ' ';
-				x = true;
-			}
-		}
-		return x;
-	}
-
-	public boolean killPlayerDown(int i, int k) {
-		boolean x = false;
-		if (i > 8) {
-			x = false;
-		} else {
-			if (board[i][k] == 'P') {
-				board[i][k] = ' ';
-				x = true;
-			}
-		}
-		return x;
-	}
-
-	public void enemyUp(int X, int Y, char k) {
-		board[X][Y] = ' ';
-		board[X - 1][Y] = k;
-	}
-
-	public void enemyLeft(int X, int Y, char k) {
-		board[X][Y] = ' ';
-		board[X][Y - 1] = k;
-	}
-
-	public void enemyRight(int X, int Y, char k) {
-		board[X][Y] = ' ';
-		board[X][Y + 1] = k;
-	}
-
-	public void enemyDown(int X, int Y, char k) {
-		board[X][Y] = ' ';
-		board[X + 1][Y] = k;
-	}
-
-	public int[] position() {
-		return pos;
-	}
-
-	public void shootUp(int x) {
-		int i = playerX;
-		int k = playerY;
-
-		while (i >= 0 && (board[i][k] != ROOMCHAR && board[i][k] != CASECHAR)) {
-			if (board[i][k] == 'E') {
-				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
-			}
-			i--;
-
-		}
-	}
-
-	public void shootLeft(int x) {
-		int i = playerX;
-		int k = playerY;
-
-		while (k >= 0 && board[i][k] != ROOMCHAR) {
-			if (board[i][k] == 'E') {
-				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
-			}
-			k--;
-
-		}
-	}
-
-	public void shootRight(int x) {
-		int i = playerX;
-		int k = playerY;
-
-		while (k <= 8 && board[i][k] != ROOMCHAR) {
-			if (board[i][k] == 'E') {
-				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
-			}
-			k++;
-
-		}
-	}
-
-	public void shootDown(int x) {
-		int i = playerX;
-		int k = playerY;
-
-		while (i <= 8 && board[i][k] != ROOMCHAR) {
-			if (board[i][k] == 'E') {
-				board[i][k] = ' ';
-				pos[x] = i;
-				x++;
-				pos[x] = k;
-				x++;
-
-			}
-			i++;
-
-		}
-	}
-
-	public void playerUp(char x) {
-		board[playerX][playerY] = ' ';
-		playerX -= 1;
-		setPlayer(playerX, playerY, x);
-	}
-
-	public void playerLeft(char x) {
-		board[playerX][playerY] = ' ';
-		playerY -= 1;
-		setPlayer(playerX, playerY, x);
-	}
-
-	public void playerRight(char x) {
-		board[playerX][playerY] = ' ';
-		playerY += 1;
-		setPlayer(playerX, playerY, x);
-	}
-
-	public void playerDown(char x) {
-		board[playerX][playerY] = ' ';
-		playerX += 1;
-		setPlayer(playerX, playerY, x);
-	}
-
+	
 	/**
-	 * This method will search for an enemy in the direction the gun of the
-	 * player was fired. This will only function if the player has ammo to
-	 * shoot.
+	 * This method takes in the {@link Enemy}'s X and Y position from the {@link GameEngine} and checks every direction
+	 * if it can find the {@link Player}. If there is a {@link #ROOMCHAR} or {@link #CASECHAR} in a direction then it will
+	 * set the direction either up,down,left,right to false. If the directions is still true and the {@link Enemy} finds
+	 * a {@code P} then the String s will equal to that direction. 
 	 * 
-	 * @return true if enemy is in line of sight of bullet, return false if not.
-	 */
-	public boolean searchShot() {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the bullet power-up in
-	 * the next step
-	 * 
+	 * @param enemyX2
+	 * 					The integer used to form the for-loop to look up and down.
+	 * @param enemyY2
+	 * 					The integer used to form the for-loop to look left and right.
 	 * @return
+	 * 			The String s equal to the direction the {@link Player} was found or a {@code ""}.
 	 */
-	public boolean bullet(char[][] board) {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the invincibility
-	 * power-up in the next step
-	 * 
-	 * @return
-	 */
-	public boolean invincibility(char[][] board) {
-		return false;
-
-	}
-
-	/**
-	 * This method will check if the player will pick up the radar power-up in
-	 * the next step
-	 * 
-	 * @return
-	 */
-	public boolean radar(char[][] board) {
-		return false;
-	}
-
-	/**
-	 * This method will check if the player will pick up the briefcase in the
-	 * next step
-	 * 
-	 * @return
-	 */
-	public boolean briefcase(char[][] board) {
-		return false;
-	}
-
-	public void setMode(int x) {
-		mode = x;
-	}
-	// GETTERS
-	public int getMode() {
-		return mode;
-	}
-	public int getPlayerX() {
-		return playerX;
-	}
-
-	public int getPlayerY() {
-		return playerY;
-	}
-
-	public int getEnemyX() {
-		return enemyX;
-	}
-
-	public int getEnemyY() {
-		return enemyY;
-	}
-
 	public String enemyRowCheck(int enemyX2, int enemyY2) {
 		String s = ""; 
 		boolean up = true;
@@ -710,6 +666,14 @@ public class Board implements Serializable {
 		}
 		return s;
 	}
+	
+	/**
+	 * This method checks to see if the {@link Player} is able to move up, down, left, or right. If they return {@code false} then the 
+	 * method will return {@code false}.
+	 * 
+	 * @return
+	 * 			false if the player is unable to move anywhere in the {@link #board}
+	 */
 	public boolean avaliableMove(){
 		boolean x = false;
 		if(playerMoveCheck(playerX+1, playerY) == true || playerMoveCheck(playerX-1, playerY) == true
@@ -717,5 +681,493 @@ public class Board implements Serializable {
 			x = true;
 		}
 		return x;
+	}
+
+	/**
+	  * This method takes in two integers where the {@link Player} wants to move and checks if they are out of bounds.
+	 * If they are not it check the {@link #board} and if it is either {@link ' '}, {@link #BULLETCHAR}, {@link #RADARCHAR}
+	 * or {@link #INVINCHAR} then it will return true meaning the {@link Player} will be able to move there.
+	 *  
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}.
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if the {@link Player} is able to move
+	 */
+	public boolean playerMoveCheck(int i, int k) {
+		boolean x = false;
+		if (i < 0 || i > 8 || k < 0 || k > 8) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			case BULLETCHAR:
+				x = true;
+				break;
+			case RADARCHAR:
+				x = true;
+				break;
+			case INVINCHAR:
+				x = true;
+				break;
+			default:
+				break;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method takes in two integers where the {@link Enemy} wants to move and checks if they are out of bounds.
+	 * If they are not it check the {@link #board} and if there is a {@link ' '} then it will return true meaning
+	 * the {@link Enemy} will be able to move there.
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}.
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if the {@link Enemy} is able to move
+	 */
+	public boolean enemyMoveCheck(int i, int k) {
+		boolean x = false;
+		if (i < 0 || i > 8 || k < 0 || k > 8) {
+			x = false;
+		} else {
+			switch (board[i][k]) {
+			case ' ':
+				x = true;
+				break;
+			default:
+				break;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method take in an object of the {@link Enemy} class and checks to see if it is in the {@link Player}'s
+	 * safe zone. If true it will get random numbers and use {@link #check(int, int)} and {@link #enemyCheck(int, int)}
+	 * to pick a different location for the {@link Enemy}.
+	 * 
+	 * @param enemies
+	 * 					An object of the {@link Enemy} 
+	 */
+	public void checkDeath(Enemy enemies) {
+		if (enemies.getEnemyX() > 4 && enemies.getEnemyY() < 4) {
+			int rndmX = R.nextInt(9);
+			int rndmY = R.nextInt(9);
+			if (check(rndmX, rndmY) == true && enemyCheck(rndmX, rndmY) == true) {
+				board[enemies.getEnemyX()][enemies.getEnemyY()] = ' ';
+				enemies.setEnemyX(rndmX);
+				enemies.setEnemyY(rndmY);
+				board[rndmX][rndmY] = enemies.getEnemy();
+			} else {
+				checkDeath(enemies);
+			}
+		}
+
+	}
+
+	/**
+	 * This method takes in the {@link Enemy}'s position to kill and checks if the {@link #board} position
+	 * equals to {@code P} and if it does it will set that position to {@code ' '} and return true.
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if {@code P} is found and false if {@code i} is less than {@code 0} or
+	 * {@code P} is not found
+	 */
+	public boolean killPlayerUp(int i, int k) {
+		boolean x = false;
+		if (i < 0) {
+			x = false;
+		} else {
+			if (board[i][k] == 'P') {
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method takes in the {@link Enemy}'s position to kill and checks if the {@link #board} position
+	 * equals to {@code P} and if it does it will set that position to {@code ' '} and return true.
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if {@code P} is found and false if {@code k} is less than {@code 0} or
+	 * {@code P} is not found
+	 */
+	public boolean killPlayerLeft(int i, int k) {
+		boolean x = false;
+		if (k < 0) {
+			x = false;
+		} else {
+			if (board[i][k] == 'P') {
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method takes in the {@link Enemy}'s position to kill and checks if the {@link #board} position
+	 * equals to {@code P} and if it does it will set that position to {@code ' '} and return true.
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if {@code P} is found and false if {@code k} is greater than {@code 8} or
+	 * {@code P} is not found
+	 */
+	public boolean killPlayerRight(int i, int k) {
+		boolean x = false;
+		if (k > 8) {
+			x = false;
+		} else {
+			if (board[i][k] == 'P') {
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method takes in the {@link Enemy}'s position to kill and checks if the {@link #board} position
+	 * equals to {@code P} and if it does it will set that position to {@code ' '} and return true.
+	 * 
+	 * @param i
+	 * 			The first integer that will be used to check the {@link #board}
+	 * @param k
+	 * 			The second integer that will be used to check the {@link #board}
+	 * @return
+	 * 			true if {@code P} is found and false if {@code i} is greater than {@code 8} or
+	 * {@code P} is not found
+	 */
+	public boolean killPlayerDown(int i, int k) {
+		boolean x = false;
+		if (i > 8) {
+			x = false;
+		} else {
+			if (board[i][k] == 'P') {
+				board[i][k] = ' ';
+				x = true;
+			}
+		}
+		return x;
+	}
+
+	/**
+	 * This method takes in two integers and a character for {@link Enemy} and place a {@code ' '}
+	 * at the current location. Then it decrements the parameter X and sets the parameter k in {@link #board}
+	 * with the new X and Y.
+	 * 
+	 * @param X
+	 * 			The integer that is used for the first number in {@link #board}.
+	 * @param Y
+	 * 			The integer that is used for the second number in {@link #board}.
+	 * @param k
+	 * 			The character that is being set in the {@link #board}.
+	 */
+	public void enemyUp(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X - 1][Y] = k;
+	}
+
+	/**
+	 * This method takes in two integers and a character for {@link Enemy} and place a {@code ' '}
+	 * at the current location. Then it decrements the parameter Y and sets the parameter k in {@link #board}
+	 * with the new X and Y.
+	 * 
+	 * @param X
+	 * 			The integer that is used for the first number in {@link #board}.
+	 * @param Y
+	 * 			The integer that is used for the second number in {@link #board}.
+	 * @param k
+	 * 			The character that is being set in the {@link #board}.
+	 */
+	public void enemyLeft(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y - 1] = k;
+	}
+
+	/**
+	 * This method takes in two integers and a character for {@link Enemy} and place a {@code ' '}
+	 * at the current location. Then it increments the parameter Y and sets the parameter k in {@link #board}
+	 * with the new X and Y.
+	 * 
+	 * @param X
+	 * 			The integer that is used for the first number in {@link #board}.
+	 * @param Y
+	 * 			The integer that is used for the second number in {@link #board}.
+	 * @param k
+	 * 			The character that is being set in the {@link #board}.
+	 */
+	public void enemyRight(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X][Y + 1] = k;
+	}
+
+	/**
+	 * This method takes in two integers and a character for {@link Enemy} and place a {@code ' '}
+	 * at the current location. Then it increments the parameter X and sets the parameter k in {@link #board}
+	 * with the new X and Y.
+	 * 
+	 * @param X
+	 * 			The integer that is used for the first number in {@link #board}.
+	 * @param Y
+	 * 			The integer that is used for the second number in {@link #board}.
+	 * @param k
+	 * 			The character that is being set in the {@link #board}.
+	 */
+	public void enemyDown(int X, int Y, char k) {
+		board[X][Y] = ' ';
+		board[X + 1][Y] = k;
+	}
+
+	/**
+	 * This method will return the array {@link #pos} which will be used to in the {@link GameEngine} to 
+	 * find the {@link Enemy} that was shot.
+	 * 
+	 * @return
+	 * 			The array {@link #pos}
+	 */
+	public int[] position() {
+		return pos;
+	}
+
+	/**
+	 * This method will set {@code i} to {@link #playerX} minus {@code 1} and {@code k} to {@link #playerY}.
+	 * It will then check if {@code i} is greater than or equal to {@code 0} and that {@code i} and {@code k}
+	 * is not equal to {@link #ROOMCHAR}. If this is true it will then check the {@link #board} position and 
+	 * if it holds an {@code E} then it will replace it with a {@code ' '} and set the {@link #pos}{@code 0} to 
+	 * {@code i} and {@link #pos}{@code 1} to {@code k}.
+	 * 
+	 */
+	public void shootUp() {
+		int i = playerX - 1;
+		int k = playerY;
+
+		while (i >= 0 && (board[i][k] != ROOMCHAR && board[i][k] != CASECHAR)) {
+
+			if (board[i][k] == 'E') {
+				board[i][k] = ' ';
+				pos[0] = i;
+				pos[1] = k;
+				i = 0;
+			}
+			i--;
+		}
+	}
+	
+	/**
+	 * This method will set {@code k} to {@link #playerY} minus {@code 1} and {@code i} to {@link #playerX}.
+	 * It will then check if {@code k} is greater than or equal to {@code 0} and that {@code i} and {@code k}
+	 * is not equal to {@link #ROOMCHAR}. If this is true it will then check the {@link #board} position and 
+	 * if it holds an {@code E} then it will replace it with a {@code ' '} and set the {@link #pos}{@code 0} to 
+	 * {@code i} and {@link #pos}{@code 1} to {@code k}.
+	 * 
+	 */
+	public void shootLeft() {
+		int i = playerX;
+		int k = playerY - 1;
+
+		while (k >= 0 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
+				board[i][k] = ' ';
+				pos[0] = i;
+				pos[1] = k;
+				k = 0;
+			}
+			k--;
+		}
+	}
+
+	/**
+	 * This method will set {@code k} to {@link #playerY} plus {@code 1} and {@code i} to {@link #playerX}.
+	 * It will then check if {@code k} is less than or equal to {@code 8} and that {@code i} and {@code k}
+	 * is not equal to {@link #ROOMCHAR}. If this is true it will then check the {@link #board} position and 
+	 * if it holds an {@code E} then it will replace it with a {@code ' '} and set the {@link #pos}{@code 0} to 
+	 * {@code i} and {@link #pos}{@code 1} to {@code k}.
+	 * 
+	 */
+	public void shootRight() {
+		int i = playerX;
+		int k = playerY + 1;
+
+		while (k <= 8 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
+				board[i][k] = ' ';
+				pos[0] = i;
+				pos[1] = k;
+				k = 8;
+			}
+			k++;
+		}
+	}
+
+	/**
+	 * This method will set {@code i} to {@link #playerX} plus {@code 1} and {@code k} to {@link #playerY}.
+	 * It will then check if {@code i} is less than or equal to {@code 8} and that {@code i} and {@code k}
+	 * is not equal to {@link #ROOMCHAR}. If this is true it will then check the {@link #board} position and 
+	 * if it holds an {@code E} then it will replace it with a {@code ' '} and set the {@link #pos}{@code 0} to 
+	 * {@code i} and {@link #pos}{@code 1} to {@code k}.
+	 * 
+	 */
+	public void shootDown() {
+		int i = playerX + 1;
+		int k = playerY;
+
+		while (i <= 8 && board[i][k] != ROOMCHAR) {
+			if (board[i][k] == 'E') {
+				board[i][k] = ' ';
+				pos[0] = i;
+				pos[1] = k;
+				i = 8;
+			}
+			i++;
+		}
+	}
+
+	/**
+	 * This method takes in the {@link Player}'s character and will set the {@link Players}'s current location
+	 * to {@code ' '}. It will decrement {@link #playerX} by one and call {@link #setPlayer(int, int, char)} to
+	 * set the new position.
+	 * 
+	  * @param x
+	 * 			The character for {@link Player}.
+	 */
+	public void playerUp(char x) {
+		board[playerX][playerY] = ' ';
+		playerX -= 1;
+		setPlayer(playerX, playerY, x);
+	}
+
+	/**
+	 * This method takes in the {@link Player}'s character and will set the {@link Players}'s current location
+	 * to {@code ' '}. It will decrement {@link #playerY} by one and call {@link #setPlayer(int, int, char)} to
+	 * set the new position.
+	 * 
+	 * @param x
+	 * 			The character for {@link Player}.
+	 */
+	public void playerLeft(char x) {
+		board[playerX][playerY] = ' ';
+		playerY -= 1;
+		setPlayer(playerX, playerY, x);
+	}
+
+	/**
+	 * This method takes in the {@link Player}'s character and will set the {@link Players}'s current location
+	 * to {@code ' '}. It will increment {@link #playerY} by one and call {@link #setPlayer(int, int, char)} to
+	 * set the new position.
+	 * 
+	 * @param x
+	 * 			The character for {@link Player}.
+	 */
+	public void playerRight(char x) {
+		board[playerX][playerY] = ' ';
+		playerY += 1;
+		setPlayer(playerX, playerY, x);
+	}
+
+	/**
+	 * This method takes in the {@link Player}'s character and will set the {@link Players}'s current location
+	 * to {@code ' '}. It will increment {@link #playerX} by one and call {@link #setPlayer(int, int, char)} to
+	 * set the new position.
+	 * 
+	 * @param x
+	 * 			The character for {@link Player}.
+	 */
+	public void playerDown(char x) {
+		board[playerX][playerY] = ' ';
+		playerX += 1;
+		setPlayer(playerX, playerY, x);
+	}
+
+	/**
+	 * This method takes in a String and sets it to {@link #mode}.
+	 * 
+	 * @param x
+	 * 			The string that is being set to {@link #mode}.
+	 */
+	public void setMode(String x) {
+		mode = x;
+	}
+	
+	/**
+	 * This method takes in the boolean x and set that to {@link #radar}.
+	 * 
+	 * @param x
+	 * 			The boolean that is set to {@link #radar}.
+	 */
+	public void setRadar(boolean x) {
+		radar = x;
+	}
+	
+	/**
+	 * This method returns the String {@link #mode}.
+	 * 
+	 * @return
+	 * 			The String {@link #mode}.
+	 */
+	public String getMode() {
+		return mode;
+	}
+	
+	/**
+	 * This method return the {@link Player}'s {@link #playerY} position.
+	 * 
+	 * @return
+	 * 			The {@link Player}'s {@link #playerY} position.
+	 */
+	public int getPlayerX() {
+		return playerX;
+	}
+
+	/**
+	 * This method returns the {@link Player}'s {@link #playerY} position.
+	 * 
+	 * @return
+	 * 			The {@link Player}'s {@link #playerY} position.
+	 */
+	public int getPlayerY() {
+		return playerY;
+	}
+
+	/**
+	 * This method returns the {@link Enemy}'s {@link #enemyX} position.
+	 * 
+	 * @return
+	 * 			The {@link Enemy}'s {@link #enemyX} position.
+	 */
+	public int getEnemyX() {
+		return enemyX;
+	}
+
+	/**
+	 * This method returns the {@link Enemy}'s {@link #enemyY} position.
+	 * 
+	 * @return
+	 * 			The {@link Enemy}'s {@link #enemyY} position.
+	 */
+	public int getEnemyY() {
+		return enemyY;
 	}
 }
